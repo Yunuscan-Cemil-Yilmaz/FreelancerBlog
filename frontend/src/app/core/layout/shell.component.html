@@ -1,0 +1,117 @@
+<div class="min-h-screen flex flex-col bg-[#0a0f1e] text-white">
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-[#0a0f1e]/80 border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <a routerLink="/" class="flex items-center gap-2 group" (click)="closeMenu()">
+          <span class="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-violet-500 bg-clip-text text-transparent group-hover:from-violet-400 group-hover:to-blue-500 transition-all duration-500">
+            {{ env.brandName }}
+          </span>
+          <span class="hidden sm:block text-sm font-medium text-slate-400 group-hover:text-white transition-colors">
+            {{ env.brandDomain }}
+          </span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-1">
+          <a routerLink="/" routerLinkActive="nav-active" [routerLinkActiveOptions]="{exact: true}"
+             class="nav-link">{{ t.t('nav.home') }}</a>
+          <a routerLink="/about" routerLinkActive="nav-active"
+             class="nav-link">{{ t.t('nav.about') }}</a>
+          <a routerLink="/blogs" routerLinkActive="nav-active"
+             class="nav-link">{{ t.t('nav.blogs') }}</a>
+          <a routerLink="/repos" routerLinkActive="nav-active"
+             class="nav-link">{{ t.t('nav.repos') }}</a>
+          <a routerLink="/contact" routerLinkActive="nav-active"
+             class="nav-link">{{ t.t('nav.contact') }}</a>
+        </div>
+
+        <!-- Right side actions -->
+        <div class="flex items-center gap-3">
+          <!-- Language Toggle -->
+          <div class="flex items-center rounded-full border border-white/10 bg-white/5 p-0.5 gap-0.5">
+            <button (click)="t.setLang('en')"
+                    class="px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-300 cursor-pointer tracking-wider"
+                    [class]="t.isEnglish()
+                      ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-blue-500/20'
+                      : 'text-slate-500 hover:text-slate-300'">
+              EN
+            </button>
+            <button (click)="t.setLang('tr')"
+                    class="px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-300 cursor-pointer tracking-wider"
+                    [class]="!t.isEnglish()
+                      ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-blue-500/20'
+                      : 'text-slate-500 hover:text-slate-300'">
+              TR
+            </button>
+          </div>
+
+          <!-- Mobile Hamburger -->
+          <button (click)="toggleMenu()"
+                  class="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+            @if (mobileMenuOpen()) {
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            } @else {
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    @if (mobileMenuOpen()) {
+      <div class="md:hidden border-t border-white/5 bg-[#0a0f1e]/95 backdrop-blur-xl animate-slide-down">
+        <div class="px-4 py-4 space-y-1">
+          <a routerLink="/" routerLinkActive="nav-active-mobile" [routerLinkActiveOptions]="{exact: true}"
+             (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.home') }}</a>
+          <a routerLink="/about" routerLinkActive="nav-active-mobile"
+             (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.about') }}</a>
+          <a routerLink="/blogs" routerLinkActive="nav-active-mobile"
+             (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.blogs') }}</a>
+          <a routerLink="/repos" routerLinkActive="nav-active-mobile"
+             (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.repos') }}</a>
+          <a routerLink="/contact" routerLinkActive="nav-active-mobile"
+             (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.contact') }}</a>
+        </div>
+      </div>
+    }
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 pt-16">
+    <router-outlet />
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 bg-[#060a15]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-lg font-bold bg-gradient-to-r from-blue-400 to-violet-500 bg-clip-text text-transparent">
+            {{ env.brandName }}
+          </span>
+          <span class="text-sm text-slate-500">{{ env.brandDomain }}</span>
+        </div>
+        <p class="text-sm text-slate-500">
+          © 2025 {{ env.copyrightHolder }}. {{ t.t('footer.rights') }}
+        </p>
+        <div class="flex items-center gap-4">
+          <a [href]="env.githubUrl" target="_blank" rel="noopener"
+             class="text-slate-500 hover:text-white transition-colors duration-300">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016.02 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.93.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+          <a [href]="env.linkedinUrl" target="_blank" rel="noopener"
+             class="text-slate-500 hover:text-white transition-colors duration-300">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

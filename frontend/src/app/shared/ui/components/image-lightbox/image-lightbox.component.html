@@ -1,0 +1,15 @@
+@if (isOpen() && imageUrl()) {
+  <div class="lightbox-backdrop" (click)="onBackdropClick($event)">
+    <!-- Close button -->
+    <button class="lightbox-close" (click)="close()" aria-label="Close">
+      <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <!-- Image -->
+    <div class="lightbox-content">
+      <img [src]="imageUrl()" alt="Gallery image" class="lightbox-image" />
+    </div>
+  </div>
+}

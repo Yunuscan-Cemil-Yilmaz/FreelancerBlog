@@ -1,0 +1,30 @@
+@if (totalPages() >= 1) {
+  <nav class="pagination-wrapper flex items-center justify-center gap-2 mt-10" aria-label="Pagination">
+    <!-- Previous -->
+    <button class="nav-btn" (click)="prev()" [disabled]="currentPage() === 1" aria-label="Previous page">
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    <!-- Page numbers -->
+    @for (page of visiblePages(); track $index) {
+      @if (isEllipsis(page)) {
+        <span class="ellipsis text-slate-500 px-1 select-none">…</span>
+      } @else {
+        <button class="page-btn"
+                [class.active]="page === currentPage()"
+                (click)="goToPage(page)">
+          {{ page }}
+        </button>
+      }
+    }
+
+    <!-- Next -->
+    <button class="nav-btn" (click)="next()" [disabled]="currentPage() === totalPages()" aria-label="Next page">
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </nav>
+}

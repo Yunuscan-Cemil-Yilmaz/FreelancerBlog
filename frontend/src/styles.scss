@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 
 @import "tailwindcss";
+@source "../app";
 
 :root {
   --primary-color: #3f51b5;
@@ -11,11 +12,11 @@
   --accent-dark: #c60055;
   --warn-color: #f44336;
 
-  --bg-color: #fafafa;
-  --surface-color: #ffffff;
-  --text-color: #212121;
-  --text-secondary: #757575;
-  --border-color: #e0e0e0;
+  --bg-color: #0a0f1e;
+  --surface-color: #111827;
+  --text-color: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.05);
 
   --font-family: 'Roboto', sans-serif;
   --font-size-xs: 0.75rem;
@@ -39,9 +40,9 @@
   --radius-xl: 16px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
 
   --transition-fast: 150ms ease;
   --transition-normal: 300ms ease;
@@ -61,25 +62,21 @@ html {
 }
 
 body {
-  color-scheme: light;
+  margin: 0;
+  padding: 0;
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  margin: 0;
-  padding: 0;
+*, *::before, *::after {
   box-sizing: border-box;
-}
-
-ul, ol, li {
-  list-style: none;
 }
 
 a {
   text-decoration: none;
   color: inherit;
 }
-/* You can add global styles to this file, and also import other style files */

@@ -1,0 +1,47 @@
+@if (images().length > 0) {
+  <div class="gallery-carousel-wrapper mt-8 mb-10">
+    <h3 class="text-lg font-bold text-white mb-6">{{ title() }}</h3>
+
+    @if (needsCarousel) {
+      <!-- Carousel mode: more images than visible slots -->
+      <div class="swiper-container rounded-2xl overflow-hidden border border-white/10">
+        <swiper-container init="false" #swiperEl>
+          @for (img of images(); track $index) {
+            <swiper-slide>
+              <div class="slide-inner aspect-[16/10] rounded-xl overflow-hidden cursor-pointer"
+                   (click)="onImageClick(img)">
+                <img [src]="img" [alt]="title()" class="w-full h-full object-cover" loading="lazy" />
+              </div>
+            </swiper-slide>
+          }
+        </swiper-container>
+      </div>
+      <!-- Nav + Counter -->
+      <div class="carousel-controls mt-4 flex items-center justify-between">
+        <button class="nav-btn" (click)="slidePrev()" aria-label="Previous">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <span class="text-sm text-slate-400 font-mono">
+          {{ activeSlideIndex + 1 }} / {{ images().length }}
+        </span>
+        <button class="nav-btn" (click)="slideNext()" aria-label="Next">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    } @else {
+      <!-- Static grid mode: images fit in view, no carousel needed -->
+      <div class="static-gallery flex justify-center gap-3 sm:gap-4">
+        @for (img of images(); track $index) {
+          <div class="static-image aspect-[16/10] rounded-xl overflow-hidden cursor-pointer border border-white/10"
+               (click)="onImageClick(img)">
+            <img [src]="img" [alt]="title()" class="w-full h-full object-cover" loading="lazy" />
+          </div>
+        }
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,169 @@
+<section class="py-20 px-4 sm:px-6">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl sm:text-5xl font-black mb-4">
+        <span class="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+          {{ t.t('blogs.title') }}
+        </span>
+      </h1>
+      <p class="text-lg text-slate-400">{{ t.t('blogs.subtitle') }}</p>
+    </div>
+
+    <!-- Filters & Sort -->
+    <div class="mb-10 space-y-4">
+      <!-- Category Filter -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">{{ t.t('blogs.category') }}:</span>
+        <button (click)="setCategory(undefined)"
+                class="px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 cursor-pointer"
+                [class]="!selectedCategory()
+                  ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-blue-500/20'
+                  : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white'">
+          {{ t.t('blogs.all') }}
+        </button>
+        @for (cat of categories(); track cat) {
+          <button (click)="setCategory(cat)"
+                  class="px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 cursor-pointer"
+                  [class]="selectedCategory() === cat
+                    ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-blue-500/20'
+                    : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white'">
+            {{ cat }}
+          </button>
+        }
+      </div>
+
+      <!-- Sub-Category Filter (shown when category is selected) -->
+      @if (selectedCategory() && subCategories().length > 0) {
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">{{ t.t('blogs.sub_category') }}:</span>
+          <button (click)="setSubCategory(undefined)"
+                  class="px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 cursor-pointer"
+                  [class]="!selectedSubCategory()
+                    ? 'bg-violet-500/20 text-violet-300 border border-violet-500/30'
+                    : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white'">
+            {{ t.t('blogs.all') }}
+          </button>
+          @for (sub of subCategories(); track sub) {
+            <button (click)="setSubCategory(sub)"
+                    class="px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 cursor-pointer"
+                    [class]="selectedSubCategory() === sub
+                      ? 'bg-violet-500/20 text-violet-300 border border-violet-500/30'
+                      : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white'">
+              {{ sub }}
+            </button>
+          }
+        </div>
+      }
+
+      <!-- Sort Options -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">{{ t.t('blogs.sort') }}:</span>
+        <button (click)="setSort('newest')"
+                class="px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 cursor-pointer flex items-center gap-1"
+                [class]="sortBy() === 'newest'
+                  ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                  : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white'">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
+          </svg>
+          {{ t.t('blogs.sort_newest') }}
+        </button>
+        <button (click)="setSort('oldest')"
+                class="px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 cursor-pointer flex items-center gap-1"
+                [class]="sortBy() === 'oldest'
+                  ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                  : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white'">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"/>
+          </svg>
+          {{ t.t('blogs.sort_oldest') }}
+        </button>
+        <button (click)="setSort('popular')"
+                class="px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-300 cursor-pointer flex items-center gap-1"
+                [class]="sortBy() === 'popular'
+                  ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                  : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white'">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+          </svg>
+          {{ t.t('blogs.sort_popular') }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Results count -->
+    <p class="text-sm text-slate-500 mb-6">{{ blogs().length }} {{ t.t('blogs.results') }}</p>
+
+    <!-- Blog Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+      @for (blog of paginatedBlogs(); track blog.id) {
+        <a [routerLink]="['/blogs', blog.slug]"
+           class="group block rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden
+                  hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500
+                  hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/5">
+          <!-- Image -->
+          <div class="aspect-video overflow-hidden relative">
+            <img [src]="blog.imageUrl" [alt]="blog.title"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <!-- Category Badge -->
+            <span class="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider
+                         text-white bg-blue-600/80 backdrop-blur-sm rounded-full">
+              {{ blog.category }}
+            </span>
+            <!-- View Count -->
+            <span class="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-medium
+                         text-white/80 bg-black/40 backdrop-blur-sm rounded-full flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              {{ formatViewCount(blog.viewCount) }}
+            </span>
+          </div>
+          <!-- Content -->
+          <div class="p-5 sm:p-6">
+            <!-- Sub-category & Tags -->
+            <div class="flex flex-wrap gap-2 mb-3">
+              <span class="px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider
+                           text-violet-400 bg-violet-500/10 rounded-full">
+                {{ blog.subCategory }}
+              </span>
+              @for (tag of blog.tags; track tag) {
+                <span class="px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider
+                             text-blue-400 bg-blue-500/10 rounded-full">
+                  {{ tag }}
+                </span>
+              }
+            </div>
+            <!-- Title -->
+            <h2 class="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+              {{ blog.title }}
+            </h2>
+            <!-- Excerpt -->
+            <p class="text-sm text-slate-400 mb-4 leading-relaxed">
+              {{ blog.excerpt | truncate:120 }}
+            </p>
+            <!-- Meta -->
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>{{ blog.createdAt }}</span>
+              <span>{{ blog.readTime }} {{ t.t('blogs.min_read') }}</span>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+
+    <!-- No results -->
+    @if (blogs().length === 0) {
+      <div class="text-center py-20">
+        <p class="text-slate-500 text-lg">{{ t.t('blogs.no_blogs') }}</p>
+      </div>
+    }
+    <!-- Pagination -->
+    <app-pagination
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="setPage($event)" />
+  </div>
+</section>

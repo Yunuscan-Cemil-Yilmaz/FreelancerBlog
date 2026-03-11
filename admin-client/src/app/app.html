@@ -1,1 +1,38 @@
-<router-outlet />
+<div class="min-h-screen bg-slate-100 p-8 font-sans">
+  <mat-card class="max-w-2xl mx-auto p-6 shadow-xl border-t-4 border-indigo-600 bg-white rounded-xl">
+    <mat-card-header class="mb-6">
+      <mat-card-title class="text-3xl font-bold text-slate-800">
+        Angular Material & Tailwind CSS Test
+      </mat-card-title>
+      <mat-card-subtitle class="mt-2 text-slate-500 italic">
+        Installation and Configuration Verification (Admin Client)
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mt-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-4 bg-white rounded-lg border border-slate-200">
+          <h3 class="font-semibold mb-3 text-slate-700">Tailwind Utility Class Test</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Bu bölüm <code>bg-white</code>, <code>rounded-lg</code> ve <code>border-slate-200</code> gibi Tailwind sınıflarını kullanmaktadır.
+          </p>
+        </div>
+        <div class="p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+          <h3 class="font-semibold text-indigo-800 mb-3">Tailwind Responsive Test</h3>
+          <p class="text-sm text-indigo-600 leading-relaxed">
+            Bu bölüm farklı ekran boyutlarında padding ve gap değişikliklerini test eder.
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions class="mt-8 flex justify-end gap-3 px-0">
+      <button mat-button color="warn">Vazgeç</button>
+      <button mat-flat-button color="primary">Kurulumu Onayla</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <div class="mt-12 text-center opacity-50">
+    <router-outlet />
+  </div>
+</div>

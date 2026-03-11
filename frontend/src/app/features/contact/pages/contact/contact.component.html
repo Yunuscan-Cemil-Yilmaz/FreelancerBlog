@@ -1,0 +1,180 @@
+<section class="py-20 px-4 sm:px-6">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl sm:text-5xl font-black mb-4">
+        <span class="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+          {{ t.t('contact.title') }}
+        </span>
+      </h1>
+      <p class="text-lg text-slate-400">{{ t.t('contact.subtitle') }}</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+      <!-- Contact Info -->
+      <div class="md:col-span-2 space-y-6">
+        <div class="p-6 rounded-xl border border-white/5 bg-white/[0.02]">
+          <h3 class="text-sm font-bold text-blue-400 tracking-wider uppercase mb-4">
+            {{ t.t('contact.info_title') }}
+          </h3>
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <span class="text-sm text-slate-300">{{ t.t('contact.location') }}</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <a [href]="'mailto:' + env.contactEmail" class="text-sm text-slate-300 hover:text-blue-400 transition-colors">{{ env.contactEmail }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="md:col-span-3">
+        <form (ngSubmit)="onSubmit()" class="p-6 sm:p-8 rounded-xl border border-white/5 bg-white/[0.02] space-y-5">
+          <!-- Name -->
+          <mat-form-field appearance="outline" class="w-full custom-field">
+            <mat-label>{{ t.t('contact.name') }}</mat-label>
+            <input matInput [(ngModel)]="form.name" name="name" />
+          </mat-form-field>
+
+          <!-- Email & Phone Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <mat-form-field appearance="outline" class="w-full custom-field">
+              <mat-label>{{ t.t('contact.email') }}</mat-label>
+              <input matInput [(ngModel)]="form.email" name="email" type="email" />
+              <mat-hint class="!text-slate-500">{{ t.t('contact.email_or_phone_hint') }}</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full custom-field">
+              <mat-label>{{ t.t('contact.phone') }}</mat-label>
+              <input matInput [(ngModel)]="form.phone" name="phone" type="tel" />
+            </mat-form-field>
+          </div>
+
+          <!-- Contact Preference -->
+          <mat-form-field appearance="outline" class="w-full custom-field">
+            <mat-label>{{ t.t('contact.preference') }}</mat-label>
+            <mat-select [(ngModel)]="form.contactPreference" name="contactPreference">
+              @for (pref of contactPreferences; track pref.value) {
+                <mat-option [value]="pref.value">
+                  {{ t.isEnglish() ? pref.label_en : pref.label_tr }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Subject -->
+          <mat-form-field appearance="outline" class="w-full custom-field">
+            <mat-label>{{ t.t('contact.subject') }}</mat-label>
+            <input matInput [(ngModel)]="form.subject" name="subject" />
+          </mat-form-field>
+
+          <!-- Message -->
+          <mat-form-field appearance="outline" class="w-full custom-field">
+            <mat-label>{{ t.t('contact.message') }}</mat-label>
+            <textarea matInput [(ngModel)]="form.message" name="message" rows="5"></textarea>
+          </mat-form-field>
+
+          <!-- Consent Checkboxes -->
+          <div class="space-y-4 pt-2">
+            <!-- Checkbox 1: Communication Consent -->
+            <div class="flex items-start gap-3">
+              <mat-checkbox [checked]="consentAccepted()" (change)="consentAccepted.set(!consentAccepted())"
+                            name="consent" class="mt-0.5 custom-checkbox"></mat-checkbox>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                {{ t.t('contact.consent_text') }}
+              </p>
+            </div>
+
+            <!-- Checkbox 2: KVKK -->
+            <div class="flex items-start gap-3">
+              <mat-checkbox [checked]="kvkkAccepted()" (change)="kvkkAccepted.set(!kvkkAccepted())"
+                            name="kvkk" class="mt-0.5 custom-checkbox"></mat-checkbox>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                {{ t.t('contact.kvkk_text_before') }}
+                <button type="button" (click)="showKvkkModal.set(true)"
+                        class="text-blue-400 underline hover:text-blue-300 transition-colors cursor-pointer">
+                  {{ t.t('contact.kvkk_link') }}
+                </button>
+                {{ t.t('contact.kvkk_text_after') }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button mat-flat-button type="submit" [disabled]="submitting()"
+                  class="w-full !bg-gradient-to-r !from-blue-600 !to-violet-600 !text-white !py-3 !rounded-xl
+                         !font-semibold !text-base hover:!from-blue-500 hover:!to-violet-500 transition-all
+                         disabled:!opacity-50">
+            {{ submitting() ? t.t('contact.sending') : t.t('contact.send') }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KVKK Modal -->
+@if (showKvkkModal()) {
+  <div class="fixed inset-0 z-[9998] flex items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" (click)="closeKvkkModal()"></div>
+
+    <!-- Modal Content -->
+    <div class="relative w-full max-w-2xl bg-[#111827] border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+      <!-- Header -->
+      <div class="flex items-center justify-between p-6 border-b border-white/5">
+        <h3 class="text-lg font-bold text-white">{{ t.t('contact.kvkk_modal_title') }}</h3>
+        <button (click)="closeKvkkModal()"
+                class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 transition-colors
+                       flex items-center justify-center cursor-pointer">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Scrollable Text -->
+      <div class="p-6 max-h-[60vh] overflow-y-auto text-sm text-slate-300 leading-relaxed space-y-4 kvkk-scroll">
+        <h4 class="text-base font-semibold text-white">1. {{ t.t('contact.kvkk_s1_title') }}</h4>
+        <p>{{ t.t('contact.kvkk_s1_body') }}</p>
+
+        <h4 class="text-base font-semibold text-white">2. {{ t.t('contact.kvkk_s2_title') }}</h4>
+        <p>{{ t.t('contact.kvkk_s2_body') }}</p>
+
+        <h4 class="text-base font-semibold text-white">3. {{ t.t('contact.kvkk_s3_title') }}</h4>
+        <p>{{ t.t('contact.kvkk_s3_body') }}</p>
+
+        <h4 class="text-base font-semibold text-white">4. {{ t.t('contact.kvkk_s4_title') }}</h4>
+        <p>{{ t.t('contact.kvkk_s4_body') }}</p>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-6 border-t border-white/5 flex items-center justify-end gap-3">
+        <button (click)="closeKvkkModal()"
+                class="px-5 py-2.5 text-sm font-medium rounded-xl border border-white/10 bg-white/5
+                       text-slate-300 hover:bg-white/10 transition-all cursor-pointer">
+          {{ t.t('contact.kvkk_close') }}
+        </button>
+        <button (click)="acceptKvkk()"
+                class="px-5 py-2.5 text-sm font-medium rounded-xl transition-all cursor-pointer
+                       bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-blue-500/20
+                       hover:from-blue-500 hover:to-violet-500">
+          {{ t.t('contact.kvkk_accept') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

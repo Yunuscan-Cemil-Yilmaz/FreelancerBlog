@@ -1,0 +1,91 @@
+<div>
+    <h2 class="text-2xl sm:text-3xl font-bold mb-10 text-white">{{ t.t('about.references_title') }}</h2>
+
+    <!-- Slider Container -->
+    <div class="relative"
+        (mouseenter)="pauseSlide()"
+        (mouseleave)="resumeSlide()">
+
+    <!-- Overflow container -->
+    <div class="overflow-hidden">
+        <!-- Sliding track -->
+        <div class="flex transition-transform duration-700 ease-in-out"
+            [style.transform]="'translateX(-' + slideOffset + '%)'">
+        @for (ref of references; track ref.name; let i = $index) {
+            <div class="shrink-0 px-2.5"
+                [style.width]="slideWidth + '%'">
+            <div class="p-6 sm:p-7 rounded-2xl border transition-all duration-500 h-full"
+                    [class]="isHighlighted(i)
+                    ? 'bg-gradient-to-br from-blue-500/[0.06] to-violet-500/[0.04] border-blue-500/10 shadow-xl shadow-blue-500/5'
+                    : 'border-white/5 bg-white/[0.02] hover:bg-white/[0.04]'"
+                    style="min-height: 260px; display: flex; flex-direction: column; justify-content: space-between;">
+                <!-- Quote -->
+                <div class="mb-6">
+                <svg class="w-8 h-8 mb-4 transition-colors duration-300"
+                        [class]="isHighlighted(i) ? 'text-blue-500/40' : 'text-white/10'"
+                        fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983z"/>
+                </svg>
+                <p class="text-sm leading-relaxed italic"
+                    [class]="isHighlighted(i) ? 'text-slate-200' : 'text-slate-400'">
+                    "{{ t.isEnglish() ? ref.quote_en : ref.quote_tr }}"
+                </p>
+                </div>
+                <!-- Author -->
+                <div class="flex items-center gap-3 pt-4 border-t"
+                    [class]="isHighlighted(i) ? 'border-blue-500/10' : 'border-white/5'">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0"
+                        [class]="isHighlighted(i)
+                        ? 'bg-gradient-to-br from-blue-500 to-violet-500 shadow-lg shadow-blue-500/20'
+                        : 'bg-white/10'">
+                    {{ ref.name.charAt(0) }}
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold truncate"
+                        [class]="isHighlighted(i) ? 'text-white' : 'text-slate-300'">{{ ref.name }}</p>
+                    <p class="text-xs truncate"
+                        [class]="isHighlighted(i) ? 'text-slate-400' : 'text-slate-500'">
+                    {{ t.isEnglish() ? ref.role_en : ref.role_tr }} · {{ ref.company }}
+                    </p>
+                </div>
+                </div>
+            </div>
+            </div>
+        }
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex items-center justify-center gap-4 mt-8">
+        <!-- Prev -->
+        <button (click)="prevRef()"
+                class="w-10 h-10 rounded-full border border-white/10 bg-white/5
+                        hover:bg-white/10 hover:border-white/20 transition-all duration-300
+                        flex items-center justify-center cursor-pointer group">
+        <svg class="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        </button>
+        <!-- Dots -->
+        <div class="flex items-center gap-2">
+        @for (ref of references; track ref.name; let i = $index) {
+            <button (click)="goToRef(i)"
+                    class="transition-all duration-300 rounded-full cursor-pointer"
+                    [class]="i === currentRefIndex()
+                    ? 'w-6 h-2.5 bg-gradient-to-r from-blue-500 to-violet-500'
+                    : 'w-2.5 h-2.5 bg-white/20 hover:bg-white/40'">
+            </button>
+        }
+        </div>
+        <!-- Next -->
+        <button (click)="nextRef()"
+                class="w-10 h-10 rounded-full border border-white/10 bg-white/5
+                        hover:bg-white/10 hover:border-white/20 transition-all duration-300
+                        flex items-center justify-center cursor-pointer group">
+        <svg class="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+        </button>
+    </div>
+    </div>
+</div>

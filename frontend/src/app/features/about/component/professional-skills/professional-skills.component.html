@@ -1,0 +1,22 @@
+<div class="mb-20">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-10 text-white">{{ t.t('about.professional_skills_title') }}</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    @for (skill of professionalSkills; track skill.name_en) {
+        <div [class]="'group p-4 sm:p-5 rounded-xl border transition-all duration-300 flex items-center gap-3 cursor-default ' + (skill.level === 'core'
+                ? 'border-blue-500/20 bg-blue-500/[0.04] hover:bg-blue-500/[0.08] hover:border-blue-500/30'
+                : skill.level === 'strong'
+                ? 'border-violet-500/20 bg-violet-500/[0.04] hover:bg-violet-500/[0.08] hover:border-violet-500/30'
+                : 'border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10')">
+        <span class="text-2xl">{{ skill.icon }}</span>
+        <div class="flex flex-col gap-1">
+            <span class="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+            {{ t.isEnglish() ? skill.name_en : skill.name_tr }}
+            </span>
+            <span [class]="'text-[10px] font-semibold uppercase tracking-widest ' + (skill.level === 'core' ? 'text-blue-400' : skill.level === 'strong' ? 'text-violet-400' : 'text-slate-500')">
+            {{ skill.level === 'core' ? '● Core' : skill.level === 'strong' ? '◆ Strong' : '○ Familiar' }}
+            </span>
+        </div>
+        </div>
+    }
+    </div>
+</div>

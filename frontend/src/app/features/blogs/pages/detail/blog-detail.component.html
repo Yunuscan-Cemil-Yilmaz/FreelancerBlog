@@ -1,0 +1,47 @@
+@if (blog(); as blog) {
+  <article class="py-12 sm:py-20 px-4 sm:px-6">
+    <div class="max-w-3xl mx-auto">
+      <!-- Back Link -->
+      <a routerLink="/blogs"
+         class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors mb-8 group">
+        <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        {{ t.t('blogs.back') }}
+      </a>
+
+      <!-- Header Image -->
+      <app-blog-header
+        [title]="blog.title"
+        [imageUrl]="blog.imageUrl"
+        [imageAlt]="blog.title" 
+        [tags]="blog.tags"
+        [createdAt]="blog.createdAt"
+        [readTime]="blog.readTime"
+      />
+
+      <!-- Image Gallery Carousel -->
+      @if (blog.images && blog.images.length > 0) {
+        <app-gallery-carousel
+          [images]="blog.images"
+          [title]="t.t('blogs.gallery')"
+          (imageClick)="openLightbox($event)"
+        />
+      }
+
+      <!-- Content -->
+      <div class="prose-custom" [innerHTML]="renderedContent()"></div>
+    </div>
+  </article>
+} @else {
+  <div class="py-32 text-center text-slate-500">
+    {{ t.t('common.error') }}
+  </div>
+}
+
+<!-- Image Lightbox -->
+<app-image-lightbox
+  [imageUrl]="lightboxImage"
+  [isOpen]="lightboxOpen"
+  (closed)="closeLightbox()"
+/>
