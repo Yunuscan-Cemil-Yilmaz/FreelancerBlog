@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\SkillLevel;
 
+use App\Models\Scopes\DomainScope;
+
 class ProfessionalSkill extends Model
 {
     protected $fillable = [
@@ -15,6 +17,12 @@ class ProfessionalSkill extends Model
         'domain',
         'admin_domain'
     ];
+
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new DomainScope);
+    }
 
     protected function casts()
     {

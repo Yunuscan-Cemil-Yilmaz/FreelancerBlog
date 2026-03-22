@@ -12,5 +12,7 @@ export interface Blog {
   tags: string[];
   category: string;
   subCategory: string;
+  category_id: number;
+  sub_category_id?: number;
   viewCount: number;
 }

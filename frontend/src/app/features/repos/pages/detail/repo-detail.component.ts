@@ -1,23 +1,39 @@
-import { Component, inject, input, computed } from '@angular/core';
+import { Component, inject, input, computed, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { ReposService } from '../../domain/repos.service';
-import { GalleryCarouselComponent } from '../../../../shared/ui/components/gallery-carousel/gallery-carousel.component';
-import { ImageLightboxComponent } from '../../../../shared/ui/components/image-lightbox/image-lightbox.component';
+import { SeoService } from '../../../../core/seo/seo.service';
 
 @Component({
   selector: 'app-repo-detail',
   standalone: true,
-  imports: [RouterLink, GalleryCarouselComponent, ImageLightboxComponent],
+  imports: [RouterLink],
   templateUrl: './repo-detail.component.html',
   styleUrl: './repo-detail.component.scss',
 })
 export class RepoDetailComponent {
-  readonly t = inject(TranslationService);
-  private readonly reposService = inject(ReposService);
-
   readonly slug = input.required<string>();
-  readonly repo = computed(() => this.reposService.getRepoBySlug(this.slug()));
+  private readonly reposService = inject(ReposService);
+  private readonly seoService = inject(SeoService);
+  readonly t = inject(TranslationService);
+
+  readonly repo = computed(() => this.reposService.repos().find(r => r.slug === this.slug()));
+
+  constructor() {
+    effect(() => {
+      const r = this.repo();
+      if (r) {
+        this.seoService.update({
+          title: r.title,
+          description: r.description.substring(0, 160),
+          image: r.imageUrl,
+          type: 'article',
+          url: `${window.location.origin}/${this.t.lang()}/repos/${r.slug}`
+        });
+        this.reposService.incrementViewCount(r.id);
+      }
+    });
+  }
 
   readonly renderedContent = computed(() => {
     const repo = this.repo();

@@ -5,13 +5,22 @@ namespace App\Models;
 use App\Enums\SkillLevel;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Scopes\DomainScope;
+
 class Tech extends Model
 {
     protected $fillable = [
         'category_en',
         'category_tr',
-        'items'
+        'items',
+        'domain',
+        'admin_domain'
     ];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new DomainScope);
+    }
 
     protected function casts() {
         return [

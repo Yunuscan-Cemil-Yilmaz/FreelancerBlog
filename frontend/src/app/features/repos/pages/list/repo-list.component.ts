@@ -41,6 +41,14 @@ export class RepoListComponent {
   constructor() {
     afterNextRender(() => {
       this.restoreState();
+      this.loadData();
+    });
+  }
+
+  private loadData(): void {
+    this.reposService.loadRepos({
+      sort: this.sortBy(),
+      page: this.currentPage(),
     });
   }
 
@@ -48,6 +56,7 @@ export class RepoListComponent {
     this.sortBy.set(sort);
     this.currentPage.set(1);
     this.saveState();
+    this.loadData();
   }
 
   setPage(page: number): void {
@@ -55,6 +64,7 @@ export class RepoListComponent {
     const safePage = page > total ? 1 : page;
     this.currentPage.set(safePage);
     this.saveState();
+    this.loadData();
   }
 
   formatViewCount(count: number): string {

@@ -4,7 +4,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <!-- Logo -->
-        <a routerLink="/" class="flex items-center gap-2 group" (click)="closeMenu()">
+        <a [routerLink]="['/', t.lang()]" class="flex items-center gap-2 group" (click)="closeMenu()">
           <span class="text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-violet-500 bg-clip-text text-transparent group-hover:from-violet-400 group-hover:to-blue-500 transition-all duration-500">
             {{ env.brandName }}
           </span>
@@ -15,15 +15,15 @@
 
         <!-- Desktop Nav -->
         <div class="hidden md:flex items-center gap-1">
-          <a routerLink="/" routerLinkActive="nav-active" [routerLinkActiveOptions]="{exact: true}"
+          <a [routerLink]="['/', t.lang()]" routerLinkActive="nav-active" [routerLinkActiveOptions]="{exact: true}"
              class="nav-link">{{ t.t('nav.home') }}</a>
-          <a routerLink="/about" routerLinkActive="nav-active"
+          <a [routerLink]="['/', t.lang(), 'about']" routerLinkActive="nav-active"
              class="nav-link">{{ t.t('nav.about') }}</a>
-          <a routerLink="/blogs" routerLinkActive="nav-active"
+          <a [routerLink]="['/', t.lang(), 'blogs']" routerLinkActive="nav-active"
              class="nav-link">{{ t.t('nav.blogs') }}</a>
-          <a routerLink="/repos" routerLinkActive="nav-active"
+          <a [routerLink]="['/', t.lang(), 'repos']" routerLinkActive="nav-active"
              class="nav-link">{{ t.t('nav.repos') }}</a>
-          <a routerLink="/contact" routerLinkActive="nav-active"
+          <a [routerLink]="['/', t.lang(), 'contact']" routerLinkActive="nav-active"
              class="nav-link">{{ t.t('nav.contact') }}</a>
         </div>
 
@@ -31,14 +31,14 @@
         <div class="flex items-center gap-3">
           <!-- Language Toggle -->
           <div class="flex items-center rounded-full border border-white/10 bg-white/5 p-0.5 gap-0.5">
-            <button (click)="t.setLang('en')"
+            <button (click)="changeLang('en')"
                     class="px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-300 cursor-pointer tracking-wider"
                     [class]="t.isEnglish()
                       ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-blue-500/20'
                       : 'text-slate-500 hover:text-slate-300'">
               EN
             </button>
-            <button (click)="t.setLang('tr')"
+            <button (click)="changeLang('tr')"
                     class="px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-300 cursor-pointer tracking-wider"
                     [class]="!t.isEnglish()
                       ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-blue-500/20'
@@ -68,15 +68,15 @@
     @if (mobileMenuOpen()) {
       <div class="md:hidden border-t border-white/5 bg-[#0a0f1e]/95 backdrop-blur-xl animate-slide-down">
         <div class="px-4 py-4 space-y-1">
-          <a routerLink="/" routerLinkActive="nav-active-mobile" [routerLinkActiveOptions]="{exact: true}"
+          <a [routerLink]="['/', t.lang()]" routerLinkActive="nav-active-mobile" [routerLinkActiveOptions]="{exact: true}"
              (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.home') }}</a>
-          <a routerLink="/about" routerLinkActive="nav-active-mobile"
+          <a [routerLink]="['/', t.lang(), 'about']" routerLinkActive="nav-active-mobile"
              (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.about') }}</a>
-          <a routerLink="/blogs" routerLinkActive="nav-active-mobile"
+          <a [routerLink]="['/', t.lang(), 'blogs']" routerLinkActive="nav-active-mobile"
              (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.blogs') }}</a>
-          <a routerLink="/repos" routerLinkActive="nav-active-mobile"
+          <a [routerLink]="['/', t.lang(), 'repos']" routerLinkActive="nav-active-mobile"
              (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.repos') }}</a>
-          <a routerLink="/contact" routerLinkActive="nav-active-mobile"
+          <a [routerLink]="['/', t.lang(), 'contact']" routerLinkActive="nav-active-mobile"
              (click)="closeMenu()" class="mobile-nav-link">{{ t.t('nav.contact') }}</a>
         </div>
       </div>

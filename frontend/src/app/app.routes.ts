@@ -4,6 +4,11 @@ import { ShellComponent } from './core/layout/shell.component';
 export const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    redirectTo: 'en'
+  },
+  {
+    path: ':lang',
     component: ShellComponent,
     children: [
       {
@@ -43,5 +48,5 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'en' },
 ];

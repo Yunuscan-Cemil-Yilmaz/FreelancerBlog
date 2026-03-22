@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('category_en')->unique();
             $table->string('category_tr')->unique();
             $table->json('items');
+            $table->string('domain')->nullable();
+            $table->string('admin_domain')->nullable();
             $table->timestamps();
         });
 

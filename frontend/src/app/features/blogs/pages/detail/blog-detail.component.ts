@@ -1,7 +1,8 @@
-import { Component, inject, input, computed } from '@angular/core';
+import { Component, inject, input, computed, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { BlogsService } from '../../domain/blogs.service';
+import { SeoService } from '../../../../core/seo/seo.service';
 import { BlogHeader } from '../../components/blog-header/blog-header.component';
 import { GalleryCarouselComponent } from '../../../../shared/ui/components/gallery-carousel/gallery-carousel.component';
 import { ImageLightboxComponent } from '../../../../shared/ui/components/image-lightbox/image-lightbox.component';
@@ -16,9 +17,27 @@ import { ImageLightboxComponent } from '../../../../shared/ui/components/image-l
 export class BlogDetailComponent {
   readonly t = inject(TranslationService);
   private readonly blogsService = inject(BlogsService);
+  private readonly seo = inject(SeoService);
 
   readonly slug = input.required<string>();
   readonly blog = computed(() => this.blogsService.getBlogBySlug(this.slug()));
+
+  constructor() {
+    effect(() => {
+      const blog = this.blog();
+      if (blog) {
+        this.seo.update({
+          title: blog.title,
+          description: blog.excerpt,
+          image: blog.imageUrl,
+          author: blog.author,
+          type: 'article',
+          url: `${window.location.origin}/${this.t.lang()}/blogs/${blog.slug}`
+        });
+        this.blogsService.incrementViewCount(blog.id);
+      }
+    });
+  }
 
   readonly renderedContent = computed(() => {
     const blog = this.blog();

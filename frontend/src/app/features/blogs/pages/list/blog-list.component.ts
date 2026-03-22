@@ -1,7 +1,9 @@
-import { Component, inject, signal, computed, afterNextRender, effect } from '@angular/core';
+import { Component, inject, signal, computed, afterNextRender } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { BlogsService, SortOption } from '../../domain/blogs.service';
+import { CategoryService } from '../../domain/category.service';
+import { Category, SubCategory } from '../../domain/category.models';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { PaginationComponent } from '../../../../shared/ui/components/pagination/pagination.component';
 
@@ -18,20 +20,23 @@ const PAGE_SIZE = 4;
 export class BlogListComponent {
   readonly t = inject(TranslationService);
   private readonly blogsService = inject(BlogsService);
+  private readonly categoryService = inject(CategoryService);
 
-  readonly selectedCategory = signal<string | undefined>(undefined);
-  readonly selectedSubCategory = signal<string | undefined>(undefined);
+  readonly selectedCategoryId = signal<number | undefined>(undefined);
+  readonly selectedSubCategoryId = signal<number | undefined>(undefined);
   readonly sortBy = signal<SortOption>('newest');
   readonly currentPage = signal(1);
   readonly pageSize = PAGE_SIZE;
 
-  readonly categories = computed(() => this.blogsService.getCategories());
-  readonly subCategories = computed(() => this.blogsService.getSubCategories(this.selectedCategory()));
-  readonly blogs = computed(() =>
-    this.blogsService.getFilteredAndSorted(this.selectedCategory(), this.selectedSubCategory(), this.sortBy())
-  );
-
-  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.blogs().length / this.pageSize)));
+  readonly categories = this.categoryService.categories;
+  readonly subCategories = computed(() => {
+    const catId = this.selectedCategoryId();
+    if (!catId) return [];
+    const cat = this.categories().find(c => c.id === catId);
+    return cat?.subCategories || [];
+  });
+  readonly blogs = this.blogsService.blogs;
+  readonly totalPages = this.blogsService.totalPages;
 
   readonly paginatedBlogs = computed(() => {
     const page = this.currentPage();
@@ -42,35 +47,49 @@ export class BlogListComponent {
   });
 
   constructor() {
+    this.categoryService.loadCategories();
     afterNextRender(() => {
       this.restoreState();
+      this.loadData();
     });
   }
 
-  setCategory(cat?: string): void {
-    this.selectedCategory.set(cat);
-    this.selectedSubCategory.set(undefined);
-    this.currentPage.set(1);
-    this.saveState();
+  private loadData(): void {
+    this.blogsService.loadBlogs({
+      sort: this.sortBy(),
+      categoryId: this.selectedCategoryId(),
+      subCategoryId: this.selectedSubCategoryId(),
+      page: this.currentPage(),
+      perPage: this.pageSize,
+    });
   }
 
-  setSubCategory(sub?: string): void {
-    this.selectedSubCategory.set(sub);
+  setCategory(cat?: Category): void {
+    this.selectedCategoryId.set(cat?.id);
+    this.selectedSubCategoryId.set(undefined);
     this.currentPage.set(1);
     this.saveState();
+    this.loadData();
+  }
+
+  setSubCategory(sub?: SubCategory): void {
+    this.selectedSubCategoryId.set(sub?.id);
+    this.currentPage.set(1);
+    this.saveState();
+    this.loadData();
   }
 
   setSort(sort: SortOption): void {
     this.sortBy.set(sort);
     this.currentPage.set(1);
     this.saveState();
+    this.loadData();
   }
 
   setPage(page: number): void {
-    const total = this.totalPages();
-    const safePage = page > total ? 1 : page;
-    this.currentPage.set(safePage);
+    this.currentPage.set(page);
     this.saveState();
+    this.loadData();
   }
 
   formatViewCount(count: number): string {
@@ -84,8 +103,8 @@ export class BlogListComponent {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         sortBy: this.sortBy(),
-        category: this.selectedCategory(),
-        subCategory: this.selectedSubCategory(),
+        categoryId: this.selectedCategoryId(),
+        subCategoryId: this.selectedSubCategoryId(),
         currentPage: this.currentPage(),
       }));
     } catch {}
@@ -101,21 +120,14 @@ export class BlogListComponent {
         this.sortBy.set(state.sortBy);
       }
 
-      if (state.category) {
-        this.selectedCategory.set(state.category);
+      if (state.categoryId) {
+        this.selectedCategoryId.set(state.categoryId);
       }
-      if (state.subCategory) {
-        this.selectedSubCategory.set(state.subCategory);
+      if (state.subCategoryId) {
+        this.selectedSubCategoryId.set(state.subCategoryId);
       }
 
-      const total = this.totalPages();
-      const page = typeof state.currentPage === 'number' ? state.currentPage : 1;
-      if (page > total || page < 1) {
-        this.currentPage.set(1);
-        this.saveState();
-      } else {
-        this.currentPage.set(page);
-      }
+      this.currentPage.set(typeof state.currentPage === 'number' ? state.currentPage : 1);
     } catch {
       localStorage.removeItem(STORAGE_KEY);
     }
