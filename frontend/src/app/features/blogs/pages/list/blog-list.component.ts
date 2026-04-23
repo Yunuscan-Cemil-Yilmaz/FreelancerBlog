@@ -8,7 +8,7 @@ import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { PaginationComponent } from '../../../../shared/ui/components/pagination/pagination.component';
 
 const STORAGE_KEY = 'blog-list-state';
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 12;
 
 @Component({
   selector: 'app-blog-list',

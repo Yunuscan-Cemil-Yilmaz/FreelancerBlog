@@ -2,117 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Blog;
+use App\Business\Features\Blogs\GetBlogBySlugQuery\GetBlogBySlugQuery;
+use App\Business\Features\Blogs\GetBlogBySlugQuery\GetBlogBySlugRequest;
+use App\Business\Features\Blogs\GetBlogListWithPaginationQuery\GetBlogListWithPaginationQuery;
+use App\Business\Features\Blogs\GetBlogListWithPaginationQuery\GetBlogListWithPaginationRequest;
+use App\Business\Features\Blogs\GetBlogListWithPaginationQuery\GetBlogListWithPaginationValidator;
+use App\Business\Features\Blogs\IncrementBlogViewCountCommand\IncrementBlogViewCountCommand;
+use App\Business\Features\Blogs\IncrementBlogViewCountCommand\IncrementBlogViewCountRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function index(Request $request, string $lang): JsonResponse
-    {
-        $titleField = "title_{$lang}";
-        $slugField = "slug_{$lang}";
-        $contentField = "content_{$lang}";
-        $excerptField = "excerpt_{$lang}";
+    public function index(
+        Request $request,
+        string $lang,
+        GetBlogListWithPaginationValidator $validator,
+        GetBlogListWithPaginationQuery $query
+    ): JsonResponse {
+        $data = $request->all();
+        $data['lang'] = $lang;
+        
+        $validator->validate($data);
 
-        $query = Blog::with(['category', 'subCategory']);
+        $blogRequest = new GetBlogListWithPaginationRequest(
+            lang: $lang,
+            categoryId: $request->integer('category_id') ?: null,
+            subCategoryId: $request->integer('sub_category_id') ?: null,
+            sort: $request->input('sort', 'newest'),
+            perPage: $request->integer('per_page', 12),
+            page: $request->integer('page', 1)
+        );
 
-        // Optional category filter
-        if ($request->has('category_id')) {
-            $query->where('category_id', $request->input('category_id'));
-        }
-        if ($request->has('sub_category_id')) {
-            $query->where('sub_category_id', $request->input('sub_category_id'));
-        }
-
-        // Sorting
-        $sort = $request->input('sort', 'newest');
-        switch ($sort) {
-            case 'oldest':
-                $query->orderBy('created_at', 'asc');
-                break;
-            case 'popular':
-                $query->orderBy('view_count', 'desc');
-                break;
-            default: // newest
-                $query->orderBy('created_at', 'desc');
-                break;
-        }
-
-        $perPage = $request->input('per_page', 12);
-        $paginated = $query->paginate($perPage);
-
-        $categoryNameField = "name_{$lang}";
-
-        $items = $paginated->getCollection()->map(function (Blog $blog) use (
-            $titleField, $slugField, $contentField, $excerptField, $categoryNameField
-        ) {
-            return [
-                'id' => $blog->id,
-                'title' => $blog->{$titleField},
-                'slug' => $blog->{$slugField},
-                'content' => $blog->{$contentField},
-                'excerpt' => $blog->{$excerptField},
-                'imageUrl' => $blog->image_url,
-                'images' => $blog->images ?? [],
-                'author' => $blog->author,
-                'readTime' => $blog->read_time,
-                'tags' => $blog->tags ?? [],
-                'viewCount' => $blog->view_count,
-                'category' => $blog->category ? $blog->category->{$categoryNameField} : null,
-                'subCategory' => $blog->subCategory ? $blog->subCategory->{$categoryNameField} : null,
-                'createdAt' => $blog->created_at?->toDateString(),
-            ];
-        });
+        $response = $query->handle($blogRequest);
 
         return response()->json([
-            'data' => $items,
-            'meta' => [
-                'current_page' => $paginated->currentPage(),
-                'last_page' => $paginated->lastPage(),
-                'per_page' => $paginated->perPage(),
-                'total' => $paginated->total(),
-            ],
+            'data' => $response->items,
+            'meta' => $response->meta,
         ]);
     }
 
-    public function show(string $lang, string $slug): JsonResponse
+    public function show(string $lang, string $slug, GetBlogBySlugQuery $query): JsonResponse
     {
-        $slugField = "slug_{$lang}";
-        $titleField = "title_{$lang}";
-        $contentField = "content_{$lang}";
-        $excerptField = "excerpt_{$lang}";
-        $categoryNameField = "name_{$lang}";
-
-        $blog = Blog::with(['category', 'subCategory'])
-            ->where($slugField, $slug)
-            ->firstOrFail();
+        $blogRequest = new GetBlogBySlugRequest($lang, $slug);
+        $response = $query->handle($blogRequest);
 
         return response()->json([
-            'data' => [
-                'id' => $blog->id,
-                'title' => $blog->{$titleField},
-                'slug' => $blog->{$slugField},
-                'content' => $blog->{$contentField},
-                'excerpt' => $blog->{$excerptField},
-                'imageUrl' => $blog->image_url,
-                'images' => $blog->images ?? [],
-                'author' => $blog->author,
-                'readTime' => $blog->read_time,
-                'tags' => $blog->tags ?? [],
-                'viewCount' => $blog->view_count,
-                'category' => $blog->category ? $blog->category->{$categoryNameField} : null,
-                'subCategory' => $blog->subCategory ? $blog->subCategory->{$categoryNameField} : null,
-                'createdAt' => $blog->created_at?->toDateString(),
-            ],
+            'data' => $response->data,
         ]);
     }
 
-    public function incrementViewCount(int $id): JsonResponse
+    public function incrementViewCount(int $id, IncrementBlogViewCountCommand $command): JsonResponse
     {
-        $blog = Blog::findOrFail($id);
-        $blog->increment('view_count');
+        $viewRequest = new IncrementBlogViewCountRequest($id);
+        $result = $command->handle($viewRequest);
 
-        return response()->json(['viewCount' => $blog->view_count]);
+        return response()->json($result);
     }
 }

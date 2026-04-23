@@ -2,92 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Repo;
+use App\Business\Features\Repos\GetRepoBySlugQuery\GetRepoBySlugQuery;
+use App\Business\Features\Repos\GetRepoBySlugQuery\GetRepoBySlugRequest;
+use App\Business\Features\Repos\GetRepoListWithPaginationQuery\GetRepoListWithPaginationQuery;
+use App\Business\Features\Repos\GetRepoListWithPaginationQuery\GetRepoListWithPaginationRequest;
+use App\Business\Features\Repos\IncrementRepoViewCountCommand\IncrementRepoViewCountCommand;
+use App\Business\Features\Repos\IncrementRepoViewCountCommand\IncrementRepoViewCountRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class RepoController extends Controller
 {
-    public function index(Request $request, string $lang): JsonResponse
+    public function index(Request $request, string $lang, GetRepoListWithPaginationQuery $query): JsonResponse
     {
-        $descriptionField = "description_{$lang}";
+        $repoRequest = new GetRepoListWithPaginationRequest(
+            lang: $lang,
+            sort: $request->input('sort', 'newest'),
+            perPage: $request->integer('per_page', 12),
+            page: $request->integer('page', 1)
+        );
 
-        $query = Repo::query();
-
-        // Sorting
-        $sort = $request->input('sort', 'newest');
-        switch ($sort) {
-            case 'oldest':
-                $query->orderBy('created_at', 'asc');
-                break;
-            case 'popular':
-                $query->orderBy('view_count', 'desc');
-                break;
-            default: // newest
-                $query->orderBy('created_at', 'desc');
-                break;
-        }
-
-        $perPage = $request->input('per_page', 12);
-        $paginated = $query->paginate($perPage);
-
-        $items = $paginated->getCollection()->map(function (Repo $repo) use ($descriptionField) {
-            return [
-                'id' => $repo->id,
-                'title' => $repo->title,
-                'slug' => $repo->slug,
-                'description' => $repo->{$descriptionField},
-                'imageUrl' => $repo->image_url,
-                'images' => $repo->images ?? [],
-                'projectUrl' => $repo->project_url,
-                'repoUrl' => $repo->repo_url,
-                'isPublic' => $repo->is_public,
-                'techStack' => $repo->tech_stack ?? [],
-                'viewCount' => $repo->view_count,
-                'createdAt' => $repo->created_at?->toDateString(),
-            ];
-        });
+        $response = $query->handle($repoRequest);
 
         return response()->json([
-            'data' => $items,
-            'meta' => [
-                'current_page' => $paginated->currentPage(),
-                'last_page' => $paginated->lastPage(),
-                'per_page' => $paginated->perPage(),
-                'total' => $paginated->total(),
-            ],
+            'data' => $response->items,
+            'meta' => $response->meta,
         ]);
     }
 
-    public function show(string $lang, string $slug): JsonResponse
+    public function show(string $lang, string $slug, GetRepoBySlugQuery $query): JsonResponse
     {
-        $descriptionField = "description_{$lang}";
+        $repoRequest = new GetRepoBySlugRequest($lang, $slug);
+        $result = $query->handle($repoRequest);
 
-        $repo = Repo::where('slug', $slug)->firstOrFail();
-
-        return response()->json([
-            'data' => [
-                'id' => $repo->id,
-                'title' => $repo->title,
-                'slug' => $repo->slug,
-                'description' => $repo->{$descriptionField},
-                'imageUrl' => $repo->image_url,
-                'images' => $repo->images ?? [],
-                'projectUrl' => $repo->project_url,
-                'repoUrl' => $repo->repo_url,
-                'isPublic' => $repo->is_public,
-                'techStack' => $repo->tech_stack ?? [],
-                'viewCount' => $repo->view_count,
-                'createdAt' => $repo->created_at?->toDateString(),
-            ],
-        ]);
+        return response()->json($result);
     }
 
-    public function incrementViewCount(int $id): JsonResponse
+    public function incrementViewCount(int $id, IncrementRepoViewCountCommand $command): JsonResponse
     {
-        $repo = Repo::findOrFail($id);
-        $repo->increment('view_count');
+        $viewRequest = new IncrementRepoViewCountRequest($id);
+        $result = $command->handle($viewRequest);
 
-        return response()->json(['viewCount' => $repo->view_count]);
+        return response()->json($result);
     }
 }

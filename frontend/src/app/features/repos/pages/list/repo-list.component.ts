@@ -2,7 +2,6 @@ import { Component, inject, signal, computed, afterNextRender } from '@angular/c
 import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { ReposService, SortOption } from '../../domain/repos.service';
-import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { PaginationComponent } from '../../../../shared/ui/components/pagination/pagination.component';
 
 const STORAGE_KEY = 'repo-list-state';
@@ -11,7 +10,7 @@ const PAGE_SIZE = 4;
 @Component({
   selector: 'app-repo-list',
   standalone: true,
-  imports: [RouterLink, TruncatePipe, PaginationComponent],
+  imports: [RouterLink, PaginationComponent],
   templateUrl: './repo-list.component.html',
   styleUrl: './repo-list.component.scss',
 })

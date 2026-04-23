@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'set.current.domain' => SetCurrentDomain::class,
         ]);
 
+        $middleware->prependToGroup('api', \App\Http\Middleware\GlobalErrorHandlerMiddleware::class);
+        $middleware->prependToGroup('web', \App\Http\Middleware\GlobalErrorHandlerMiddleware::class);
+        
         $middleware->prependToGroup('api', SetCurrentDomain::class);
         $middleware->prependToGroup('web', SetCurrentDomain::class);
     })

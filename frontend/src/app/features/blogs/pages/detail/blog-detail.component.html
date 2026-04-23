@@ -2,7 +2,7 @@
   <article class="py-12 sm:py-20 px-4 sm:px-6">
     <div class="max-w-3xl mx-auto">
       <!-- Back Link -->
-      <a routerLink="/blogs"
+      <a [routerLink]="['/', t.lang(), 'blogs']"
          class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors mb-8 group">
         <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>

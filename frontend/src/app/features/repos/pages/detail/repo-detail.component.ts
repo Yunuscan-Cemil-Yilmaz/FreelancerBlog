@@ -3,11 +3,13 @@ import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { ReposService } from '../../domain/repos.service';
 import { SeoService } from '../../../../core/seo/seo.service';
+import { GalleryCarouselComponent } from '../../../../shared/ui/components/gallery-carousel/gallery-carousel.component';
+import { ImageLightboxComponent } from '../../../../shared/ui/components/image-lightbox/image-lightbox.component';
 
 @Component({
   selector: 'app-repo-detail',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, GalleryCarouselComponent, ImageLightboxComponent],
   templateUrl: './repo-detail.component.html',
   styleUrl: './repo-detail.component.scss',
 })
