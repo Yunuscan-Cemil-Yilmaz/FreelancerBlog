@@ -19,6 +19,8 @@ class GlobalErrorHandlerMiddleware
     {
         try {
             return $next($request);
+        } catch (\Illuminate\Auth\AuthenticationException $e) {
+            return $this->handleException($e, $request, 401, $e->getMessage() ?: 'Invalid credentials.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return $this->handleException($e, $request, 422, $e->getMessage(), $e->errors());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {

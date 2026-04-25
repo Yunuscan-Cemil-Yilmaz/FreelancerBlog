@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RepoController;
@@ -10,6 +11,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+
+Route::post('admin/login', [AdminController::class, 'login']);
+Route::get('admin/oauth', [AdminController::class, 'oauth']);
+Route::post('admin/logout', [AdminController::class, 'logout']);
 
 /*
 |--------------------------------------------------------------------------
