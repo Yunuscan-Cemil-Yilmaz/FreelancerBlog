@@ -3,8 +3,10 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DomainController;
 use App\Http\Controllers\RepoController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Middleware\AdminAuthMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +18,11 @@ Route::get('/user', function (Request $request) {
 Route::post('admin/login', [AdminController::class, 'login']);
 Route::get('admin/oauth', [AdminController::class, 'oauth']);
 Route::post('admin/logout', [AdminController::class, 'logout']);
+
+Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function () {
+    Route::get('domains', [DomainController::class, 'getDomainsWithPagination']);
+    Route::get('domain-details', [DomainController::class, 'getDomainDetails']);
+});
 
 /*
 |--------------------------------------------------------------------------
