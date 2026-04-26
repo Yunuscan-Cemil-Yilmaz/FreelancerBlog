@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DomainController;
+use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\RepoController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Middleware\AdminAuthMiddleware;
@@ -19,9 +20,21 @@ Route::post('admin/login', [AdminController::class, 'login']);
 Route::get('admin/oauth', [AdminController::class, 'oauth']);
 Route::post('admin/logout', [AdminController::class, 'logout']);
 
+Route::post('moderator/login', [ModeratorController::class, 'login']);
+Route::get('moderator/oauth', [ModeratorController::class, 'oauth']);
+Route::post('moderator/logout', [ModeratorController::class, 'logout']);
+
 Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function () {
     Route::get('domains', [DomainController::class, 'getDomainsWithPagination']);
     Route::get('domain-details', [DomainController::class, 'getDomainDetails']);
+    
+    // Moderator management (for Admin)
+    Route::get('moderators', [ModeratorController::class, 'getModerators']);
+    Route::post('moderators', [ModeratorController::class, 'createModerator']);
+    Route::delete('moderators', [ModeratorController::class, 'deleteModerator']);
+    Route::patch('moderators/status', [ModeratorController::class, 'setActiveStatusModerator']);
+    Route::patch('moderators/domain', [ModeratorController::class, 'updateModeratorDomain']);
+    Route::patch('moderators/reset-password', [ModeratorController::class, 'resetModeratorPassword']);
 });
 
 /*
