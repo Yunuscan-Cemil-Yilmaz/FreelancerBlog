@@ -2,7 +2,9 @@
 
 namespace App\Business\Features\Domain\Commands\UpdateDomainCommand;
 
-class UpdateDomainCommandValidator
+use Infrastructure\Extensions\BaseValidator;
+
+class UpdateDomainCommandValidator extends BaseValidator
 {
     public function validate($request)
     {

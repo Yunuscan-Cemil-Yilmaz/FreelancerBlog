@@ -15,6 +15,7 @@ class Reference extends Model
         'company',
         'quote_en',
         'quote_tr',
+        'order',
         'domain',
         'admin_domain'
     ];

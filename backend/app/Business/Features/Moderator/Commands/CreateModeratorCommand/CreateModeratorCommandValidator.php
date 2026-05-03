@@ -2,22 +2,17 @@
 
 namespace App\Business\Features\Moderator\Commands\CreateModeratorCommand;
 
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use Infrastructure\Extensions\BaseValidator;
 
-class CreateModeratorCommandValidator
+class CreateModeratorCommandValidator extends BaseValidator
 {
     public function validate(array $data): void
     {
-        $validator = Validator::make($data, [
+        $this->executeValidation($data, [
             'username' => 'required|string|unique:moderators,username',
             'password' => 'required|string|min:6',
             'full_name' => 'required|string',
             'domain_id' => 'required|integer|exists:domains,id',
         ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
     }
 }

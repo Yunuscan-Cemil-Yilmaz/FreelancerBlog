@@ -14,6 +14,7 @@ class ProfessionalSkill extends Model
         'name_tr',
         'icon',
         'level',
+        'order',
         'domain',
         'admin_domain'
     ];

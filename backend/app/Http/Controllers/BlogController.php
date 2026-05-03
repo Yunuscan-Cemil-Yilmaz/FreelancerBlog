@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Business\Features\Blogs\GetBlogBySlugQuery\GetBlogBySlugQuery;
-use App\Business\Features\Blogs\GetBlogBySlugQuery\GetBlogBySlugRequest;
-use App\Business\Features\Blogs\GetBlogListWithPaginationQuery\GetBlogListWithPaginationQuery;
-use App\Business\Features\Blogs\GetBlogListWithPaginationQuery\GetBlogListWithPaginationRequest;
-use App\Business\Features\Blogs\GetBlogListWithPaginationQuery\GetBlogListWithPaginationValidator;
-use App\Business\Features\Blogs\IncrementBlogViewCountCommand\IncrementBlogViewCountCommand;
-use App\Business\Features\Blogs\IncrementBlogViewCountCommand\IncrementBlogViewCountRequest;
+use App\Business\Features\Blogs\Queries\GetBlogBySlugQuery\GetBlogBySlugQuery;
+use App\Business\Features\Blogs\Queries\GetBlogBySlugQuery\GetBlogBySlugRequest;
+use App\Business\Features\Blogs\Queries\GetBlogListWithPaginationQuery\GetBlogListWithPaginationQuery;
+use App\Business\Features\Blogs\Queries\GetBlogListWithPaginationQuery\GetBlogListWithPaginationRequest;
+use App\Business\Features\Blogs\Queries\GetBlogListWithPaginationQuery\GetBlogListWithPaginationValidator;
+use App\Business\Features\Blogs\Commands\IncrementBlogViewCountCommand\IncrementBlogViewCountCommand;
+use App\Business\Features\Blogs\Commands\IncrementBlogViewCountCommand\IncrementBlogViewCountRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

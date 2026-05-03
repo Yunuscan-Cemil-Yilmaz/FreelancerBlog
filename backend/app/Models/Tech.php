@@ -13,6 +13,7 @@ class Tech extends Model
         'category_en',
         'category_tr',
         'items',
+        'order',
         'domain',
         'admin_domain'
     ];

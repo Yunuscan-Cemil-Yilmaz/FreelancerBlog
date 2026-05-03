@@ -13,6 +13,7 @@ class SubCategory extends Model
         'name_en',
         'name_tr',
         'slug',
+        'order',
         'domain',
         'admin_domain',
     ];

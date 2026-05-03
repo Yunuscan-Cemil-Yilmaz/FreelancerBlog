@@ -2,20 +2,15 @@
 
 namespace App\Business\Features\Moderator\Commands\ModeratorLogin;
 
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use Infrastructure\Extensions\BaseValidator;
 
-class ModeratorLoginValidator
+class ModeratorLoginValidator extends BaseValidator
 {
     public function validate(array $data): void
     {
-        $validator = Validator::make($data, [
+        $this->executeValidation($data, [
             'username' => 'required|string',
             'password' => 'required|string',
         ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
     }
 }

@@ -17,6 +17,7 @@ class Education extends Model
         'school_tr',
         'description_en',
         'description_tr',
+        'order',
         'domain',
         'admin_domain',
     ];

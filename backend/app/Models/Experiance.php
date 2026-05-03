@@ -16,6 +16,7 @@ class Experiance extends Model
         'company_tr',
         'description_en',
         'description_tr',
+        'order',
         'domain',
         'admin_domain',
     ];

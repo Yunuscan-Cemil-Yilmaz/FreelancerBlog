@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Business\Features\Repos\GetRepoBySlugQuery\GetRepoBySlugQuery;
-use App\Business\Features\Repos\GetRepoBySlugQuery\GetRepoBySlugRequest;
-use App\Business\Features\Repos\GetRepoListWithPaginationQuery\GetRepoListWithPaginationQuery;
-use App\Business\Features\Repos\GetRepoListWithPaginationQuery\GetRepoListWithPaginationRequest;
-use App\Business\Features\Repos\IncrementRepoViewCountCommand\IncrementRepoViewCountCommand;
-use App\Business\Features\Repos\IncrementRepoViewCountCommand\IncrementRepoViewCountRequest;
+use App\Business\Features\Repos\Queries\GetRepoBySlugQuery\GetRepoBySlugQuery;
+use App\Business\Features\Repos\Queries\GetRepoBySlugQuery\GetRepoBySlugRequest;
+use App\Business\Features\Repos\Queries\GetRepoListWithPaginationQuery\GetRepoListWithPaginationQuery;
+use App\Business\Features\Repos\Queries\GetRepoListWithPaginationQuery\GetRepoListWithPaginationRequest;
+use App\Business\Features\Repos\Commands\IncrementRepoViewCountCommand\IncrementRepoViewCountCommand;
+use App\Business\Features\Repos\Commands\IncrementRepoViewCountCommand\IncrementRepoViewCountRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
