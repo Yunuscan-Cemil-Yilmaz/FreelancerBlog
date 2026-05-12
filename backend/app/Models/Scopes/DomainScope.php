@@ -2,7 +2,7 @@
 
 namespace App\Models\Scopes;
 
-use App\Support\CurrentDomain;
+use App\Business\Extentions\CurrentDomain\CurrentDomain;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;

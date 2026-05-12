@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Business\Features\Domain\Commands\CascadeUpdateDomainCommand;
+
+use App\Models\Domain;
+
+class CascadeUpdateDomainCommandResponse
+{
+    public function __construct(
+        public readonly int $id,
+        public readonly string $domain,
+        public readonly string $admin_domain
+    ) {}
+}

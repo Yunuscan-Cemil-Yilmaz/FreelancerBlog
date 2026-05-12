@@ -8,9 +8,12 @@ class CreateDomainCommandValidator extends BaseValidator
 {
     public function validate($request)
     {
-        return $request->validate([
-            'domain' => 'required|string|max:64|unique:domains,domain,admin_domain',
-            'admin_domain' => 'required|string|max:64|unique:domains,admin_domain,domain',
+        $this->executeValidation([
+            'domain' => $request->domain,
+            'admin_domain' => $request->admin_domain,
+        ], [
+            'domain' => 'required|string|max:64|unique:domains,domain',
+            'admin_domain' => 'required|string|max:64|unique:domains,admin_domain',
         ]);
     }
 }

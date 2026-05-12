@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Business\Features\Domain\Commands\UpdateDomainCommand;
+namespace App\Business\Features\Domain\Commands\CascadeUpdateDomainCommand;
 
 use Infrastructure\Extensions\BaseValidator;
 
-class UpdateDomainCommandValidator extends BaseValidator
+class CascadeUpdateDomainCommandValidator extends BaseValidator
 {
     public function validate($request)
     {

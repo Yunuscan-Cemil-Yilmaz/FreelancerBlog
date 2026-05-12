@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -20,7 +21,8 @@ import { AuthService } from '../../services/auth.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   template: `
     <div class="login-container">
@@ -103,7 +105,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -119,10 +122,13 @@ export class LoginComponent {
       try {
         const { username, password } = this.loginForm.value;
         await this.authService.login(username, password);
+        this.snackBar.open('Logged in successfully!', 'Close', { duration: 3000 });
         this.router.navigate(['/dashboard']);
       } catch (err: any) {
         console.error('Login error:', err);
-        this.error = err.error?.message || 'Invalid username or password';
+        const errorMsg = err.error?.message || 'Invalid username or password';
+        this.error = errorMsg;
+        this.snackBar.open(errorMsg, 'Close', { duration: 3000 });
       } finally {
         this.loading = false;
       }

@@ -16,7 +16,7 @@ use App\Business\Features\Domain\Commands\UpdateDomainCommand\UpdateDomainComman
 
 class DomainController extends Controller
 {
-    public function getDomainsWithPagination(Request $request, GetDomainWithPaginationQuery $query)
+    public function getDomainsWithPagination(Request $request, GetDomainWithPaginationQuery $query): \Illuminate\Http\JsonResponse
     {
         $queryRequest = new GetDomainWithPaginationQueryRequest(
             page: (int) $request->header('page', 1),
@@ -26,29 +26,29 @@ class DomainController extends Controller
             orderBy: $request->header('orderBy')
         );
 
-        return $query->handle($queryRequest);
+        return response()->json($query->handle($queryRequest));
     }
 
-    public function getDomainDetails(Request $request, GetDomainDetailsQuery $query)
+    public function getDomainDetails(Request $request, GetDomainDetailsQuery $query): \Illuminate\Http\JsonResponse
     {
         $queryRequest = new GetDomainDetailsQueryRequest(
             id: (int) $request->header('id')
         );
 
-        return $query->handle($queryRequest);
+        return response()->json($query->handle($queryRequest));
     }
 
-    public function createDomain(Request $request, CreateDomainCommand $command)
+    public function createDomain(Request $request, CreateDomainCommand $command): \Illuminate\Http\JsonResponse
     {
         $commandRequest = new CreateDomainCommandRequest(
             domain: $request->input('domain'),
             admin_domain: $request->input('admin_domain')
         );
 
-        return $command->handle($commandRequest);
+        return response()->json($command->handle($commandRequest));
     }
 
-    public function updateDomain(Request $request, UpdateDomainCommand $command)
+    public function updateDomain(Request $request, UpdateDomainCommand $command): \Illuminate\Http\JsonResponse
     {
         $commandRequest = new UpdateDomainCommandRequest(
             id: (int) $request->input('id'),
@@ -56,7 +56,18 @@ class DomainController extends Controller
             admin_domain: $request->input('admin_domain')
         );
 
-        return $command->handle($commandRequest);
+        return response()->json($command->handle($commandRequest));
+    }
+
+    public function cascadeUpdateDomain(Request $request, \App\Business\Features\Domain\Commands\CascadeUpdateDomainCommand\CascadeUpdateDomainCommand $command): \Illuminate\Http\JsonResponse
+    {
+        $commandRequest = new \App\Business\Features\Domain\Commands\CascadeUpdateDomainCommand\CascadeUpdateDomainCommandRequest(
+            id: (int) $request->input('id'),
+            domain: $request->input('domain'),
+            admin_domain: $request->input('admin_domain')
+        );
+
+        return response()->json($command->handle($commandRequest));
     }
 
     public function deleteDomain(Request $request)

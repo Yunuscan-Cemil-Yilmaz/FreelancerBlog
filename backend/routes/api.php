@@ -33,6 +33,10 @@ Route::post('moderator/logout', [ModeratorController::class, 'logout']);
 Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function () {
     Route::get('domains', [DomainController::class, 'getDomainsWithPagination']);
     Route::get('domain-details', [DomainController::class, 'getDomainDetails']);
+    Route::post('domains/create', [DomainController::class, 'createDomain']);
+    Route::post('domains/update', [DomainController::class, 'updateDomain']);
+    Route::post('domains/cascade-update', [DomainController::class, 'cascadeUpdateDomain']);
+    Route::post('domains/delete', [DomainController::class, 'deleteDomain']);
     
     // Moderator management (for Admin)
     Route::get('moderators', [ModeratorController::class, 'getModerators']);

@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -16,7 +18,9 @@ import { AuthService } from '../../services/auth.service';
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatExpansionModule,
+    RouterModule
   ],
   template: `
     <div class="dashboard-container">
@@ -24,7 +28,7 @@ import { AuthService } from '../../services/auth.service';
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
-        <span>FreelancerBlog Admin Dashboard</span>
+        <span style="cursor: pointer" routerLink="/dashboard">FreelancerBlog Admin Dashboard</span>
         <span class="spacer"></span>
         <button mat-icon-button (click)="logout()" title="Logout">
           <mat-icon>logout</mat-icon>
@@ -34,10 +38,30 @@ import { AuthService } from '../../services/auth.service';
       <mat-sidenav-container class="sidenav-container">
         <mat-sidenav #sidenav mode="side" opened class="sidenav">
           <mat-nav-list>
-            <a mat-list-item href="#">
+            <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
               <mat-icon matListItemIcon>dashboard</mat-icon>
               <div matListItemTitle>Overview</div>
             </a>
+            
+            <mat-expansion-panel class="mat-elevation-z0" style="background: transparent;">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon style="margin-right: 16px;">language</mat-icon>
+                  Domains
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-nav-list class="submenu">
+                <a mat-list-item routerLink="/dashboard/domains/create" routerLinkActive="active-link">
+                  <mat-icon matListItemIcon>add</mat-icon>
+                  <div matListItemTitle>Create Domain</div>
+                </a>
+                <a mat-list-item routerLink="/dashboard/domains" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+                  <mat-icon matListItemIcon>list</mat-icon>
+                  <div matListItemTitle>Domain List</div>
+                </a>
+              </mat-nav-list>
+            </mat-expansion-panel>
+
             <a mat-list-item href="#">
               <mat-icon matListItemIcon>article</mat-icon>
               <div matListItemTitle>Blog Posts</div>
@@ -54,23 +78,27 @@ import { AuthService } from '../../services/auth.service';
         </mat-sidenav>
 
         <mat-sidenav-content class="content">
-          <div class="welcome-section">
-            <h1>Welcome back, Admin!</h1>
-            <p>Select an option from the sidebar to manage your blog.</p>
-          </div>
+          <router-outlet></router-outlet>
+          
+          <div *ngIf="router.url === '/dashboard'">
+            <div class="welcome-section">
+              <h1>Welcome back, Admin!</h1>
+              <p>Select an option from the sidebar to manage your blog.</p>
+            </div>
 
-          <div class="stats-grid">
-            <div class="stat-card">
-              <h3>Total Posts</h3>
-              <p class="stat-value">24</p>
-            </div>
-            <div class="stat-card">
-              <h3>Total Views</h3>
-              <p class="stat-value">1.2k</p>
-            </div>
-            <div class="stat-card">
-              <h3>Pending Comments</h3>
-              <p class="stat-value">5</p>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <h3>Total Posts</h3>
+                <p class="stat-value">24</p>
+              </div>
+              <div class="stat-card">
+                <h3>Total Views</h3>
+                <p class="stat-value">1.2k</p>
+              </div>
+              <div class="stat-card">
+                <h3>Pending Comments</h3>
+                <p class="stat-value">5</p>
+              </div>
             </div>
           </div>
         </mat-sidenav-content>
@@ -93,6 +121,16 @@ import { AuthService } from '../../services/auth.service';
       width: 250px;
       border-right: 1px solid #e0e0e0;
       background-color: #f8f9fa;
+    }
+    ::ng-deep .mat-expansion-panel-body {
+      padding: 0 0 0 16px !important;
+    }
+    .submenu a {
+      padding-left: 16px;
+    }
+    .active-link {
+      background: rgba(0, 0, 0, 0.04);
+      color: #764ba2;
     }
     .content {
       padding: 30px;
@@ -131,7 +169,7 @@ import { AuthService } from '../../services/auth.service';
   `]
 })
 export class DashboardComponent {
-  constructor(private authService: AuthService) {}
+  constructor(public router: Router, private authService: AuthService) {}
 
   logout() {
     this.authService.logout();
