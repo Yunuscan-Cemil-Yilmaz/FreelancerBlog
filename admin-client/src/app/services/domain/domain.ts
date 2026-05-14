@@ -20,6 +20,7 @@ export interface PaginatedResponse<T> {
 })
 export class DomainService {
   private apiUrl = 'http://localhost:8000/api/admin/domains';
+  private detailUrl = 'http://localhost:8000/api/admin/domain-details';
 
   constructor(private http: HttpClient) {}
 
@@ -29,6 +30,13 @@ export class DomainService {
       'pageSize': pageSize.toString()
     });
     return this.http.get<any>(this.apiUrl, { headers }).pipe(timeout(10000));
+  }
+
+  getDomainDetails(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'id': id.toString()
+    });
+    return this.http.get<any>(this.detailUrl, { headers }).pipe(timeout(10000));
   }
 
   createDomain(domainData: { domain: string, admin_domain: string }): Observable<any> {

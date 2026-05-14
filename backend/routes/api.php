@@ -95,6 +95,12 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
     Route::post('/skills/delete', [SkillController::class, 'deleteSkill']);
 });
 
+
+
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Language-Prefixed Public Routes

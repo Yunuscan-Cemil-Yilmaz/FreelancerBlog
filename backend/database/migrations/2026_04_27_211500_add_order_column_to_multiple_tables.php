@@ -12,7 +12,7 @@ return new class extends Migration
         'professional_skills',
         'references',
         'sub_categories',
-        'techs',
+        'teches',
     ];
 
     /**

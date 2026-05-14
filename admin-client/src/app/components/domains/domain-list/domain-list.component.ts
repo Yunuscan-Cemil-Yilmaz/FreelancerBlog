@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RouterLink } from '@angular/router';
 import { DomainService, Domain } from '../../../services/domain/domain';
 import { DomainUpdateDialogComponent } from '../domain-update-dialog/domain-update-dialog';
 
@@ -21,7 +22,8 @@ import { DomainUpdateDialogComponent } from '../domain-update-dialog/domain-upda
     MatIconModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RouterLink
   ],
   template: `
     <div class="list-container mat-elevation-z8">
@@ -40,7 +42,11 @@ import { DomainUpdateDialogComponent } from '../domain-update-dialog/domain-upda
         <table mat-table [dataSource]="domains" class="full-width-table" *ngIf="domains.length > 0">
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef> ID </th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            <td mat-cell *matCellDef="let element">
+              <a [routerLink]="['/dashboard/domains', element.id]" class="detail-link">
+                {{element.id}}
+              </a>
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="domain">
@@ -130,6 +136,14 @@ import { DomainUpdateDialogComponent } from '../domain-update-dialog/domain-upda
     }
     .spinning {
       animation: rotate 2s linear infinite;
+    }
+    .detail-link {
+      color: #3f51b5;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .detail-link:hover {
+      text-decoration: underline;
     }
     @keyframes rotate {
       from { transform: rotate(0deg); }

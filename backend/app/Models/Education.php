@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Education extends Model
 {
     protected $primaryKey = 'id';
+    protected $table = "educations";
     protected $fillable = [
         'year_en',
         'year_tr',
