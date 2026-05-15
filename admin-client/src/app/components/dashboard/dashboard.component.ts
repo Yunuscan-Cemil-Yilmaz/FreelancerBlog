@@ -38,12 +38,7 @@ import { AuthService } from '../../services/auth.service';
       <mat-sidenav-container class="sidenav-container">
         <mat-sidenav #sidenav mode="side" opened class="sidenav">
           <mat-nav-list>
-            <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
-              <mat-icon matListItemIcon>dashboard</mat-icon>
-              <div matListItemTitle>Overview</div>
-            </a>
-            
-            <mat-expansion-panel class="mat-elevation-z0" style="background: transparent;">
+            <mat-expansion-panel class="mat-elevation-z0" style="background: transparent;" [expanded]="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <mat-icon style="margin-right: 16px;">language</mat-icon>
@@ -61,19 +56,6 @@ import { AuthService } from '../../services/auth.service';
                 </a>
               </mat-nav-list>
             </mat-expansion-panel>
-
-            <a mat-list-item href="#">
-              <mat-icon matListItemIcon>article</mat-icon>
-              <div matListItemTitle>Blog Posts</div>
-            </a>
-            <a mat-list-item href="#">
-              <mat-icon matListItemIcon>category</mat-icon>
-              <div matListItemTitle>Categories</div>
-            </a>
-            <a mat-list-item href="#">
-              <mat-icon matListItemIcon>people</mat-icon>
-              <div matListItemTitle>Users</div>
-            </a>
           </mat-nav-list>
         </mat-sidenav>
 
@@ -83,22 +65,7 @@ import { AuthService } from '../../services/auth.service';
           <div *ngIf="router.url === '/dashboard'">
             <div class="welcome-section">
               <h1>Welcome back, Admin!</h1>
-              <p>Select an option from the sidebar to manage your blog.</p>
-            </div>
-
-            <div class="stats-grid">
-              <div class="stat-card">
-                <h3>Total Posts</h3>
-                <p class="stat-value">24</p>
-              </div>
-              <div class="stat-card">
-                <h3>Total Views</h3>
-                <p class="stat-value">1.2k</p>
-              </div>
-              <div class="stat-card">
-                <h3>Pending Comments</h3>
-                <p class="stat-value">5</p>
-              </div>
+              <p>Select an option from the sidebar to manage your system.</p>
             </div>
           </div>
         </mat-sidenav-content>

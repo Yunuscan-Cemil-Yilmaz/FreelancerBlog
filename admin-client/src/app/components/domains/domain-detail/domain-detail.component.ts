@@ -7,7 +7,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DomainService, Domain } from '../../../services/domain/domain';
+import { ModeratorService, Moderator } from '../../../services/moderator/moderator';
+import { ModeratorDialogComponent } from '../../moderators/moderator-dialog/moderator-dialog.component';
 
 @Component({
   selector: 'app-domain-detail',
@@ -20,7 +26,11 @@ import { DomainService, Domain } from '../../../services/domain/domain';
     MatIconModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSlideToggleModule
   ],
   template: `
     <div class="detail-container">
@@ -71,29 +81,72 @@ import { DomainService, Domain } from '../../../services/domain/domain';
         <mat-card class="detail-card">
           <mat-card-header>
             <mat-card-title>Moderators</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-raised-button color="primary" (click)="openAddModeratorDialog()">
+              <mat-icon>add</mat-icon> Add Moderator
+            </button>
           </mat-card-header>
           <mat-card-content>
-            <div *ngIf="details.moderators.length === 0" class="no-moderators">
-              No moderators assigned to this domain.
-            </div>
-            <table *ngIf="details.moderators.length > 0" class="moderators-table">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let mod of details.moderators">
-                  <td>{{ mod.username }}</td>
-                  <td>
-                    <span class="status-badge" [class.active]="mod.is_active">
-                      {{ mod.is_active ? 'Active' : 'Inactive' }}
-                    </span>
+            <div class="table-container">
+              <div class="loading-shade" *ngIf="isModeratorsLoading">
+                <mat-spinner diameter="30"></mat-spinner>
+              </div>
+
+              <table mat-table [dataSource]="moderators" class="full-width-table">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef> ID </th>
+                  <td mat-cell *matCellDef="let mod"> 
+                    <a [routerLink]="['/dashboard/moderators', mod.id]" class="detail-link">
+                      {{ mod.id }}
+                    </a>
                   </td>
-                </tr>
-              </tbody>
-            </table>
+                </ng-container>
+
+                <ng-container matColumnDef="username">
+                  <th mat-header-cell *matHeaderCellDef> Username </th>
+                  <td mat-cell *matCellDef="let mod"> {{ mod.username }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let mod">
+                    <mat-slide-toggle 
+                      [checked]="mod.is_active" 
+                      (change)="toggleModeratorStatus(mod, $event.checked)">
+                    </mat-slide-toggle>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef> Actions </th>
+                  <td mat-cell *matCellDef="let mod">
+                    <button mat-icon-button color="primary" (click)="openUpdateDomainDialog(mod)" title="Update Domain">
+                      <mat-icon>domain</mat-icon>
+                    </button>
+                    <button mat-icon-button color="accent" (click)="resetModeratorPassword(mod)" title="Reset Password">
+                      <mat-icon>lock_reset</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteModerator(mod.id)" title="Delete">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+
+              <div class="no-moderators" *ngIf="!isModeratorsLoading && moderators.length === 0">
+                No moderators assigned to this domain.
+              </div>
+            </div>
+
+            <mat-paginator 
+              [length]="totalModerators"
+              [pageSize]="moderatorPageSize"
+              [pageSizeOptions]="[5, 10, 20]"
+              (page)="onModeratorPageChange($event)">
+            </mat-paginator>
           </mat-card-content>
         </mat-card>
       </div>
@@ -123,6 +176,9 @@ import { DomainService, Domain } from '../../../services/domain/domain';
       margin: 0;
       font-weight: 600;
       color: #2c3e50;
+    }
+    .spacer {
+      flex: 1 1 auto;
     }
     .content-wrapper {
       display: flex;
@@ -189,34 +245,33 @@ import { DomainService, Domain } from '../../../services/domain/domain';
       color: #7f8c8d;
       text-transform: capitalize;
     }
-    .moderators-table {
-      width: 100%;
-      border-collapse: collapse;
+    .table-container {
+      position: relative;
+      min-height: 150px;
       margin-top: 16px;
     }
-    .moderators-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 2px solid #ecf0f1;
-      color: #7f8c8d;
-      font-size: 13px;
+    .full-width-table {
+      width: 100%;
     }
-    .moderators-table td {
-      padding: 12px;
-      border-bottom: 1px solid #ecf0f1;
-      color: #2c3e50;
+    .loading-shade {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.7);
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .status-badge {
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 11px;
+    .detail-link {
+      color: #3f51b5;
+      text-decoration: none;
       font-weight: 600;
-      background-color: #ecf0f1;
-      color: #95a5a6;
     }
-    .status-badge.active {
-      background-color: #d4edda;
-      color: #155724;
+    .detail-link:hover {
+      text-decoration: underline;
     }
     .spinner-container {
       display: flex;
@@ -247,10 +302,20 @@ export class DomainDetailComponent implements OnInit {
   errorMessage = '';
   statsArray: { label: string, value: number }[] = [];
 
+  // Moderators Pagination
+  moderators: Moderator[] = [];
+  isModeratorsLoading = false;
+  totalModerators = 0;
+  moderatorPageSize = 5;
+  moderatorPageIndex = 1;
+  displayedColumns: string[] = ['id', 'username', 'status', 'actions'];
+
   constructor(
     private route: ActivatedRoute,
     private domainService: DomainService,
+    private moderatorService: ModeratorService,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -278,6 +343,8 @@ export class DomainDetailComponent implements OnInit {
             value: this.details.counts[key]
           }));
         }
+        // After loading domain details, load paginated moderators
+        this.loadPaginatedModerators();
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -291,25 +358,101 @@ export class DomainDetailComponent implements OnInit {
     });
   }
 
+  loadPaginatedModerators(): void {
+    if (!this.details || !this.details.data) return;
+
+    this.isModeratorsLoading = true;
+    this.cdr.detectChanges();
+
+    const domainName = this.details.data.domain;
+    this.moderatorService.getModerators(this.moderatorPageIndex, this.moderatorPageSize, domainName).subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          this.moderators = response.data.data;
+          this.totalModerators = response.data.total;
+        }
+        this.isModeratorsLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading moderators', err);
+        this.isModeratorsLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  onModeratorPageChange(event: PageEvent): void {
+    this.moderatorPageIndex = event.pageIndex + 1;
+    this.moderatorPageSize = event.pageSize;
+    this.loadPaginatedModerators();
+  }
+
+  openAddModeratorDialog(): void {
+    if (!this.details || !this.details.data) return;
+
+    const dialogRef = this.dialog.open(ModeratorDialogComponent, {
+      width: '500px',
+      data: { mode: 'create', domain_id: this.details.data.id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadPaginatedModerators();
+      }
+    });
+  }
+
+  openUpdateDomainDialog(mod: Moderator): void {
+    const dialogRef = this.dialog.open(ModeratorDialogComponent, {
+      width: '500px',
+      data: { mode: 'update', moderator: mod }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadPaginatedModerators();
+      }
+    });
+  }
+
+  toggleModeratorStatus(mod: Moderator, isActive: boolean): void {
+    this.moderatorService.setActiveStatus(mod.id, isActive).subscribe({
+      next: () => {
+        mod.is_active = isActive;
+        this.snackBar.open('Status updated', 'Close', { duration: 2000 });
+      },
+      error: (err) => {
+        this.snackBar.open('Failed to update status', 'Close', { duration: 2000 });
+        this.loadPaginatedModerators();
+      }
+    });
+  }
+
+  resetModeratorPassword(mod: Moderator): void {
+    const dialogRef = this.dialog.open(ModeratorDialogComponent, {
+      width: '500px',
+      data: { mode: 'reset-password', moderator: mod }
+    });
+  }
+
+  deleteModerator(id: number): void {
+    if (confirm('Delete this moderator?')) {
+      this.moderatorService.deleteModerator(id).subscribe({
+        next: () => {
+          this.snackBar.open('Moderator deleted', 'Close', { duration: 2000 });
+          this.loadPaginatedModerators();
+        },
+        error: (err) => this.snackBar.open('Failed to delete', 'Close', { duration: 2000 })
+      });
+    }
+  }
+
   private extractErrorMessage(err: any): string {
-    // Check for specific HTTP status codes first for better user experience
-    if (err.status === 404) {
-      return 'The requested domain record could not be found.';
-    }
-    
-    if (err.status === 401 || err.status === 403) {
-      return 'You do not have permission to view these details.';
-    }
-
-    if (err.status >= 500) {
-      return 'A server-side error occurred. Our team has been notified.';
-    }
-
-    if (err.status === 0) {
-      return 'Connection lost. Please check your internet or server status.';
-    }
-
-    // Default friendly message if no specific mapping exists
-    return 'An unexpected error occurred while loading domain details. Please try again.';
+    if (err.status === 404) return 'Domain not found.';
+    if (err.status === 401 || err.status === 403) return 'Unauthorized.';
+    if (err.status >= 500) return 'Server error.';
+    if (err.status === 0) return 'Connection error.';
+    return 'An error occurred.';
   }
 }

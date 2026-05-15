@@ -14,6 +14,7 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Middleware\AdminAuthMiddleware;
+use App\Http\Middleware\ModeratorAuthMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,13 +42,15 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
     // Moderator management (for Admin)
     Route::get('moderators', [ModeratorController::class, 'getModerators']);
     Route::post('/moderators/reset-password', [ModeratorController::class, 'resetModeratorPassword']);
-    Route::get('/moderators', [ModeratorController::class, 'index']);
     Route::post('moderators', [ModeratorController::class, 'createModerator']);
     Route::delete('moderators', [ModeratorController::class, 'deleteModerator']);
     Route::patch('moderators/status', [ModeratorController::class, 'setActiveStatusModerator']);
     Route::patch('moderators/domain', [ModeratorController::class, 'updateModeratorDomain']);
-    Route::patch('moderators/reset-password', [ModeratorController::class, 'resetModeratorPassword']);
+});
 
+
+
+Route::middleware(ModeratorAuthMiddleware::class)->prefix('moderator')->group(function () {
     // Category Management
     Route::post('/categories/create', [CategoryController::class, 'createCategory']);
     Route::post('/categories/update', [CategoryController::class, 'updateCategory']);
@@ -94,10 +97,6 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
     Route::post('/skills/update-order', [SkillController::class, 'updateSkillOrder']);
     Route::post('/skills/delete', [SkillController::class, 'deleteSkill']);
 });
-
-
-
-
 
 
 

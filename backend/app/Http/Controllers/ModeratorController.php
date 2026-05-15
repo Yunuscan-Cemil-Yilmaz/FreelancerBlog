@@ -18,6 +18,7 @@ use App\Business\Features\Moderator\Commands\UpdateModeratorDomainCommand\Update
 use App\Business\Features\Moderator\Commands\UpdateModeratorDomainCommand\UpdateModeratorDomainCommandValidator;
 use App\Business\Features\Moderator\Commands\ResetModeratorPasswordCommand\ResetModeratorPasswordCommand;
 use App\Business\Features\Moderator\Queries\GetModeratorsWithPaginationQuery\GetModeratorsWithPaginationQuery;
+use App\Business\Features\Moderator\Queries\GetModeratorDetailsQuery\GetModeratorDetailsQuery;
 
 class ModeratorController extends Controller
 {
@@ -101,8 +102,14 @@ class ModeratorController extends Controller
     public function resetModeratorPassword(Request $request, ResetModeratorPasswordCommand $command)
     {
         $id = $request->header('id');
-        $newPassword = $request->header('new-password');
+        $newPassword = $request->input('new-password');
 
         return $command->handle((int)$id, $newPassword);
+    }
+
+    public function getModeratorDetails(Request $request, GetModeratorDetailsQuery $query)
+    {
+        $id = $request->header('id');
+        return $query->handle((int)$id);
     }
 }
