@@ -72,8 +72,8 @@ class ModeratorController extends Controller
 
     public function setActiveStatusModerator(Request $request, SetActiveStatusModeratorCommand $command)
     {
-        $id = $request->header('id');
-        $isActive = (bool)$request->header('is-active');
+        $id = $request->input('id');
+        $isActive = filter_var($request->input('is_active'), FILTER_VALIDATE_BOOLEAN);
 
         return $command->handle((int)$id, $isActive);
     }

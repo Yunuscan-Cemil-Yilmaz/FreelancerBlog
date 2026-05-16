@@ -7,8 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { ModeratorService, Moderator } from '../../../services/moderator/moderator';
-import { DomainService, Domain } from '../../../services/domain/domain';
+import { ModeratorService, Moderator } from '../../domain/moderator';
+import { DomainService, Domain } from '@features/domains/domain/domain';
 
 @Component({
   selector: 'app-moderator-dialog',
@@ -134,7 +134,7 @@ export class ModeratorDialogComponent implements OnInit {
   loadDomains(): void {
     // Pagination might be needed but let's load first page for now
     this.domainService.getDomains(1, 50).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         if (response && response.data) {
           this.domains = response.data.data;
         }
@@ -162,7 +162,7 @@ export class ModeratorDialogComponent implements OnInit {
         this.snackBar.open('Success!', 'Close', { duration: 2000 });
         this.dialogRef.close(true);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.isSubmitting = false;
         this.showError(err);
       }

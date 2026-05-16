@@ -8,8 +8,8 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
-import { DomainService, Domain } from '../../../services/domain/domain';
-import { DomainUpdateDialogComponent } from '../domain-update-dialog/domain-update-dialog';
+import { DomainService, Domain } from '../../domain/domain';
+import { DomainUpdateDialogComponent } from '../../components/update-dialog/domain-update-dialog';
 
 @Component({
   selector: 'app-domain-list',
@@ -181,7 +181,7 @@ export class DomainListComponent implements OnInit {
     this.cdr.detectChanges();
     
     this.domainService.getDomains(this.pageIndex, this.pageSize).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         console.log('DomainListComponent: Received response', response);
         this.isLoading = false;
         
@@ -207,7 +207,7 @@ export class DomainListComponent implements OnInit {
           this.snackBar.open(`Loaded ${this.domains.length} domains`, 'Close', { duration: 2000 });
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('DomainListComponent: Load error', err);
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -258,7 +258,7 @@ export class DomainListComponent implements OnInit {
         next: () => {
           this.loadDomains();
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Failed to delete domain', err);
           // Reload anyway since it's a placeholder
           this.loadDomains();

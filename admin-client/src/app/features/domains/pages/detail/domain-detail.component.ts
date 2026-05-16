@@ -11,9 +11,9 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { DomainService, Domain } from '../../../services/domain/domain';
-import { ModeratorService, Moderator } from '../../../services/moderator/moderator';
-import { ModeratorDialogComponent } from '../../moderators/moderator-dialog/moderator-dialog.component';
+import { DomainService, Domain } from '../../domain/domain';
+import { ModeratorService, Moderator } from '@features/moderators/domain/moderator';
+import { ModeratorDialogComponent } from '@features/moderators/components/dialog/moderator-dialog.component';
 
 @Component({
   selector: 'app-domain-detail',
@@ -348,7 +348,7 @@ export class DomainDetailComponent implements OnInit {
         this.isLoading = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error loading domain details', err);
         this.isLoading = false;
         this.errorMessage = this.extractErrorMessage(err);
@@ -366,7 +366,7 @@ export class DomainDetailComponent implements OnInit {
 
     const domainName = this.details.data.domain;
     this.moderatorService.getModerators(this.moderatorPageIndex, this.moderatorPageSize, domainName).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         if (response && response.data) {
           this.moderators = response.data.data;
           this.totalModerators = response.data.total;
@@ -374,7 +374,7 @@ export class DomainDetailComponent implements OnInit {
         this.isModeratorsLoading = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error loading moderators', err);
         this.isModeratorsLoading = false;
         this.cdr.detectChanges();
@@ -419,10 +419,13 @@ export class DomainDetailComponent implements OnInit {
   toggleModeratorStatus(mod: Moderator, isActive: boolean): void {
     this.moderatorService.setActiveStatus(mod.id, isActive).subscribe({
       next: () => {
-        mod.is_active = isActive;
+        setTimeout(() => {
+          mod.is_active = isActive;
+          this.cdr.detectChanges();
+        });
         this.snackBar.open('Status updated', 'Close', { duration: 2000 });
       },
-      error: (err) => {
+      error: (err: any) => {
         this.snackBar.open('Failed to update status', 'Close', { duration: 2000 });
         this.loadPaginatedModerators();
       }
@@ -443,7 +446,7 @@ export class DomainDetailComponent implements OnInit {
           this.snackBar.open('Moderator deleted', 'Close', { duration: 2000 });
           this.loadPaginatedModerators();
         },
-        error: (err) => this.snackBar.open('Failed to delete', 'Close', { duration: 2000 })
+        error: (err: any) => this.snackBar.open('Failed to delete', 'Close', { duration: 2000 })
       });
     }
   }

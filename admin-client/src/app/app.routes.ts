@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { authGuard } from './guards/auth.guard';
-import { guestGuard } from './guards/guest.guard';
-import { DomainListComponent } from './components/domains/domain-list/domain-list.component';
-import { DomainCreateComponent } from './components/domains/domain-create/domain-create.component';
-import { DomainDetailComponent } from './components/domains/domain-detail/domain-detail.component';
-import { ModeratorDetailComponent } from './components/moderators/moderator-detail/moderator-detail.component';
+import { LoginComponent } from '@features/login/pages/login/login.component';
+import { DashboardComponent } from '@features/dashboard/pages/dashboard/dashboard.component';
+import { authGuard } from '@core/guards/auth.guard';
+import { guestGuard } from '@core/guards/guest.guard';
+import { DomainListComponent } from '@features/domains/pages/list/domain-list.component';
+import { DomainCreateComponent } from '@features/domains/pages/create/domain-create.component';
+import { DomainDetailComponent } from '@features/domains/pages/detail/domain-detail.component';
+import { ModeratorDetailComponent } from '@features/moderators/pages/detail/moderator-detail.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [guestGuard] },

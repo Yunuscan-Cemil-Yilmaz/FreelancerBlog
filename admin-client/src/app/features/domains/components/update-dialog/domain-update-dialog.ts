@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
-import { DomainService, Domain } from '../../../services/domain/domain';
+import { DomainService, Domain } from '../../domain/domain';
 
 @Component({
   selector: 'app-domain-update-dialog',

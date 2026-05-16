@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { ModeratorService, Moderator } from '../../../services/moderator/moderator';
+import { ModeratorService, Moderator } from '../../domain/moderator';
 
 @Component({
   selector: 'app-moderator-detail',
@@ -200,12 +200,12 @@ export class ModeratorDetailComponent implements OnInit {
     this.cdr.detectChanges();
 
     this.moderatorService.getModeratorDetails(id).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.moderator = response.data;
         this.isLoading = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: any) => {
         this.isLoading = false;
         this.errorMessage = 'Moderator details could not be loaded.';
         this.snackBar.open(this.errorMessage, 'Close', { duration: 5000 });

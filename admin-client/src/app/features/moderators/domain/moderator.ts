@@ -54,11 +54,7 @@ export class ModeratorService {
   }
 
   setActiveStatus(id: number, isActive: boolean): Observable<any> {
-    const headers = new HttpHeaders({
-      'id': id.toString(),
-      'is-active': isActive.toString()
-    });
-    return this.http.patch<any>(`${this.apiUrl}/status`, {}, { headers }).pipe(timeout(10000));
+    return this.http.patch<any>(`${this.apiUrl}/status`, { id, is_active: isActive }).pipe(timeout(10000));
   }
 
   updateModeratorDomain(id: number, domainId: number): Observable<any> {

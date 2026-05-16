@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DomainService } from '../../../services/domain/domain';
+import { DomainService } from '../../domain/domain';
 
 @Component({
   selector: 'app-domain-create',
@@ -115,7 +115,7 @@ export class DomainCreateComponent {
         this.snackBar.open('Domain created successfully!', 'Close', { duration: 3000 });
         this.router.navigate(['/dashboard/domains']);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Failed to create domain', err);
         this.isSubmitting = false;
         this.cdr.detectChanges();
