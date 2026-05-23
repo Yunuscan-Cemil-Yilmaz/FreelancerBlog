@@ -10,8 +10,6 @@ return new class extends Migration
         'educations',
         'experiances',
         'professional_skills',
-        'references',
-        'sub_categories',
         'teches',
     ];
 

@@ -2,7 +2,7 @@
 
 namespace App\Business\Features\References\Commands\UpdateReferenceOrderCommand;
 
-use App\Models\Reference;
+use App\Models\UserReference;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -13,7 +13,7 @@ class UpdateReferenceOrderCommand
         DB::transaction(function () use ($request) {
             // Get all items count for current domain. 
             // Assuming global scope applies.
-            $total = Reference::count();
+            $total = UserReference::count();
             $orders = collect($request->orders);
             
             if ($orders->count() !== $total) {
@@ -33,7 +33,7 @@ class UpdateReferenceOrderCommand
 
             // Update orders using lock
             foreach ($orders as $item) {
-                $modelItem = Reference::lockForUpdate()->find($item['id']);
+                $modelItem = UserReference::lockForUpdate()->find($item['id']);
                 if ($modelItem) {
                     $modelItem->order = $item['order'];
                     $modelItem->save();

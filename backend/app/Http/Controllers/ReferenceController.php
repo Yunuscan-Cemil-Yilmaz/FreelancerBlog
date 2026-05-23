@@ -15,11 +15,17 @@ use App\Business\Features\References\Commands\UpdateReferenceCommand\UpdateRefer
 use App\Business\Features\References\Commands\UpdateReferenceCommand\UpdateReferenceCommandRequest;
 use App\Business\Features\References\Commands\UpdateReferenceCommand\UpdateReferenceCommandValidator;
 use App\Business\Features\References\Commands\DeleteReferenceCommand\DeleteReferenceCommand;
+use App\Business\Features\References\Queries\GetReferenceAllListQuery\GetReferenceAllListQuery;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ReferenceController extends Controller
 {
+    public function indexForModerator(GetReferenceAllListQuery $query): JsonResponse
+    {
+        return response()->json($query->handle());
+    }
+
     public function index(string $lang, GetReferenceListQuery $query): JsonResponse
     {
         $request = new GetReferenceListRequest($lang);
@@ -38,8 +44,7 @@ class ReferenceController extends Controller
             role_tr: $request->input('role_tr'),
             company: $request->input('company'),
             quote_en: $request->input('quote_en'),
-            quote_tr: $request->input('quote_tr'),
-            request_domain: $request->header('domain') ?? $request->input('domain')
+            quote_tr: $request->input('quote_tr')
         );
 
         return response()->json($command->handle($createRequest));

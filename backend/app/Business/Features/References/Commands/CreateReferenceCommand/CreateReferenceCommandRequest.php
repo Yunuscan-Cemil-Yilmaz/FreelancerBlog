@@ -10,8 +10,7 @@ class CreateReferenceCommandRequest
         public string $role_tr,
         public string $company,
         public string $quote_en,
-        public string $quote_tr,
-        public string $request_domain
+        public string $quote_tr
     ) {
     }
 }

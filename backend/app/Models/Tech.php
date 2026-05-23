@@ -9,6 +9,8 @@ use App\Models\Scopes\DomainScope;
 
 class Tech extends Model
 {
+    protected $table = 'teches';
+
     protected $fillable = [
         'category_en',
         'category_tr',
@@ -31,12 +33,13 @@ class Tech extends Model
         ];
     }
 
-    public function getItemsAttribute()
+    public function getItemsAttribute($value)
     {
-        return collect($this->items)->map(function ($item){
+        $items = is_string($value) ? json_decode($value, true) : $value;
+        return collect($items)->map(function ($item){
             return (object) [
-                'name' => $item['name'],
-                'level' => SkillLevel::from($item['level'])->value
+                'name' => $item['name'] ?? '',
+                'level' => isset($item['level']) ? SkillLevel::tryFrom($item['level'])?->value ?? $item['level'] : ''
             ];
         });
     }

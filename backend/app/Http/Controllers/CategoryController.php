@@ -11,11 +11,17 @@ use App\Business\Features\Categories\Commands\UpdateCategoryCommand\UpdateCatego
 use App\Business\Features\Categories\Commands\UpdateCategoryCommand\UpdateCategoryCommandRequest;
 use App\Business\Features\Categories\Commands\UpdateCategoryCommand\UpdateCategoryCommandValidator;
 use App\Business\Features\Categories\Commands\DeleteCategoryCommand\DeleteCategoryCommand;
+use App\Business\Features\Categories\Queries\GetCategoryAllListQuery\GetCategoryAllListQuery;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function indexForModerator(GetCategoryAllListQuery $query): JsonResponse
+    {
+        return response()->json($query->handle());
+    }
+
     public function index(string $lang, GetCategoryListQuery $query): JsonResponse
     {
         $categoryRequest = new GetCategoryListRequest($lang);
@@ -31,8 +37,7 @@ class CategoryController extends Controller
         $createRequest = new CreateCategoryCommandRequest(
             name_en: $request->input('name_en'),
             name_tr: $request->input('name_tr'),
-            slug: $request->input('slug'),
-            request_domain: $request->header('domain') ?? $request->input('domain')
+            slug: $request->input('slug')
         );
 
         return response()->json($command->handle($createRequest));

@@ -15,7 +15,7 @@ class CreateReferenceCommandValidator extends BaseValidator
             'company' => 'required|string|max:255',
             'quote_en' => 'required|string',
             'quote_tr' => 'required|string',
-            'request_domain' => 'required|string',
+            
         ]);
     }
 }

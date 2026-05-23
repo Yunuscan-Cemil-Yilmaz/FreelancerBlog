@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Business\Features\Repos\Commands\Commands\IncrementRepoViewCountCommand;
+namespace App\Business\Features\Repos\Commands\IncrementRepoViewCountCommand;
 
 use App\Models\Repo;
 

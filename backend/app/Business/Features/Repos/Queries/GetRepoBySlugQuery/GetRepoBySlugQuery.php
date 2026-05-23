@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Business\Features\Repos\Queries\Queries\GetRepoBySlugQuery;
+namespace App\Business\Features\Repos\Queries\GetRepoBySlugQuery;
 
 use App\Models\Repo;
 

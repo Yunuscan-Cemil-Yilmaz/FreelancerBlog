@@ -18,6 +18,6 @@ export class ProfessionalSkills {
     { name_en: 'Observability', name_tr: 'Gözlemlenebilirlik', icon: '🔎', level: 'strong' },
     { name_en: 'Automation & Workflows', name_tr: 'Otomasyon & Workflowlar', icon: '⚡', level: 'strong' },
     { name_en: 'Test Strategy', name_tr: 'Test Stratejisi', icon: '🧪', level: 'familiar' },
-    { name_en: 'Collaboration & Ownership', name_tr: 'Sahiplenme & Takım Çalışması', icon: '🤝', level: 'core' }
+    { name_en: 'Collaboration & Ownership', name_tr: 'Takım Çalışması', icon: '🤝', level: 'core' }
   ];
 }

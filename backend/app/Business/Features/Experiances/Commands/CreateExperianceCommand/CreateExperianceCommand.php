@@ -24,7 +24,7 @@ class CreateExperianceCommand
         }
 
         // Fetch domain info
-        $domainInfo = $this->getDomainService->handle($request->request_domain);
+        $domainInfo = $this->getDomainService->handle(app(\App\Business\Extentions\CurrentDomain\CurrentDomain::class)->get());
         if (!$domainInfo) {
              throw new HttpException(404, "Domain information not found.");
         }
@@ -38,7 +38,7 @@ class CreateExperianceCommand
             'company_tr' => $request->company_tr,
             'description_en' => $request->description_en,
             'description_tr' => $request->description_tr,
-            'order' => $request->order,
+            'order' => (\App\Models\Experiance::max('order') ?? 0) + 1,
             'domain' => $domainInfo->domain,
             'admin_domain' => $domainInfo->admin_domain,
         ]);

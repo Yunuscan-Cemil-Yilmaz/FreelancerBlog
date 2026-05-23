@@ -15,11 +15,17 @@ use App\Business\Features\Experiances\Commands\UpdateExperianceCommand\UpdateExp
 use App\Business\Features\Experiances\Commands\UpdateExperianceCommand\UpdateExperianceCommandRequest;
 use App\Business\Features\Experiances\Commands\UpdateExperianceCommand\UpdateExperianceCommandValidator;
 use App\Business\Features\Experiances\Commands\DeleteExperianceCommand\DeleteExperianceCommand;
+use App\Business\Features\Experiences\Queries\GetExperienceAllListQuery\GetExperienceAllListQuery;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ExperienceController extends Controller
 {
+    public function indexForModerator(GetExperienceAllListQuery $query): JsonResponse
+    {
+        return response()->json($query->handle());
+    }
+
     public function index(string $lang, GetExperianceListQuery $query): JsonResponse
     {
         $request = new GetExperianceListRequest($lang);
@@ -40,8 +46,7 @@ class ExperienceController extends Controller
             company_en: $request->input('company_en'),
             company_tr: $request->input('company_tr'),
             description_en: $request->input('description_en'),
-            description_tr: $request->input('description_tr'),
-            request_domain: $request->header('domain') ?? $request->input('domain')
+            description_tr: $request->input('description_tr')
         );
 
         return response()->json($command->handle($createRequest));
@@ -71,7 +76,7 @@ class ExperienceController extends Controller
         $id = (int) $request->header('id');
         return response()->json($command->handle($id));
     }
-    public function updateExperienceOrder(Request $request, UpdateExperienceOrderCommand $command, UpdateExperienceOrderCommandValidator $validator): \Illuminate\Http\JsonResponse
+    public function updateExperienceOrder(Request $request, UpdateExperienceOrderCommand $command, UpdateExperienceOrderCommandValidator $validator): JsonResponse
     {
         $validator->validate($request->all());
         $updateRequest = new UpdateExperienceOrderCommandRequest(

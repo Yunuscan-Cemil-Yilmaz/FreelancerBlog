@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Scopes\DomainScope;
 
-class Reference extends Model
+class UserReference extends Model
 {
+    protected $table = 'user_references';
+
     protected $fillable = [
         'name',
         'role_en',

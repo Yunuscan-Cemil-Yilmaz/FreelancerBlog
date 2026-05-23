@@ -15,11 +15,17 @@ use App\Business\Features\ProfessionalSkills\Commands\UpdateProfessionalSkillCom
 use App\Business\Features\ProfessionalSkills\Commands\UpdateProfessionalSkillCommand\UpdateProfessionalSkillCommandRequest;
 use App\Business\Features\ProfessionalSkills\Commands\UpdateProfessionalSkillCommand\UpdateProfessionalSkillCommandValidator;
 use App\Business\Features\ProfessionalSkills\Commands\DeleteProfessionalSkillCommand\DeleteProfessionalSkillCommand;
+use App\Business\Features\ProfessionalSkills\Queries\GetProfessionalSkillAllListQuery\GetProfessionalSkillAllListQuery;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProfessionalSkillController extends Controller
 {
+    public function indexForModerator(GetProfessionalSkillAllListQuery $query): JsonResponse
+    {
+        return response()->json($query->handle());
+    }
+
     public function index(string $lang, GetProfessionalSkillListQuery $query): JsonResponse
     {
         $request = new GetProfessionalSkillListRequest($lang);
@@ -36,8 +42,7 @@ class ProfessionalSkillController extends Controller
             name_en: $request->input('name_en'),
             name_tr: $request->input('name_tr'),
             icon: $request->input('icon'),
-            level: $request->input('level'),
-            request_domain: $request->header('domain') ?? $request->input('domain')
+            level: $request->input('level')
         );
 
         return response()->json($command->handle($createRequest));

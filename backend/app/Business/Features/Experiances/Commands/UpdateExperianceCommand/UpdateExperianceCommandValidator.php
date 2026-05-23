@@ -18,7 +18,6 @@ class UpdateExperianceCommandValidator extends BaseValidator
             'company_tr' => 'required|string|max:255',
             'description_en' => 'required|string',
             'description_tr' => 'required|string',
-            'order' => 'required|integer',
         ]);
     }
 }

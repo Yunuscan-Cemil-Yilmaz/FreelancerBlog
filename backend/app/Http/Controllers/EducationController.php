@@ -15,11 +15,17 @@ use App\Business\Features\Educations\Commands\UpdateEducationCommand\UpdateEduca
 use App\Business\Features\Educations\Commands\UpdateEducationCommand\UpdateEducationCommandRequest;
 use App\Business\Features\Educations\Commands\UpdateEducationCommand\UpdateEducationCommandValidator;
 use App\Business\Features\Educations\Commands\DeleteEducationCommand\DeleteEducationCommand;
+use App\Business\Features\Educations\Queries\GetEducationAllListQuery\GetEducationAllListQuery;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class EducationController extends Controller
 {
+    public function indexForModerator(GetEducationAllListQuery $query): JsonResponse
+    {
+        return response()->json($query->handle());
+    }
+
     public function index(string $lang, GetEducationListQuery $query): JsonResponse
     {
         $request = new GetEducationListRequest($lang);
@@ -40,8 +46,7 @@ class EducationController extends Controller
             school_en: $request->input('school_en'),
             school_tr: $request->input('school_tr'),
             description_en: $request->input('description_en'),
-            description_tr: $request->input('description_tr'),
-            request_domain: $request->header('domain') ?? $request->input('domain')
+            description_tr: $request->input('description_tr')
         );
 
         return response()->json($command->handle($createRequest));

@@ -52,17 +52,20 @@ Route::middleware(AdminAuthMiddleware::class)->prefix('admin')->group(function (
 
 Route::middleware(ModeratorAuthMiddleware::class)->prefix('moderator')->group(function () {
     // Category Management
+    Route::get('/categories', [CategoryController::class, 'indexForModerator']);
     Route::post('/categories/create', [CategoryController::class, 'createCategory']);
     Route::post('/categories/update', [CategoryController::class, 'updateCategory']);
     Route::post('/categories/delete', [CategoryController::class, 'deleteCategory']);
 
     // SubCategory Management
+    Route::get('/sub-categories', [SubCategoryController::class, 'indexForModerator']);
     Route::get('/sub-categories/{lang}', [SubCategoryController::class, 'index']);
     Route::post('/sub-categories/create', [SubCategoryController::class, 'createSubCategory']);
     Route::post('/sub-categories/update', [SubCategoryController::class, 'updateSubCategory']);
     Route::post('/sub-categories/delete', [SubCategoryController::class, 'deleteSubCategory']);
 
     // Education Management
+    Route::get('/educations', [EducationController::class, 'indexForModerator']);
     Route::get('/educations/{lang}', [EducationController::class, 'index']);
     Route::post('/educations/create', [EducationController::class, 'createEducation']);
     Route::post('/educations/update', [EducationController::class, 'updateEducation']);
@@ -70,34 +73,54 @@ Route::middleware(ModeratorAuthMiddleware::class)->prefix('moderator')->group(fu
     Route::post('/educations/delete', [EducationController::class, 'deleteEducation']);
 
     // Experience Management
-    Route::get('/experiences/{lang}', [ExperienceController::class, 'index']);
+    Route::get('/experiences', [ExperienceController::class, 'indexForModerator']);
     Route::post('/experiences/create', [ExperienceController::class, 'createExperience']);
     Route::post('/experiences/update', [ExperienceController::class, 'updateExperience']);
     Route::post('/experiences/update-order', [ExperienceController::class, 'updateExperienceOrder']);
     Route::post('/experiences/delete', [ExperienceController::class, 'deleteExperience']);
 
     // Professional Skill Management
-    Route::get('/professional-skills/{lang}', [ProfessionalSkillController::class, 'index']);
+    Route::get('/professional-skills', [ProfessionalSkillController::class, 'indexForModerator']);
     Route::post('/professional-skills/create', [ProfessionalSkillController::class, 'createProfessionalSkill']);
     Route::post('/professional-skills/update', [ProfessionalSkillController::class, 'updateProfessionalSkill']);
     Route::post('/professional-skills/update-order', [ProfessionalSkillController::class, 'updateProfessionalSkillOrder']);
     Route::post('/professional-skills/delete', [ProfessionalSkillController::class, 'deleteProfessionalSkill']);
-
+    
     // Reference Management
-    Route::get('/references/{lang}', [ReferenceController::class, 'index']);
+    Route::get('/references', [ReferenceController::class, 'indexForModerator']);
     Route::post('/references/create', [ReferenceController::class, 'createReference']);
     Route::post('/references/update', [ReferenceController::class, 'updateReference']);
     Route::post('/references/update-order', [ReferenceController::class, 'updateReferenceOrder']);
     Route::post('/references/delete', [ReferenceController::class, 'deleteReference']);
-
+    
     // Skill Management
-    Route::get('/skills/{lang}', [SkillController::class, 'index']);
+    Route::get('/skills', [SkillController::class, 'indexForModerator']);
     Route::post('/skills/create', [SkillController::class, 'createSkill']);
     Route::post('/skills/update', [SkillController::class, 'updateSkill']);
     Route::post('/skills/update-order', [SkillController::class, 'updateSkillOrder']);
     Route::post('/skills/delete', [SkillController::class, 'deleteSkill']);
+
+    // Blog Management
+    Route::get('/blogs', [BlogController::class, 'indexForModerator']);
+    Route::get('/blogs/{id}', [BlogController::class, 'getDetailsForModerator']);
+    Route::post('/blogs/create', [BlogController::class, 'createBlog']);
+    Route::post('/blogs/update', [BlogController::class, 'updateBlog']);
+    Route::post('/blogs/delete', [BlogController::class, 'deleteBlog']);
+
+    // Repo Management
+    Route::get('/repos', [RepoController::class, 'indexForModerator']);
+    Route::get('/repos/{id}', [RepoController::class, 'getDetails']);
+    Route::post('/repos/create', [RepoController::class, 'createRepo']);
+    Route::post('/repos/update', [RepoController::class, 'updateRepo']);
+    Route::post('/repos/delete', [RepoController::class, 'deleteRepo']);
 });
 
+
+
+Route::get('/experiences/{lang}', [ExperienceController::class, 'index']);
+Route::get('/professional-skills/{lang}', [ProfessionalSkillController::class, 'index']);
+Route::get('/references/{lang}', [ReferenceController::class, 'index']);
+Route::get('/skills/{lang}', [SkillController::class, 'index']);
 
 
 /*

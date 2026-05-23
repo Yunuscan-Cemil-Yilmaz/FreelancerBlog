@@ -12,9 +12,7 @@ class CreateExperianceCommandRequest
         public string $company_en,
         public string $company_tr,
         public string $description_en,
-        public string $description_tr,
-        public int $order,
-        public string $request_domain
+        public string $description_tr
     ) {
     }
 }

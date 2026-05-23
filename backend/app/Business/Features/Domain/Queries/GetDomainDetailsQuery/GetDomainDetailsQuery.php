@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Models\Tech;
 use App\Models\Education;
 use App\Models\Experiance;
-use App\Models\Reference;
+use App\Models\UserReference;
 use App\Models\ProfessionalSkill;
 use App\Models\SubCategory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -41,7 +41,7 @@ class GetDomainDetailsQuery
             'techs' => Tech::class,
             'educations' => Education::class,
             'experiences' => Experiance::class,
-            'references' => Reference::class,
+            'references' => UserReference::class,
             'professional_skills' => ProfessionalSkill::class,
             'sub_categories' => SubCategory::class,
         ];

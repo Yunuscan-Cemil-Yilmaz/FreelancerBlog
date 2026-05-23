@@ -24,7 +24,7 @@ class CreateCategoryCommand
         }
 
         // Fetch domain info
-        $domainInfo = $this->getDomainService->handle($request->request_domain);
+        $domainInfo = $this->getDomainService->handle(app(\App\Business\Extentions\CurrentDomain\CurrentDomain::class)->get());
         if (!$domainInfo) {
              throw new HttpException(404, "Domain information not found.");
         }

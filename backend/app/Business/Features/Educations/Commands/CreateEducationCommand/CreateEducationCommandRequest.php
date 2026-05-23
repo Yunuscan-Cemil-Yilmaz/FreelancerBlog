@@ -12,8 +12,7 @@ class CreateEducationCommandRequest
         public string $school_en,
         public string $school_tr,
         public string $description_en,
-        public string $description_tr,
-        public string $request_domain
+        public string $description_tr
     ) {
     }
 }

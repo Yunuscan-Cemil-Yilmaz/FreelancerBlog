@@ -2,7 +2,7 @@
 
 namespace App\Business\Features\References\Queries\GetReferenceListQuery;
 
-use App\Models\Reference;
+use App\Models\UserReference;
 
 class GetReferenceListQuery
 {
@@ -10,10 +10,10 @@ class GetReferenceListQuery
     {
         $lang = $request->lang;
         
-        $references = Reference::orderBy('order')->get();
+        $references = UserReference::orderBy('order')->get();
 
         return [
-            'data' => $references->map(function (Reference $ref) use ($lang) {
+            'data' => $references->map(function (UserReference $ref) use ($lang) {
                 return [
                     'id' => $ref->id,
                     'name' => $ref->name,

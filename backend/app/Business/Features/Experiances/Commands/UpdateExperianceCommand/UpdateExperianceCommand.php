@@ -19,7 +19,6 @@ class UpdateExperianceCommand
             'company_tr' => $request->company_tr,
             'description_en' => $request->description_en,
             'description_tr' => $request->description_tr,
-            'order' => $request->order,
         ]);
 
         return [

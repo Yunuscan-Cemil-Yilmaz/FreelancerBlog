@@ -8,8 +8,7 @@ class CreateProfessionalSkillCommandRequest
         public string $name_en,
         public string $name_tr,
         public string $icon,
-        public string $level,
-        public string $request_domain
+        public string $level
     ) {
     }
 }

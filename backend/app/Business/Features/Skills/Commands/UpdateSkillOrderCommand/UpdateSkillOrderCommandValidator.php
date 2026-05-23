@@ -10,7 +10,7 @@ class UpdateSkillOrderCommandValidator extends BaseValidator
     {
         $this->executeValidation($data, [
             'orders' => 'required|array',
-            'orders.*.id' => 'required|integer|exists:techs,id',
+            'orders.*.id' => 'required|integer|exists:teches,id',
             'orders.*.order' => 'required|integer|min:1',
         ]);
     }

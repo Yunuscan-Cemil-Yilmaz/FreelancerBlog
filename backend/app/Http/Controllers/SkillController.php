@@ -15,11 +15,17 @@ use App\Business\Features\Skills\Commands\UpdateSkillCommand\UpdateSkillCommand;
 use App\Business\Features\Skills\Commands\UpdateSkillCommand\UpdateSkillCommandRequest;
 use App\Business\Features\Skills\Commands\UpdateSkillCommand\UpdateSkillCommandValidator;
 use App\Business\Features\Skills\Commands\DeleteSkillCommand\DeleteSkillCommand;
+use App\Business\Features\Skills\Queries\GetSkillAllListQuery\GetSkillAllListQuery;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SkillController extends Controller
 {
+    public function indexForModerator(GetSkillAllListQuery $query): JsonResponse
+    {
+        return response()->json($query->handle());
+    }
+
     public function index(string $lang, GetSkillListQuery $query): JsonResponse
     {
         $request = new GetSkillListRequest($lang);
@@ -35,8 +41,7 @@ class SkillController extends Controller
         $createRequest = new CreateSkillCommandRequest(
             category_en: $request->input('category_en'),
             category_tr: $request->input('category_tr'),
-            items: $request->input('items'),
-            request_domain: $request->header('domain') ?? $request->input('domain')
+            items: $request->input('items')
         );
 
         return response()->json($command->handle($createRequest));

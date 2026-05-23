@@ -9,11 +9,13 @@ class UpdateSkillCommandValidator extends BaseValidator
     public function validate(array $data): void
     {
         $this->executeValidation($data, [
-            'id' => 'required|integer|exists:techs,id',
+            'id' => 'required|integer|exists:teches,id',
             'category_en' => 'required|string|max:255',
             'category_tr' => 'required|string|max:255',
             'items' => 'required|array',
-            'items.*' => 'required|string|max:255',
+            'items.*' => 'required|array',
+            'items.*.name' => 'required|string|max:255',
+            'items.*.level' => 'required|string|max:255',
         ]);
     }
 }

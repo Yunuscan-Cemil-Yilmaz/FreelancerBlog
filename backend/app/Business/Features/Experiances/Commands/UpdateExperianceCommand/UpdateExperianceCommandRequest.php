@@ -13,8 +13,7 @@ class UpdateExperianceCommandRequest
         public string $company_en,
         public string $company_tr,
         public string $description_en,
-        public string $description_tr,
-        public int $order
+        public string $description_tr
     ) {
     }
 }

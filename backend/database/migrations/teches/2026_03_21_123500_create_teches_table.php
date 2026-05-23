@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::statement('ALTER TABLE techs ADD CONSTRAINT check_items_format 
+        DB::statement('ALTER TABLE teches ADD CONSTRAINT check_items_format 
             CHECK (JSON_SCHEMA_VALID(\'{
                 "type": "array",
                 "items": {
@@ -41,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('techs');
+        Schema::dropIfExists('teches');
     }
 };

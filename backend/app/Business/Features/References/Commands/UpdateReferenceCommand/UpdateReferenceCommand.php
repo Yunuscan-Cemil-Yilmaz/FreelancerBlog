@@ -2,13 +2,13 @@
 
 namespace App\Business\Features\References\Commands\UpdateReferenceCommand;
 
-use App\Models\Reference;
+use App\Models\UserReference;
 
 class UpdateReferenceCommand
 {
     public function handle(UpdateReferenceCommandRequest $request): array
     {
-        $reference = Reference::findOrFail($request->id);
+        $reference = UserReference::findOrFail($request->id);
 
         $reference->update([
             'name' => $request->name,

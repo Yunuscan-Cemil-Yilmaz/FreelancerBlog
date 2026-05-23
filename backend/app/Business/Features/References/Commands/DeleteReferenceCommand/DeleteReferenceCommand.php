@@ -2,7 +2,7 @@
 
 namespace App\Business\Features\References\Commands\DeleteReferenceCommand;
 
-use App\Models\Reference;   
+use App\Models\UserReference;   
 use Illuminate\Support\Facades\DB;
 
 class DeleteReferenceCommand
@@ -10,10 +10,10 @@ class DeleteReferenceCommand
     public function handle(int $id): array
     {
         DB::transaction(function () use ($id) {
-            $reference = Reference::lockForUpdate()->findOrFail($id);
+            $reference = UserReference::lockForUpdate()->findOrFail($id);
             $order = $reference->order;
             $reference->delete();
-            Reference::where('order', '>', $order)->decrement('order');
+            UserReference::where('order', '>', $order)->decrement('order');
         });
 
         return [

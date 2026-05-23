@@ -7,8 +7,7 @@ class CreateCategoryCommandRequest
     public function __construct(
         public string $name_en,
         public string $name_tr,
-        public string $slug,
-        public string $request_domain
+        public string $slug
     ) {
     }
 }

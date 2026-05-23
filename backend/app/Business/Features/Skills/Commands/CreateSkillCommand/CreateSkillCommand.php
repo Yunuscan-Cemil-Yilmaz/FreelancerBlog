@@ -24,7 +24,7 @@ class CreateSkillCommand
         }
 
         // Fetch domain info
-        $domainInfo = $this->getDomainService->handle($request->request_domain);
+        $domainInfo = $this->getDomainService->handle(app(\App\Business\Extentions\CurrentDomain\CurrentDomain::class)->get());
         if (!$domainInfo) {
              throw new HttpException(404, "Domain information not found.");
         }
@@ -33,7 +33,6 @@ class CreateSkillCommand
             'category_en' => $request->category_en,
             'category_tr' => $request->category_tr,
             'items' => $request->items,
-            'order' => (\App\Models\Tech::max('order') ?? 0) + 1,
             'domain' => $domainInfo->domain,
             'admin_domain' => $domainInfo->admin_domain,
         ]);

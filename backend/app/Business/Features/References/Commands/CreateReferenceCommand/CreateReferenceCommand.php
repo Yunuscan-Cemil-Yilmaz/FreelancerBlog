@@ -2,7 +2,7 @@
 
 namespace App\Business\Features\References\Commands\CreateReferenceCommand;
 
-use App\Models\Reference;
+use App\Models\UserReference;
 use App\Business\Features\Domain\Services\GetDomainService\GetDomainService;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -19,24 +19,24 @@ class CreateReferenceCommand
     {
         // Enforce limit
         $limit = config('business_limits.limits.references', 30);
-        if (Reference::count() >= $limit) {
+        if (UserReference::count() >= $limit) {
             throw new HttpException(403, "Maximum limit of {$limit} references reached.");
         }
 
         // Fetch domain info
-        $domainInfo = $this->getDomainService->handle($request->request_domain);
+        $domainInfo = $this->getDomainService->handle(app(\App\Business\Extentions\CurrentDomain\CurrentDomain::class)->get());
         if (!$domainInfo) {
              throw new HttpException(404, "Domain information not found.");
         }
 
-        $reference = Reference::create([
+        $reference = UserReference::create([
             'name' => $request->name,
             'role_en' => $request->role_en,
             'role_tr' => $request->role_tr,
             'company' => $request->company,
             'quote_en' => $request->quote_en,
             'quote_tr' => $request->quote_tr,
-            'order' => (\App\Models\Reference::max('order') ?? 0) + 1,
+            'order' => (\App\Models\UserReference::max('order') ?? 0) + 1,
             'domain' => $domainInfo->domain,
             'admin_domain' => $domainInfo->admin_domain,
         ]);

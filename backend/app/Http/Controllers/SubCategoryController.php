@@ -11,11 +11,17 @@ use App\Business\Features\SubCategories\Commands\UpdateSubCategoryCommand\Update
 use App\Business\Features\SubCategories\Commands\UpdateSubCategoryCommand\UpdateSubCategoryCommandRequest;
 use App\Business\Features\SubCategories\Commands\UpdateSubCategoryCommand\UpdateSubCategoryCommandValidator;
 use App\Business\Features\SubCategories\Commands\DeleteSubCategoryCommand\DeleteSubCategoryCommand;
+use App\Business\Features\SubCategories\Queries\GetSubCategoryAllListQuery\GetSubCategoryAllListQuery;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
 {
+    public function indexForModerator(GetSubCategoryAllListQuery $query): JsonResponse
+    {
+        return response()->json($query->handle());
+    }
+
     public function index(string $lang, GetSubCategoryListQuery $query): JsonResponse
     {
         $request = new GetSubCategoryListRequest($lang);
@@ -32,8 +38,7 @@ class SubCategoryController extends Controller
             category_id: (int) $request->input('category_id'),
             name_en: $request->input('name_en'),
             name_tr: $request->input('name_tr'),
-            slug: $request->input('slug'),
-            request_domain: $request->header('domain') ?? $request->input('domain')
+            slug: $request->input('slug')
         );
 
         return response()->json($command->handle($createRequest));

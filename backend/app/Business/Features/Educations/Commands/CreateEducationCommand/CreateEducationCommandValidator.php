@@ -17,7 +17,7 @@ class CreateEducationCommandValidator extends BaseValidator
             'school_tr' => 'required|string|max:255',
             'description_en' => 'required|string',
             'description_tr' => 'required|string',
-            'request_domain' => 'required|string',
+            
         ]);
     }
 }

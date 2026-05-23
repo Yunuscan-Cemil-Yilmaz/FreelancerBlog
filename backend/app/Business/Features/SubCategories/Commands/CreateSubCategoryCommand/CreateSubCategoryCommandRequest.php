@@ -8,8 +8,7 @@ class CreateSubCategoryCommandRequest
         public int $category_id,
         public string $name_en,
         public string $name_tr,
-        public string $slug,
-        public string $request_domain
+        public string $slug
     ) {
     }
 }

@@ -12,8 +12,9 @@ class CreateSkillCommandValidator extends BaseValidator
             'category_en' => 'required|string|max:255',
             'category_tr' => 'required|string|max:255',
             'items' => 'required|array',
-            'items.*' => 'required|string|max:255',
-            'request_domain' => 'required|string',
+            'items.*' => 'required|array',
+            'items.*.name' => 'required|string|max:255',
+            'items.*.level' => 'required|string|max:255',
         ]);
     }
 }

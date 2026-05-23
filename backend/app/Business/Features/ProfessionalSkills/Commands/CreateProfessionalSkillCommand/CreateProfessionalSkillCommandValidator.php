@@ -16,7 +16,7 @@ class CreateProfessionalSkillCommandValidator extends BaseValidator
             'name_tr' => 'required|string|max:255',
             'icon' => 'required|string|max:255',
             'level' => ['required', Rule::enum(SkillLevel::class)],
-            'request_domain' => 'required|string',
+            
         ]);
     }
 }
