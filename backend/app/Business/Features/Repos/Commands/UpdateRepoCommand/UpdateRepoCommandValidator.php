@@ -2,7 +2,7 @@
 
 namespace App\Business\Features\Repos\Commands\UpdateRepoCommand;
 
-use App\Exceptions\ValidationException;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -33,7 +33,7 @@ class UpdateRepoCommandValidator
         ]);
 
         if ($validator->fails()) {
-            throw new ValidationException($validator->errors()->first(), $validator->errors()->toArray());
+            throw new ValidationException($validator);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Business\Features\Repos\Commands\CreateRepoCommand;
 
-use App\Exceptions\ValidationException;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 
 class CreateRepoCommandValidator
@@ -24,7 +24,7 @@ class CreateRepoCommandValidator
         ]);
 
         if ($validator->fails()) {
-            throw new ValidationException($validator->errors()->first(), $validator->errors()->toArray());
+            throw new ValidationException($validator);
         }
     }
 }
