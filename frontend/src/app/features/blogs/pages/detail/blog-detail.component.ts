@@ -1,4 +1,4 @@
-import { Component, inject, input, computed, effect } from '@angular/core';
+import { Component, inject, input, effect, untracked, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { BlogsService } from '../../domain/blogs.service';
@@ -20,19 +20,25 @@ export class BlogDetailComponent {
   private readonly seo = inject(SeoService);
 
   readonly slug = input.required<string>();
-  readonly blog = computed(() => this.blogsService.getBlogBySlug(this.slug()));
+  readonly blog = this.blogsService.blogDetail;
 
   constructor() {
     effect(() => {
+      const currentSlug = this.slug();
+      untracked(() => this.blogsService.loadBlogBySlug(currentSlug));
+    }, { allowSignalWrites: true });
+
+    effect(() => {
       const blog = this.blog();
       if (blog) {
+        const origin = typeof window !== 'undefined' ? window.location.origin : '';
         this.seo.update({
           title: blog.title,
           description: blog.excerpt,
           image: blog.imageUrl,
           author: blog.author,
           type: 'article',
-          url: `${window.location.origin}/${this.t.lang()}/blogs/${blog.slug}`
+          url: `${origin}/${this.t.lang()}/blogs/${blog.slug}`
         });
         this.blogsService.incrementViewCount(blog.id);
       }

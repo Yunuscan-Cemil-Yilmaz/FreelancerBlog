@@ -1,6 +1,16 @@
 import { Component, HostListener, inject, OnInit, OnDestroy,PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { TranslationService } from '../../../../core/config/translation.service';
+import { ApiClient } from '../../../../core/http/api-client';
+
+export interface ReferenceDetails {
+  name: string;
+  company: string;
+  role_en: string;
+  role_tr: string;
+  quote_en: string;
+  quote_tr: string;
+}
 
 @Component({
   selector: 'app-references',
@@ -10,49 +20,10 @@ import { TranslationService } from '../../../../core/config/translation.service'
 })
 export class References implements OnInit, OnDestroy {
   readonly t = inject(TranslationService);
+  private readonly apiClient = inject(ApiClient);
 
-    readonly references = [
-    {
-      name: 'John Doe',
-      role_en: 'Senior Software Engineer',
-      role_tr: 'Kıdemli Yazılım Mühendisi',
-      company: 'Tech Corp',
-      quote_en: 'Yunuscan is a talented developer who consistently delivers high-quality work. His ability to quickly learn new technologies is impressive.',
-      quote_tr: 'Yunuscan, sürekli olarak yüksek kaliteli iş üreten yetenekli bir geliştirici. Yeni teknolojileri hızla öğrenme yeteneği etkileyici.',
-    },
-    {
-      name: 'Jane Smith',
-      role_en: 'Project Manager',
-      role_tr: 'Proje Yöneticisi',
-      company: 'StartupXYZ',
-      quote_en: 'Working with Yunuscan was a great experience. He brings both technical expertise and excellent communication skills to every project.',
-      quote_tr: 'Yunuscan ile çalışmak harika bir deneyimdi. Her projeye hem teknik uzmanlık hem de mükemmel iletişim becerileri getiriyor.',
-    },
-    {
-      name: 'Ahmet Yılmaz',
-      role_en: 'CTO',
-      role_tr: 'CTO',
-      company: 'Digital Agency',
-      quote_en: 'One of the most dedicated developers I have worked with. His problem-solving skills and attention to detail are exceptional.',
-      quote_tr: 'Birlikte çalıştığım en özverili geliştiricilerden biri. Problem çözme becerileri ve detaylara gösterdiği özen olağanüstü.',
-    },
-    {
-      name: 'Emily Chen',
-      role_en: 'Lead Designer',
-      role_tr: 'Baş Tasarımcı',
-      company: 'Creative Studio',
-      quote_en: 'Yunuscan bridges the gap between design and development perfectly. He turns pixel-perfect designs into flawless implementations.',
-      quote_tr: 'Yunuscan, tasarım ve geliştirme arasındaki boşluğu mükemmel bir şekilde kapatıyor. Piksel-mükemmel tasarımları kusursuz uygulamalara dönüştürüyor.',
-    },
-    {
-      name: 'Mehmet Kaya',
-      role_en: 'Product Owner',
-      role_tr: 'Ürün Sahibi',
-      company: 'FinTech Solutions',
-      quote_en: 'Highly reliable and proactive. Yunuscan anticipates problems before they happen and always delivers on time.',
-      quote_tr: 'Son derece güvenilir ve proaktif. Yunuscan sorunları oluşmadan önce öngörüyor ve her zaman zamanında teslim ediyor.',
-    },
-  ];
+  references: ReferenceDetails[] = [];
+
 
   // slider
   readonly currentRefIndex = signal(0);
@@ -107,7 +78,21 @@ export class References implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateVisibleCount();
-    this.startAutoSlide();
+    
+    this.apiClient.get<{ data: any[] }>('references/en').subscribe({
+      next: (res) => {
+        if (res && res.data) {
+          this.references = res.data.map(item => item.details);
+          // Restart slide if we have enough items
+          if (this.references.length > 0) {
+            this.startAutoSlide();
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching references', err);
+      }
+    });
   }
 
   ngOnDestroy(): void {

@@ -66,7 +66,6 @@ Route::middleware(ModeratorAuthMiddleware::class)->prefix('moderator')->group(fu
 
     // Education Management
     Route::get('/educations', [EducationController::class, 'indexForModerator']);
-    Route::get('/educations/{lang}', [EducationController::class, 'index']);
     Route::post('/educations/create', [EducationController::class, 'createEducation']);
     Route::post('/educations/update', [EducationController::class, 'updateEducation']);
     Route::post('/educations/update-order', [EducationController::class, 'updateEducationOrder']);
@@ -118,6 +117,7 @@ Route::middleware(ModeratorAuthMiddleware::class)->prefix('moderator')->group(fu
 
 
 Route::get('/experiences/{lang}', [ExperienceController::class, 'index']);
+Route::get('/educations/{lang}', [EducationController::class, 'index']);
 Route::get('/professional-skills/{lang}', [ProfessionalSkillController::class, 'index']);
 Route::get('/references/{lang}', [ReferenceController::class, 'index']);
 Route::get('/skills/{lang}', [SkillController::class, 'index']);
