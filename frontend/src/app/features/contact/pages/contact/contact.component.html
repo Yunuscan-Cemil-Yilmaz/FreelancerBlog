@@ -50,19 +50,6 @@
             <input matInput [(ngModel)]="form.name" name="name" />
           </mat-form-field>
 
-          <!-- Email & Phone Row -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <mat-form-field appearance="outline" class="w-full custom-field">
-              <mat-label>{{ t.t('contact.email') }}</mat-label>
-              <input matInput [(ngModel)]="form.email" name="email" type="email" />
-              <mat-hint class="!text-slate-500">{{ t.t('contact.email_or_phone_hint') }}</mat-hint>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="w-full custom-field">
-              <mat-label>{{ t.t('contact.phone') }}</mat-label>
-              <input matInput [(ngModel)]="form.phone" name="phone" type="tel" />
-            </mat-form-field>
-          </div>
-
           <!-- Contact Preference -->
           <mat-form-field appearance="outline" class="w-full custom-field">
             <mat-label>{{ t.t('contact.preference') }}</mat-label>
@@ -74,6 +61,30 @@
               }
             </mat-select>
           </mat-form-field>
+
+          @if (form.contactPreference === 'email') {
+            <!-- Email -->
+            <mat-form-field appearance="outline" class="w-full custom-field">
+              <mat-label>{{ t.t('contact.email') }}</mat-label>
+              <input matInput [(ngModel)]="form.email" name="email" type="email" />
+            </mat-form-field>
+          } @else if (form.contactPreference === 'phone' || form.contactPreference === 'whatsapp' || form.contactPreference === 'sms') {
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Phone -->
+              <mat-form-field appearance="outline" class="w-full custom-field" [class.sm:col-span-2]="form.contactPreference !== 'phone'">
+                <mat-label>{{ t.t('contact.phone') }}</mat-label>
+                <input matInput [(ngModel)]="form.phone" name="phone" type="tel" />
+              </mat-form-field>
+              
+              @if (form.contactPreference === 'phone') {
+                <!-- Preferred Time -->
+                <mat-form-field appearance="outline" class="w-full custom-field">
+                  <mat-label>{{ t.isEnglish() ? 'Preferred Contact Time' : 'Tercih Edilen Aranma Zamanı' }}</mat-label>
+                  <input matInput [(ngModel)]="form.preferred_contact_time" name="preferred_contact_time" type="datetime-local" />
+                </mat-form-field>
+              }
+            </div>
+          }
 
           <!-- Subject -->
           <mat-form-field appearance="outline" class="w-full custom-field">

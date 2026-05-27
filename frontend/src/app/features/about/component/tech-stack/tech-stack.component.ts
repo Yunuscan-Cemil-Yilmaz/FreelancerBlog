@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, signal, effect, untracked } from '@angular/core';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { ApiClient } from '../../../../core/http/api-client';
 
@@ -18,22 +18,27 @@ export interface TechSkillCategory {
   imports: [],
   templateUrl: './tech-stack.component.html',
 })
-export class TechStack implements OnInit {
+export class TechStack {
   readonly t = inject(TranslationService);
   private readonly apiClient = inject(ApiClient);
 
-  techSkills: TechSkillCategory[] = [];
+  readonly techSkills = signal<TechSkillCategory[]>([]);
 
-  ngOnInit(): void {
-    this.apiClient.get<{ data: { details: TechSkillCategory }[] }>('skills/en').subscribe({
-      next: (res) => {
-        if (res && res.data) {
-          this.techSkills = res.data.map(item => item.details);
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching tech skills', err);
-      }
+  constructor() {
+    effect(() => {
+      const lang = this.t.lang();
+      untracked(() => {
+        this.apiClient.get<{ data: { details: TechSkillCategory }[] }>(`skills/${lang}`).subscribe({
+          next: (res) => {
+            if (res && res.data) {
+              this.techSkills.set(res.data.map(item => item.details));
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching tech skills', err);
+          }
+        });
+      });
     });
   }
 }

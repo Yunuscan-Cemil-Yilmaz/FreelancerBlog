@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit, OnDestroy,PLATFORM_ID, signal } from '@angular/core';
+import { Component, HostListener, inject, OnDestroy, PLATFORM_ID, signal, effect, untracked } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { ApiClient } from '../../../../core/http/api-client';
@@ -18,21 +18,40 @@ export interface ReferenceDetails {
   imports: [CommonModule],
   templateUrl: './references.component.html',
 })
-export class References implements OnInit, OnDestroy {
+export class References implements OnDestroy {
   readonly t = inject(TranslationService);
   private readonly apiClient = inject(ApiClient);
 
-  references: ReferenceDetails[] = [];
-
-
-  // slider
+  readonly references = signal<ReferenceDetails[]>([]);
   readonly currentRefIndex = signal(0);
-  private autoSlideInterval: ReturnType <typeof setInterval> | null = null;
+  private autoSlideInterval: ReturnType<typeof setInterval> | null = null;
   readonly isPaused = signal(false);
 
   private readonly platformId = inject(PLATFORM_ID);
 
   visibleCount: number = 3;
+
+  constructor() {
+    this.updateVisibleCount();
+    effect(() => {
+      const lang = this.t.lang();
+      untracked(() => {
+        this.apiClient.get<{ data: { details: ReferenceDetails }[] }>(`references/${lang}`).subscribe({
+          next: (res) => {
+            if (res && res.data) {
+              this.references.set(res.data.map(item => item.details));
+              if (this.references().length > 0) {
+                this.startAutoSlide();
+              }
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching references', err);
+          }
+        });
+      });
+    });
+  }
 
   get slideWidth(): number {
     return 100 / this.visibleCount;
@@ -40,8 +59,7 @@ export class References implements OnInit, OnDestroy {
 
   get slideOffset(): number {
     const active = this.currentRefIndex();
-    const maxOffset = Math.max(this.references.length - this.visibleCount, 0);
-    // Try to center: for 3 visible use active-1, for 2 use active-0.5 floored, for 1 use active
+    const maxOffset = Math.max(this.references().length - this.visibleCount, 0);
     let offset: number;
     if (this.visibleCount >= 3) {
       offset = active - 1;
@@ -76,30 +94,12 @@ export class References implements OnInit, OnDestroy {
     return i === this.currentRefIndex();
   }
 
-  ngOnInit(): void {
-    this.updateVisibleCount();
-    
-    this.apiClient.get<{ data: any[] }>('references/en').subscribe({
-      next: (res) => {
-        if (res && res.data) {
-          this.references = res.data.map(item => item.details);
-          // Restart slide if we have enough items
-          if (this.references.length > 0) {
-            this.startAutoSlide();
-          }
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching references', err);
-      }
-    });
-  }
-
   ngOnDestroy(): void {
     this.stopAutoSlide();
   }
 
   startAutoSlide(): void {
+    this.stopAutoSlide();
     this.autoSlideInterval = setInterval(() => {
       if (!this.isPaused()) {
         this.nextRef();
@@ -123,11 +123,11 @@ export class References implements OnInit, OnDestroy {
   }
 
   nextRef(): void {
-    this.currentRefIndex.update(i => (i + 1) % this.references.length);
+    this.currentRefIndex.update(i => (i + 1) % this.references().length);
   }
 
   prevRef(): void {
-    this.currentRefIndex.update(i => (i - 1 + this.references.length) % this.references.length);
+    this.currentRefIndex.update(i => (i - 1 + this.references().length) % this.references().length);
   }
 
   goToRef(index: number): void {

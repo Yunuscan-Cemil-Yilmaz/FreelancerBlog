@@ -81,6 +81,9 @@
 
       <!-- Content -->
       <div class="prose-custom" [innerHTML]="renderedContent()"></div>
+
+      <!-- Interaction Form -->
+      <app-interaction-form type="repo" [targetId]="repo.id" [title]="t.isEnglish() ? 'Are you interested in this project?' : 'Bu proje ilginizi çekti mi?'"></app-interaction-form>
     </div>
   </article>
 } @else {

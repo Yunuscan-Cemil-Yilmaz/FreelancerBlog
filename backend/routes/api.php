@@ -123,12 +123,21 @@ Route::get('/references/{lang}', [ReferenceController::class, 'index']);
 Route::get('/skills/{lang}', [SkillController::class, 'index']);
 
 
+use App\Http\Controllers\InteractionRequestController;
+use App\Http\Controllers\BlogInteractionRequestController;
+use App\Http\Controllers\RepoInteractionRequestController;
+
 /*
 |--------------------------------------------------------------------------
 | Language-Prefixed Public Routes
 |--------------------------------------------------------------------------
 */
 Route::prefix('{lang}')->where(['lang' => 'en|tr'])->group(function () {
+    // Interaction Requests
+    Route::post('interaction-requests', [InteractionRequestController::class, 'store']);
+    Route::post('blog-interaction-requests', [BlogInteractionRequestController::class, 'store']);
+    Route::post('repo-interaction-requests', [RepoInteractionRequestController::class, 'store']);
+
     // Blogs
     Route::get('blogs', [BlogController::class, 'index']);
     Route::get('blogs/{slug}', [BlogController::class, 'show']);

@@ -6,11 +6,12 @@ import { SeoService } from '../../../../core/seo/seo.service';
 import { BlogHeader } from '../../components/blog-header/blog-header.component';
 import { GalleryCarouselComponent } from '../../../../shared/ui/components/gallery-carousel/gallery-carousel.component';
 import { ImageLightboxComponent } from '../../../../shared/ui/components/image-lightbox/image-lightbox.component';
+import { InteractionFormComponent } from '../../../../shared/ui/components/interaction-form/interaction-form.component';
 
 @Component({
   selector: 'app-blog-detail',
   standalone: true,
-  imports: [RouterLink, BlogHeader, GalleryCarouselComponent, ImageLightboxComponent],
+  imports: [RouterLink, BlogHeader, GalleryCarouselComponent, ImageLightboxComponent, InteractionFormComponent],
   templateUrl: './blog-detail.component.html',
   styleUrl: './blog-detail.component.scss',
 })

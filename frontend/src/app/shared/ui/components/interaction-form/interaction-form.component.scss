@@ -28,3 +28,30 @@
     color: rgb(148, 163, 184) !important;
   }
 }
+
+::ng-deep .custom-checkbox {
+  .mdc-checkbox__background {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  &.mat-mdc-checkbox-checked .mdc-checkbox__background {
+    border-color: #3b82f6 !important;
+    background-color: #3b82f6 !important;
+  }
+}
+
+.kvkk-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.kvkk-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+.kvkk-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+.kvkk-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

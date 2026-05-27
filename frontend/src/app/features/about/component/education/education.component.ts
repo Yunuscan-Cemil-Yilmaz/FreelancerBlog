@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, signal, effect, untracked } from '@angular/core';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { ApiClient } from '../../../../core/http/api-client';
 
@@ -18,22 +18,27 @@ export interface EducationDetails {
   imports: [],
   templateUrl: './education.component.html',
 })
-export class Education implements OnInit {
+export class Education {
   readonly t = inject(TranslationService);
   private readonly apiClient = inject(ApiClient);
 
-  educations: EducationDetails[] = [];
+  readonly educations = signal<EducationDetails[]>([]);
 
-  ngOnInit(): void {
-    this.apiClient.get<{ data: { details: EducationDetails }[] }>('educations/en').subscribe({
-      next: (res) => {
-        if (res && res.data) {
-          this.educations = res.data.map(item => item.details);
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching educations', err);
-      }
+  constructor() {
+    effect(() => {
+      const lang = this.t.lang();
+      untracked(() => {
+        this.apiClient.get<{ data: { details: EducationDetails }[] }>(`educations/${lang}`).subscribe({
+          next: (res) => {
+            if (res && res.data) {
+              this.educations.set(res.data.map(item => item.details));
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching educations', err);
+          }
+        });
+      });
     });
   }
 }

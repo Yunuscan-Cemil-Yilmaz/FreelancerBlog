@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { ToastService } from '../../../../shared/toast/toast.service';
+import { ApiClient } from '../../../../core/http/api-client';
 import { environment } from '../../../../../environments/environment';
 
 interface ContactForm {
@@ -14,6 +15,7 @@ interface ContactForm {
   email: string;
   phone: string;
   contactPreference: string;
+  preferred_contact_time?: string;
   subject: string;
   message: string;
 }
@@ -28,6 +30,7 @@ interface ContactForm {
 export class ContactComponent {
   readonly t = inject(TranslationService);
   private readonly toast = inject(ToastService);
+  private readonly apiClient = inject(ApiClient);
   readonly env = environment;
 
   readonly showKvkkModal = signal(false);
@@ -40,6 +43,7 @@ export class ContactComponent {
     email: '',
     phone: '',
     contactPreference: '',
+    preferred_contact_time: '',
     subject: '',
     message: '',
   };
@@ -72,23 +76,36 @@ export class ContactComponent {
 
     this.submitting.set(true);
 
-    console.log('=== CONTACT FORM SUBMISSION ===');
-    console.log('Name:', this.form.name);
-    console.log('Email:', this.form.email);
-    console.log('Phone:', this.form.phone);
-    console.log('Contact Preference:', this.form.contactPreference);
-    console.log('Subject:', this.form.subject);
-    console.log('Message:', this.form.message);
-    console.log('Consent Accepted:', this.consentAccepted());
-    console.log('KVKK Accepted:', this.kvkkAccepted());
-    console.log('===============================');
+    const payload = {
+      name: this.form.name,
+      email: this.form.contactPreference === 'email' ? this.form.email : null,
+      phone: (this.form.contactPreference === 'phone' || this.form.contactPreference === 'whatsapp' || this.form.contactPreference === 'sms') ? this.form.phone : null,
+      interaction_type: this.form.contactPreference,
+      preferred_contact_time: this.form.contactPreference === 'phone' ? this.form.preferred_contact_time : null,
+      title: this.form.subject,
+      message: this.form.message,
+      kvkk_approved: this.kvkkAccepted() ? 1 : 0
+    };
 
-    this.toast.success(this.t.isEnglish()
-      ? 'Your message has been sent successfully!'
-      : 'Mesajınız başarıyla gönderildi!');
-
-    this.resetForm();
-    this.submitting.set(false);
+    const lang = this.t.lang();
+    // Assuming backend endpoint is /api/{lang}/interaction-requests or just /api/interaction-requests
+    // We'll use the ApiClient post method
+    this.apiClient.post(`${lang}/interaction-requests`, payload).subscribe({
+      next: () => {
+        this.toast.success(this.t.isEnglish()
+          ? 'Your message has been sent successfully!'
+          : 'Mesajınız başarıyla gönderildi!');
+        this.resetForm();
+        this.submitting.set(false);
+      },
+      error: (err) => {
+        console.error('Error sending contact form:', err);
+        this.toast.error(this.t.isEnglish()
+          ? 'An error occurred while sending your message. Please try again.'
+          : 'Mesajınız gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+        this.submitting.set(false);
+      }
+    });
   }
 
   private validate(): string[] {
@@ -101,29 +118,24 @@ export class ContactComponent {
       errors.push(isEn ? 'Name must be at least 2 characters.' : 'İsim en az 2 karakter olmalıdır.');
     }
 
-    const hasEmail = this.form.email.trim().length > 0;
-    const hasPhone = this.form.phone.trim().length > 0;
-
-    if (!hasEmail && !hasPhone) {
-      errors.push(isEn ? 'Please provide either an email or phone number.' : 'Lütfen e-posta veya telefon numarası girin.');
-    }
-
-    if (hasEmail) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(this.form.email.trim())) {
-        errors.push(isEn ? 'Please enter a valid email address.' : 'Lütfen geçerli bir e-posta adresi girin.');
-      }
-    }
-
-    if (hasPhone) {
-      const phoneClean = this.form.phone.trim().replace(/[\s\-\(\)]/g, '');
-      if (phoneClean.length < 10 || !/^\+?\d+$/.test(phoneClean)) {
-        errors.push(isEn ? 'Please enter a valid phone number.' : 'Lütfen geçerli bir telefon numarası girin.');
-      }
-    }
-
     if (!this.form.contactPreference) {
       errors.push(isEn ? 'Please select a contact preference.' : 'Lütfen bir iletişim tercihi seçin.');
+    } else {
+      if (this.form.contactPreference === 'email') {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(this.form.email.trim())) {
+          errors.push(isEn ? 'Please enter a valid email address.' : 'Lütfen geçerli bir e-posta adresi girin.');
+        }
+      } else {
+        const phoneClean = this.form.phone.trim().replace(/[\s\-\(\)]/g, '');
+        if (phoneClean.length < 10 || !/^\+?\d+$/.test(phoneClean)) {
+          errors.push(isEn ? 'Please enter a valid phone number.' : 'Lütfen geçerli bir telefon numarası girin.');
+        }
+
+        if (this.form.contactPreference === 'phone' && !this.form.preferred_contact_time?.trim()) {
+          errors.push(isEn ? 'Please select a preferred contact time.' : 'Lütfen tercih edilen bir aranma zamanı seçin.');
+        }
+      }
     }
 
     if (!this.form.subject.trim()) {
@@ -157,6 +169,7 @@ export class ContactComponent {
       email: '',
       phone: '',
       contactPreference: '',
+      preferred_contact_time: '',
       subject: '',
       message: '',
     };

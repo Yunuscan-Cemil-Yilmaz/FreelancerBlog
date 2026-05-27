@@ -1,4 +1,4 @@
-@if (references && references.length > 0) {
+@if (references() && references().length > 0) {
 <div>
     <h2 class="text-2xl sm:text-3xl font-bold mb-10 text-white">{{ t.t('about.references_title') }}</h2>
 
@@ -12,7 +12,7 @@
         <!-- Sliding track -->
         <div class="flex transition-transform duration-700 ease-in-out"
             [style.transform]="'translateX(-' + slideOffset + '%)'">
-        @for (ref of references; track ref.name; let i = $index) {
+        @for (ref of references(); track ref.name; let i = $index) {
             <div class="shrink-0 px-2.5"
                 [style.width]="slideWidth + '%'">
             <div class="p-6 sm:p-7 rounded-2xl border transition-all duration-500 h-full"
@@ -72,7 +72,7 @@
         </button>
         <!-- Dots -->
         <div class="flex items-center gap-2">
-        @for (ref of references; track ref.name; let i = $index) {
+        @for (ref of references(); track ref.name; let i = $index) {
             <button (click)="goToRef(i)"
                     class="transition-all duration-300 rounded-full cursor-pointer"
                     [class]="i === currentRefIndex()
