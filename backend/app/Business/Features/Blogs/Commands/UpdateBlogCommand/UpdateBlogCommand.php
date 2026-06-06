@@ -15,8 +15,8 @@ class UpdateBlogCommand
             throw new HttpException(404, "Blog not found");
         }
 
-        $contentEn = $this->sanitize($request->content_en);
-        $contentTr = $this->sanitize($request->content_tr);
+        $contentEn = clean($request->content_en);
+        $contentTr = clean($request->content_tr);
 
         $mainImageUrl = $blog->image_url;
         if ($request->delete_main_image) {
@@ -61,12 +61,5 @@ class UpdateBlogCommand
         ];
     }
 
-    private function sanitize(string $html): string
-    {
-        // Simple XSS prevention
-        $html = preg_replace('/<(script|iframe|object|embed|applet|meta|link|style|base|form)[^>]*>.*?<\/\1>/is', '', $html);
-        $html = preg_replace('/<(script|iframe|object|embed|applet|meta|link|style|base|form)[^>]*>/is', '', $html);
-        $html = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*?>#iUu', "$1>", $html);
-        return $html;
-    }
+
 }

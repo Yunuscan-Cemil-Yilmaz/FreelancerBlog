@@ -22,8 +22,8 @@ class CreateBlogCommand
             throw new HttpException(404, "Domain information not found.");
         }
 
-        $contentEn = $this->sanitize($request->content_en);
-        $contentTr = $this->sanitize($request->content_tr);
+        $contentEn = clean($request->content_en);
+        $contentTr = clean($request->content_tr);
 
         $mainImageUrl = null;
         if ($request->main_image) {
@@ -68,13 +68,5 @@ class CreateBlogCommand
         ];
     }
 
-    private function sanitize(string $html): string
-    {
-        // Simple XSS prevention: remove script, iframe, object, embed tags
-        $html = preg_replace('/<(script|iframe|object|embed|applet|meta|link|style|base|form)[^>]*>.*?<\/\1>/is', '', $html);
-        $html = preg_replace('/<(script|iframe|object|embed|applet|meta|link|style|base|form)[^>]*>/is', '', $html);
-        // Remove 'on...' attributes
-        $html = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*?>#iUu', "$1>", $html);
-        return $html;
-    }
+
 }
