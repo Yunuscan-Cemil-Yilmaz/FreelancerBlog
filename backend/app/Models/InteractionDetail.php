@@ -11,17 +11,9 @@ class InteractionDetail extends Model
     protected $fillable = [
         'interaction_id',
         'interaction_note',
-        'contact_result',
         'domain',
         'admin_domain',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'contact_result' => 'integer',
-        ];
-    }
 
     protected static function booted(): void
     {

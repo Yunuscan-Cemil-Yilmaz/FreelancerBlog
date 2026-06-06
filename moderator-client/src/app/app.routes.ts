@@ -23,6 +23,12 @@ export const routes: Routes = [
       { path: 'repos', loadComponent: () => import('./features/repos/pages/list/repos-list.component').then(m => m.ReposListComponent) },
       { path: 'repos/create', loadComponent: () => import('./features/repos/pages/form/repos-form.component').then(m => m.ReposFormComponent) },
       { path: 'repos/edit/:id', loadComponent: () => import('./features/repos/pages/form/repos-form.component').then(m => m.ReposFormComponent) },
+      { path: 'interaction-requests', loadComponent: () => import('./features/interaction-requests/pages/list/list').then(m => m.List) },
+      { path: 'interaction-requests/:id', loadComponent: () => import('./features/interaction-requests/pages/detail/detail').then(m => m.Detail) },
+      { path: 'blog-interaction-requests', loadComponent: () => import('./features/blog-interaction-requests/pages/list/list').then(m => m.List) },
+      { path: 'blog-interaction-requests/:id', loadComponent: () => import('./features/blog-interaction-requests/pages/detail/detail').then(m => m.Detail) },
+      { path: 'repo-interaction-requests', loadComponent: () => import('./features/repo-interaction-requests/pages/list/list').then(m => m.List) },
+      { path: 'repo-interaction-requests/:id', loadComponent: () => import('./features/repo-interaction-requests/pages/detail/detail').then(m => m.Detail) },
       { path: '', redirectTo: '', pathMatch: 'full' }
     ]
   },

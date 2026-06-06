@@ -75,6 +75,19 @@ import { AuthService } from '@core/services/auth.service';
               <mat-icon matListItemIcon>code</mat-icon>
               <span matListItemTitle>Repos</span>
             </a>
+            <div class="list-header">Interaction Requests</div>
+            <a mat-list-item routerLink="/dashboard/interaction-requests" routerLinkActive="active">
+              <mat-icon matListItemIcon>contact_mail</mat-icon>
+              <span matListItemTitle>General Contacts</span>
+            </a>
+            <a mat-list-item routerLink="/dashboard/blog-interaction-requests" routerLinkActive="active">
+              <mat-icon matListItemIcon>forum</mat-icon>
+              <span matListItemTitle>Blog Interactions</span>
+            </a>
+            <a mat-list-item routerLink="/dashboard/repo-interaction-requests" routerLinkActive="active">
+              <mat-icon matListItemIcon>integration_instructions</mat-icon>
+              <span matListItemTitle>Repo Interactions</span>
+            </a>
           </mat-nav-list>
         </mat-sidenav>
 

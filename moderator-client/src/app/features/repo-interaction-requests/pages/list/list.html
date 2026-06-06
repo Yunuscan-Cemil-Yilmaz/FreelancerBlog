@@ -1,0 +1,117 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">RepoInteractionRequest Management</h1>
+  </div>
+
+  <mat-tab-group (selectedIndexChange)="onTabChange($event)" class="mb-6">
+    <mat-tab label="All Requests"></mat-tab>
+    <mat-tab label="Unread"></mat-tab>
+    <mat-tab label="Handled"></mat-tab>
+    <mat-tab label="Unhandled"></mat-tab>
+  </mat-tab-group>
+
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
+    <h3 class="text-lg font-medium mb-4 dark:text-white">Filters</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="filters.name" (keyup.enter)="applyFilters()">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="filters.email" (keyup.enter)="applyFilters()">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input matInput [(ngModel)]="filters.phone" (keyup.enter)="applyFilters()">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <input matInput [(ngModel)]="filters.interaction_type" (keyup.enter)="applyFilters()">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput [(ngModel)]="filters.title" (keyup.enter)="applyFilters()">
+      </mat-form-field>
+    </div>
+    <div class="flex justify-end gap-2 mt-4">
+      <button mat-button (click)="clearFilters()">Clear</button>
+      <button mat-flat-button color="primary" (click)="applyFilters()">Search</button>
+    </div>
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+    <table mat-table [dataSource]="data" class="w-full">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="interaction_type">
+        <th mat-header-cell *matHeaderCellDef> Type </th>
+        <td mat-cell *matCellDef="let element"> {{element.interaction_type}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="is_readed">
+        <th mat-header-cell *matHeaderCellDef> Read </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon [color]="element.is_readed ? 'primary' : 'warn'">
+            {{element.is_readed ? 'check_circle' : 'cancel'}}
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="is_handled">
+        <th mat-header-cell *matHeaderCellDef> Handled </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon [color]="element.is_handled ? 'primary' : 'warn'">
+            {{element.is_handled ? 'check_circle' : 'cancel'}}
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="is_completed">
+        <th mat-header-cell *matHeaderCellDef> Completed </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon [color]="element.is_completed ? 'primary' : 'warn'">
+            {{element.is_completed ? 'check_circle' : 'cancel'}}
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.created_at | date:'short'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element">
+          <a mat-icon-button color="primary" [routerLink]="['/dashboard/repo-interaction-requests', element.id]">
+            <mat-icon>visibility</mat-icon>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [length]="totalItems"
+                   [pageSize]="filters.perPage"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   (page)="onPageChange($event)"
+                   showFirstLastButtons>
+    </mat-paginator>
+  </div>
+</div>

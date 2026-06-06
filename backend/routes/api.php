@@ -13,6 +13,9 @@ use App\Http\Controllers\RepoController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\InteractionRequestController;
+use App\Http\Controllers\BlogInteractionRequestController;
+use App\Http\Controllers\RepoInteractionRequestController;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Middleware\ModeratorAuthMiddleware;
 use Illuminate\Http\Request;
@@ -112,6 +115,41 @@ Route::middleware(ModeratorAuthMiddleware::class)->prefix('moderator')->group(fu
     Route::post('/repos/create', [RepoController::class, 'createRepo']);
     Route::post('/repos/update', [RepoController::class, 'updateRepo']);
     Route::post('/repos/delete', [RepoController::class, 'deleteRepo']);
+    // Interaction Request Management
+    Route::get('/interaction-requests', [InteractionRequestController::class, 'index']);
+    Route::get('/interaction-requests/{id}', [InteractionRequestController::class, 'show']);
+    Route::patch('/interaction-requests/{id}/read', [InteractionRequestController::class, 'updateReadStatus']);
+    Route::patch('/interaction-requests/{id}/handled', [InteractionRequestController::class, 'updateHandledStatus']);
+    Route::patch('/interaction-requests/{id}/completed', [InteractionRequestController::class, 'updateCompletedStatus']);
+    Route::patch('/interaction-requests/{id}/admin-note', [InteractionRequestController::class, 'updateAdminNote']);
+    Route::delete('/interaction-requests/{id}', [InteractionRequestController::class, 'destroy']);
+    Route::post('/interaction-requests/details', [InteractionRequestController::class, 'storeDetail']);
+    Route::patch('/interaction-requests/details/{id}', [InteractionRequestController::class, 'updateDetail']);
+    Route::delete('/interaction-requests/details/{id}', [InteractionRequestController::class, 'destroyDetail']);
+
+    // Blog Interaction Request Management
+    Route::get('/blog-interaction-requests', [BlogInteractionRequestController::class, 'index']);
+    Route::get('/blog-interaction-requests/{id}', [BlogInteractionRequestController::class, 'show']);
+    Route::patch('/blog-interaction-requests/{id}/read', [BlogInteractionRequestController::class, 'updateReadStatus']);
+    Route::patch('/blog-interaction-requests/{id}/handled', [BlogInteractionRequestController::class, 'updateHandledStatus']);
+    Route::patch('/blog-interaction-requests/{id}/completed', [BlogInteractionRequestController::class, 'updateCompletedStatus']);
+    Route::patch('/blog-interaction-requests/{id}/admin-note', [BlogInteractionRequestController::class, 'updateAdminNote']);
+    Route::delete('/blog-interaction-requests/{id}', [BlogInteractionRequestController::class, 'destroy']);
+    Route::post('/blog-interaction-requests/details', [BlogInteractionRequestController::class, 'storeDetail']);
+    Route::patch('/blog-interaction-requests/details/{id}', [BlogInteractionRequestController::class, 'updateDetail']);
+    Route::delete('/blog-interaction-requests/details/{id}', [BlogInteractionRequestController::class, 'destroyDetail']);
+
+    // Repo Interaction Request Management
+    Route::get('/repo-interaction-requests', [RepoInteractionRequestController::class, 'index']);
+    Route::get('/repo-interaction-requests/{id}', [RepoInteractionRequestController::class, 'show']);
+    Route::patch('/repo-interaction-requests/{id}/read', [RepoInteractionRequestController::class, 'updateReadStatus']);
+    Route::patch('/repo-interaction-requests/{id}/handled', [RepoInteractionRequestController::class, 'updateHandledStatus']);
+    Route::patch('/repo-interaction-requests/{id}/completed', [RepoInteractionRequestController::class, 'updateCompletedStatus']);
+    Route::patch('/repo-interaction-requests/{id}/admin-note', [RepoInteractionRequestController::class, 'updateAdminNote']);
+    Route::delete('/repo-interaction-requests/{id}', [RepoInteractionRequestController::class, 'destroy']);
+    Route::post('/repo-interaction-requests/details', [RepoInteractionRequestController::class, 'storeDetail']);
+    Route::patch('/repo-interaction-requests/details/{id}', [RepoInteractionRequestController::class, 'updateDetail']);
+    Route::delete('/repo-interaction-requests/details/{id}', [RepoInteractionRequestController::class, 'destroyDetail']);
 });
 
 
@@ -123,9 +161,7 @@ Route::get('/references/{lang}', [ReferenceController::class, 'index']);
 Route::get('/skills/{lang}', [SkillController::class, 'index']);
 
 
-use App\Http\Controllers\InteractionRequestController;
-use App\Http\Controllers\BlogInteractionRequestController;
-use App\Http\Controllers\RepoInteractionRequestController;
+
 
 /*
 |--------------------------------------------------------------------------

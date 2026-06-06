@@ -1,0 +1,102 @@
+<div class="p-6" *ngIf="data">
+  <div class="flex justify-between items-center mb-6">
+    <div class="flex items-center gap-4">
+      <a mat-icon-button routerLink="/dashboard/repo-interaction-requests">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">RepoInteractionRequest #{{data.id}}</h1>
+    </div>
+    <button mat-flat-button color="warn" (click)="deleteInteraction()">Delete Request</button>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Info -->
+    <div class="lg:col-span-2 space-y-6">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Request Info</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="pt-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div><strong class="text-blue-500 font-medium">Name:</strong> <div>{{data.name}}</div></div>
+            <div><strong class="text-blue-500 font-medium">Email:</strong> <div>{{data.email || '-'}}</div></div>
+            <div><strong class="text-blue-500 font-medium">Phone:</strong> <div>{{data.phone || '-'}}</div></div>
+            <div><strong class="text-blue-500 font-medium">Type:</strong> <div>{{data.interaction_type}}</div></div>
+            <div><strong class="text-blue-500 font-medium">Title:</strong> <div class="text-indigo-600 dark:text-indigo-400 font-semibold text-lg">{{data.title}}</div></div>
+            <div><strong class="text-blue-500 font-medium">Time:</strong> <div>{{data.preferred_contact_time || '-'}}</div></div>
+          </div>
+          
+          <div class="mt-6">
+            <strong class="text-blue-500 font-medium">Message:</strong>
+            <div class="p-4 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-lg mt-2 whitespace-pre-wrap border border-gray-200 dark:border-gray-600 shadow-inner">{{data.message}}</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Details List -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Interaction Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="pt-4">
+          <table mat-table [dataSource]="data.details || []" class="w-full mb-6">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let element">{{element.id}}</td>
+            </ng-container>
+            <ng-container matColumnDef="interaction_note">
+              <th mat-header-cell *matHeaderCellDef>Note</th>
+              <td mat-cell *matCellDef="let element">{{element.interaction_note}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="warn" (click)="deleteDetail(element.id)"><mat-icon>delete</mat-icon></button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="detailColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: detailColumns;"></tr>
+          </table>
+
+          <h4 class="font-medium mb-2">Add New Detail</h4>
+          <div class="flex gap-4 items-start">
+            <mat-form-field appearance="outline" class="flex-1">
+              <mat-label>Note</mat-label>
+              <textarea matInput [(ngModel)]="newDetail.interaction_note" rows="2"></textarea>
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" class="mt-2" (click)="addDetail()">Add</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Status & Admin Note -->
+    <div class="space-y-6">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Status Control</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="pt-4 flex flex-col gap-4">
+          <mat-slide-toggle [(ngModel)]="data.is_readed" (change)="updateRead($event)">Read</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="data.is_handled" (change)="updateHandled($event)">Handled</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="data.is_completed" (change)="updateCompleted($event)">Completed</mat-slide-toggle>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Admin Note</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="pt-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Internal Note</mat-label>
+            <textarea matInput [(ngModel)]="data.admin_note" rows="6"></textarea>
+          </mat-form-field>
+          <button mat-flat-button color="primary" class="w-full" (click)="saveAdminNote()">Save Note</button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
