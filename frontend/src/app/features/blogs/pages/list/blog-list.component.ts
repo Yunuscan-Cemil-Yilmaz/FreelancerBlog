@@ -4,6 +4,7 @@ import { TranslationService } from '../../../../core/config/translation.service'
 import { BlogsService, SortOption } from '../../domain/blogs.service';
 import { CategoryService } from '../../domain/category.service';
 import { Category, SubCategory } from '../../domain/category.models';
+import { SeoService } from '../../../../core/seo/seo.service';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { PaginationComponent } from '../../../../shared/ui/components/pagination/pagination.component';
 
@@ -21,6 +22,7 @@ export class BlogListComponent {
   readonly t = inject(TranslationService);
   private readonly blogsService = inject(BlogsService);
   private readonly categoryService = inject(CategoryService);
+  private readonly seoService = inject(SeoService);
 
   readonly selectedCategoryId = signal<number | undefined>(undefined);
   readonly selectedSubCategoryId = signal<number | undefined>(undefined);
@@ -51,6 +53,7 @@ export class BlogListComponent {
     afterNextRender(() => {
       this.restoreState();
       this.loadData();
+      this.updateSeo();
     });
   }
 
@@ -61,6 +64,14 @@ export class BlogListComponent {
       subCategoryId: this.selectedSubCategoryId(),
       page: this.currentPage(),
       perPage: this.pageSize,
+    });
+  }
+
+  private updateSeo(): void {
+    const isEn = this.t.isEnglish();
+    this.seoService.update({
+      title: isEn ? 'Blog Posts' : 'Blog Yazıları',
+      description: isEn ? 'Read my latest articles, tutorials, and tech insights.' : 'En son makalelerimi, eğitimlerimi ve teknoloji paylaşımlarımı okuyun.',
     });
   }
 

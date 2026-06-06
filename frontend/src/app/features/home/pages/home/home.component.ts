@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, effect, OnInit, OnDestroy } from '
 import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { environment } from '../../../../../environments/environment';
+import { SeoService } from '../../../../core/seo/seo.service';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,7 @@ import { environment } from '../../../../../environments/environment';
 export class HomeComponent implements OnInit, OnDestroy {
   readonly t = inject(TranslationService);
   readonly env = environment;
+  private readonly seoService = inject(SeoService);
 
   private readonly titlesEn = [
     'Building Things That Actually Work',
@@ -50,6 +52,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initialized = true;
     this.type();
+    
+    this.seoService.setStructuredData({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: this.env.fullName,
+      url: window.location.origin,
+      sameAs: [
+        this.env.githubUrl,
+        this.env.linkedinUrl
+      ].filter(Boolean),
+      jobTitle: 'Software Developer'
+    });
   }
 
   ngOnDestroy(): void {

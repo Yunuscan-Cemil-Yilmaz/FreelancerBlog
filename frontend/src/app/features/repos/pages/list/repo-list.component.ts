@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { ReposService, SortOption } from '../../domain/repos.service';
 import { PaginationComponent } from '../../../../shared/ui/components/pagination/pagination.component';
+import { SeoService } from '../../../../core/seo/seo.service';
 
 const STORAGE_KEY = 'repo-list-state';
 const PAGE_SIZE = 4;
@@ -17,6 +18,7 @@ const PAGE_SIZE = 4;
 export class RepoListComponent {
   readonly t = inject(TranslationService);
   private readonly reposService = inject(ReposService);
+  private readonly seoService = inject(SeoService);
 
   readonly sortBy = signal<SortOption>('newest');
   readonly currentPage = signal(1);
@@ -41,6 +43,7 @@ export class RepoListComponent {
     afterNextRender(() => {
       this.restoreState();
       this.loadData();
+      this.updateSeo();
     });
   }
 
@@ -48,6 +51,14 @@ export class RepoListComponent {
     this.reposService.loadRepos({
       sort: this.sortBy(),
       page: this.currentPage(),
+    });
+  }
+
+  private updateSeo(): void {
+    const isEn = this.t.isEnglish();
+    this.seoService.update({
+      title: isEn ? 'Projects & Repos' : 'Projeler',
+      description: isEn ? 'Explore my open source projects and code repositories.' : 'Açık kaynaklı projelerimi ve kod depolarımı inceleyin.',
     });
   }
 

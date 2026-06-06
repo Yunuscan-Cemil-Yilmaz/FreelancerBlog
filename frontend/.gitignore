@@ -46,3 +46,4 @@ Thumbs.db
 # Personal assets
 public/favicon.ico
 public/images/*.png
+public/robots.txt

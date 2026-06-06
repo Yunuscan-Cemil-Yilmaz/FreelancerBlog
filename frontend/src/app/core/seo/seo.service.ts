@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 export interface SeoData {
   title: string;
@@ -18,7 +19,7 @@ export class SeoService {
   private readonly document = inject(DOCUMENT);
 
   update(data: SeoData): void {
-    const fullTitle = `${data.title} | Yunuscan Cemil Yılmaz`;
+    const fullTitle = `${data.title} | ${environment.fullName}`;
     this.title.setTitle(fullTitle);
 
     // Standard meta tags
@@ -53,8 +54,9 @@ export class SeoService {
   }
 
   resetToDefaults(): void {
-    this.title.setTitle('Yunuscan Cemil Yılmaz — Developer Portfolio');
+    this.title.setTitle(`${environment.fullName} — Developer Portfolio`);
     this.meta.removeTag("name='description'");
+
     this.meta.removeTag("property='og:title'");
     this.meta.removeTag("property='og:description'");
     this.meta.removeTag("property='og:image'");
@@ -63,6 +65,7 @@ export class SeoService {
     this.meta.removeTag("name='twitter:title'");
     this.meta.removeTag("name='twitter:description'");
     this.meta.removeTag("name='twitter:image'");
+    this.removeStructuredData();
   }
 
   private setOrUpdate(name: string, content: string): void {
@@ -92,6 +95,23 @@ export class SeoService {
       link.setAttribute('rel', 'canonical');
       link.setAttribute('href', url);
       this.document.head.appendChild(link);
+    }
+  }
+
+  setStructuredData(data: Record<string, any>): void {
+    let script: HTMLScriptElement | null = this.document.querySelector("script[type='application/ld+json']");
+    if (!script) {
+      script = this.document.createElement('script');
+      script.setAttribute('type', 'application/ld+json');
+      this.document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(data);
+  }
+
+  removeStructuredData(): void {
+    const script = this.document.querySelector("script[type='application/ld+json']");
+    if (script) {
+      script.remove();
     }
   }
 }
