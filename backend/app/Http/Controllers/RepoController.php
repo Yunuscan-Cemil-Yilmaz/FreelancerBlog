@@ -46,16 +46,11 @@ class RepoController extends Controller
         return response()->json($result);
     }
 
-    public function indexForModerator(Request $request): JsonResponse
+    public function indexForModerator(Request $request, \App\Business\Features\Repos\Queries\GetRepoListForModeratorQuery\GetRepoListForModeratorQuery $query): JsonResponse
     {
         $perPage = $request->integer('per_page', 10);
-        $repos = \App\Models\Repo::orderBy('created_at', 'desc')->paginate($perPage);
-        return response()->json([
-            'data' => $repos->items(),
-            'total' => $repos->total(),
-            'current_page' => $repos->currentPage(),
-            'last_page' => $repos->lastPage()
-        ]);
+        $repoRequest = new \App\Business\Features\Repos\Queries\GetRepoListForModeratorQuery\GetRepoListForModeratorRequest($perPage);
+        return response()->json($query->handle($repoRequest));
     }
 
     public function getDetails(int $id, \App\Business\Features\Repos\Queries\GetRepoDetailsQuery\GetRepoDetailsQuery $query): JsonResponse

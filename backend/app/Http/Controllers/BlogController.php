@@ -60,25 +60,16 @@ class BlogController extends Controller
         return response()->json($result);
     }
 
-    public function indexForModerator(Request $request): JsonResponse
+    public function indexForModerator(Request $request, \App\Business\Features\Blogs\Queries\GetBlogListForModeratorQuery\GetBlogListForModeratorQuery $query): JsonResponse
     {
         $perPage = $request->integer('per_page', 10);
-        $blogs = \App\Models\Blog::with(['category', 'subCategory'])->orderBy('created_at', 'desc')->paginate($perPage);
-        return response()->json([
-            'data' => $blogs->items(),
-            'total' => $blogs->total(),
-            'current_page' => $blogs->currentPage(),
-            'per_page' => $blogs->perPage()
-        ]);
+        $blogRequest = new \App\Business\Features\Blogs\Queries\GetBlogListForModeratorQuery\GetBlogListForModeratorRequest($perPage);
+        return response()->json($query->handle($blogRequest));
     }
 
-    public function getDetailsForModerator(int $id): JsonResponse
+    public function getDetailsForModerator(int $id, \App\Business\Features\Blogs\Queries\GetBlogDetailsForModeratorQuery\GetBlogDetailsForModeratorQuery $query): JsonResponse
     {
-        $blog = \App\Models\Blog::find($id);
-        if (!$blog) {
-            return response()->json(['message' => 'Blog not found'], 404);
-        }
-        return response()->json(['data' => $blog]);
+        return response()->json($query->handle($id));
     }
 
     public function createBlog(Request $request, \App\Business\Features\Blogs\Commands\CreateBlogCommand\CreateBlogCommand $command, \App\Business\Features\Blogs\Commands\CreateBlogCommand\CreateBlogCommandValidator $validator): JsonResponse
