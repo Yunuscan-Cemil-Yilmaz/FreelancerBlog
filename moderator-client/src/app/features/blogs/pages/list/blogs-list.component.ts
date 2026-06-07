@@ -14,84 +14,8 @@ import { RouterModule, Router } from '@angular/router';
   selector: 'app-blogs-list',
   standalone: true,
   imports: [CommonModule, MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatDialogModule, MatSnackBarModule, RouterModule],
-  template: `
-    <div class="header-container">
-      <h2>Blog Management</h2>
-      <button mat-raised-button color="primary" routerLink="/dashboard/blogs/create">
-        <mat-icon>add</mat-icon> Add New Blog
-      </button>
-    </div>
-
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let element">
-           <a [routerLink]="['/dashboard/blogs/edit', element.id]" class="id-link">{{ element.id }}</a>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="title_en">
-        <th mat-header-cell *matHeaderCellDef> Title (EN) </th>
-        <td mat-cell *matCellDef="let element"> {{ element.title_en }} </td>
-      </ng-container>
-      
-      <ng-container matColumnDef="title_tr">
-        <th mat-header-cell *matHeaderCellDef> Title (TR) </th>
-        <td mat-cell *matCellDef="let element"> {{ element.title_tr }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="category">
-        <th mat-header-cell *matHeaderCellDef> Category (ID / Name) </th>
-        <td mat-cell *matCellDef="let element"> 
-          {{ element.category_id }} / {{ element.category?.name_en || '-' }} 
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="sub_category">
-        <th mat-header-cell *matHeaderCellDef> Sub Category (ID / Name) </th>
-        <td mat-cell *matCellDef="let element"> 
-          {{ element.sub_category_id || '-' }} / {{ element.sub_category?.name_en || '-' }} 
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="author">
-        <th mat-header-cell *matHeaderCellDef> Author </th>
-        <td mat-cell *matCellDef="let element"> {{ element.author }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="created_at">
-        <th mat-header-cell *matHeaderCellDef> Created At </th>
-        <td mat-cell *matCellDef="let element"> {{ element.created_at | date }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" [routerLink]="['/dashboard/blogs/edit', element.id]">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="delete(element.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <mat-paginator [length]="totalItems"
-                   [pageSize]="pageSize"
-                   [pageSizeOptions]="[5, 10, 25, 100]"
-                   (page)="onPageChange($event)"
-                   aria-label="Select page">
-    </mat-paginator>
-  `,
-  styles: [`
-    .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    table { width: 100%; }
-    .id-link { color: #3f51b5; font-weight: 500; text-decoration: underline; cursor: pointer; }
-  `]
+  templateUrl: './blogs-list.component.html',
+  styleUrl: './blogs-list.component.css'
 })
 export class BlogsListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'title_en', 'category', 'sub_category', 'author', 'created_at', 'actions'];

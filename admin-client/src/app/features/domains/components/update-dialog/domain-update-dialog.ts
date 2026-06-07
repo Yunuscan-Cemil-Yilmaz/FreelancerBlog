@@ -22,63 +22,8 @@ import { DomainService, Domain } from '../../domain/domain';
     MatSnackBarModule,
     FormsModule
   ],
-  template: `
-    <h2 mat-dialog-title>Update Domain</h2>
-    <mat-dialog-content>
-      <div class="form-container">
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Domain</mat-label>
-          <input matInput [(ngModel)]="data.domain" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Admin Domain</mat-label>
-          <input matInput [(ngModel)]="data.admin_domain" required>
-        </mat-form-field>
-
-        <div class="update-type-section">
-          <label id="update-type-label">Update Type:</label>
-          <mat-radio-group
-            aria-labelledby="update-type-label"
-            class="update-radio-group"
-            [(ngModel)]="updateType">
-            <mat-radio-button value="normal" color="primary">
-              Normal Update (Only Domain Table)
-            </mat-radio-button>
-            <mat-radio-button value="cascade" color="primary">
-              Cascade Update (Update everywhere)
-            </mat-radio-button>
-          </mat-radio-group>
-        </div>
-      </div>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="onNoClick()">Cancel</button>
-      <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!data.domain || !data.admin_domain">Save</button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    .form-container {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      padding-top: 10px;
-    }
-    .full-width {
-      width: 100%;
-    }
-    .update-type-section {
-      display: flex;
-      flex-direction: column;
-      margin-top: 10px;
-    }
-    .update-radio-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-  `]
+  templateUrl: './domain-update-dialog.html',
+  styleUrl: './domain-update-dialog.css'
 })
 export class DomainUpdateDialogComponent {
   updateType: 'normal' | 'cascade' = 'normal';

@@ -8,7 +8,7 @@ import { SeoService } from './core/seo/seo.service';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, ToastContainerComponent],
-  template: `<router-outlet /><app-toast-container />`,
+  templateUrl: './app.html',
 })
 export class App implements OnInit {
   private readonly router = inject(Router);

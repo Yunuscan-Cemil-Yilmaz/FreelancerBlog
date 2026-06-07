@@ -1,0 +1,75 @@
+<div class="header-container">
+      <h2>Category & SubCategory Management</h2>
+      <button mat-raised-button color="primary" (click)="openCategoryDialog()">
+        <mat-icon>add</mat-icon> Add Category
+      </button>
+    </div>
+
+    <mat-accordion multi="true">
+      <mat-expansion-panel *ngFor="let category of categories">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <strong>{{ category.name_en }}</strong> &nbsp; ({{ category.name_tr }})
+          </mat-panel-title>
+          <mat-panel-description>
+            Slug: {{ category.slug }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="category-actions">
+          <button mat-button color="primary" (click)="openCategoryDialog(category)">
+            <mat-icon>edit</mat-icon> Edit Category
+          </button>
+          <button mat-button color="warn" (click)="deleteCategory(category.id)">
+            <mat-icon>delete</mat-icon> Delete Category
+          </button>
+        </div>
+
+        <div class="sub-category-section">
+          <div class="sub-header">
+            <h3>SubCategories</h3>
+            <button mat-stroked-button color="primary" (click)="openSubCategoryDialog(category.id)">
+              <mat-icon>add</mat-icon> Add SubCategory
+            </button>
+          </div>
+
+          <table mat-table [dataSource]="getSubCategories(category.id)" class="mat-elevation-z1 sub-table">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef> ID </th>
+              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="name_en">
+              <th mat-header-cell *matHeaderCellDef> name_en </th>
+              <td mat-cell *matCellDef="let element"> {{ element.name_en }} </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="name_tr">
+              <th mat-header-cell *matHeaderCellDef> name_tr </th>
+              <td mat-cell *matCellDef="let element"> {{ element.name_tr }} </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="slug">
+              <th mat-header-cell *matHeaderCellDef> slug </th>
+              <td mat-cell *matCellDef="let element"> {{ element.slug }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> Actions </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="openSubCategoryDialog(category.id, element)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteSubCategory(element.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="subColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: subColumns;"></tr>
+          </table>
+          <p *ngIf="getSubCategories(category.id).length === 0" class="no-data">No SubCategories found.</p>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>

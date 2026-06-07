@@ -25,62 +25,8 @@ import { Skill } from '../../domain/skills';
     MatIconModule,
     MatSnackBarModule
   ],
-  template: `
-    <h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'Add' }} Skill</h2>
-    <mat-dialog-content>
-      <form [formGroup]="form" class="form-container">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>category_en</mat-label>
-          <input matInput formControlName="category_en">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>category_tr</mat-label>
-          <input matInput formControlName="category_tr">
-        </mat-form-field>
-        
-        <div class="items-header">
-          <h3>Items</h3>
-          <button mat-button type="button" color="primary" (click)="addItem()">+ Add Item</button>
-        </div>
-        
-        <div formArrayName="items">
-          <div *ngFor="let item of items.controls; let i=index" [formGroupName]="i" class="item-row">
-            <mat-form-field appearance="outline" class="flex-item">
-              <mat-label>Name</mat-label>
-              <input matInput formControlName="name" placeholder="e.g. React">
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline" class="flex-item">
-              <mat-label>Level</mat-label>
-              <mat-select formControlName="level">
-                <mat-option value="core">Core</mat-option>
-                <mat-option value="strong">Strong</mat-option>
-                <mat-option value="familiar">Familiar</mat-option>
-              </mat-select>
-            </mat-form-field>
-            
-            <button mat-icon-button color="warn" type="button" (click)="removeItem(i)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </div>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-raised-button color="primary" [disabled]="form.invalid || loading" (click)="save()">
-        {{ loading ? 'Saving...' : 'Save' }}
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    .form-container { display: flex; flex-direction: column; padding-top: 10px; }
-    .full-width { width: 100%; }
-    .items-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .items-header h3 { margin: 0; }
-    .item-row { display: flex; gap: 10px; align-items: center; margin-bottom: 5px; }
-    .flex-item { flex: 1; }
-  `]
+  templateUrl: './skills-form.component.html',
+  styleUrl: './skills-form.component.css'
 })
 export class SkillFormComponent implements OnInit {
   form: FormGroup;

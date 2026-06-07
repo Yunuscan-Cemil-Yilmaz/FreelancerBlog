@@ -21,39 +21,8 @@ import { SubCategory } from '../../domain/sub-categories';
     MatButtonModule,
     MatSnackBarModule
   ],
-  template: `
-    <h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'Add' }} SubCategory</h2>
-    <mat-dialog-content>
-      <form [formGroup]="form" class="form-container">
-        <mat-form-field appearance="outline" class="full-width" [hidden]="true">
-          <mat-label>category_id</mat-label>
-          <input matInput type="number" formControlName="category_id">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>name_en</mat-label>
-          <input matInput formControlName="name_en">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>name_tr</mat-label>
-          <input matInput formControlName="name_tr">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>slug</mat-label>
-          <input matInput formControlName="slug">
-        </mat-form-field>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-raised-button color="primary" [disabled]="form.invalid || loading" (click)="save()">
-        {{ loading ? 'Saving...' : 'Save' }}
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    .form-container { display: flex; flex-direction: column; padding-top: 10px; }
-    .full-width { width: 100%; }
-  `]
+  templateUrl: './sub-categories-form.component.html',
+  styleUrl: './sub-categories-form.component.css'
 })
 export class SubCategoryFormComponent implements OnInit {
   form: FormGroup;

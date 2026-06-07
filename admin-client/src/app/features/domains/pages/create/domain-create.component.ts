@@ -23,71 +23,8 @@ import { DomainService } from '../../domain/domain';
     MatSnackBarModule,
     FormsModule
   ],
-  template: `
-    <div class="create-container">
-      <mat-card class="form-card">
-        <mat-card-header>
-          <div mat-card-avatar><mat-icon class="header-icon">add_circle</mat-icon></div>
-          <mat-card-title>Create New Domain</mat-card-title>
-          <mat-card-subtitle>Add a new domain to the system</mat-card-subtitle>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <form class="create-form" (ngSubmit)="onSubmit()" #domainForm="ngForm">
-            <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Domain Name</mat-label>
-              <input matInput placeholder="e.g., example.com" [(ngModel)]="domain" name="domain" required>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Admin Domain Name</mat-label>
-              <input matInput placeholder="e.g., admin.example.com" [(ngModel)]="admin_domain" name="admin_domain" required>
-            </mat-form-field>
-            
-            <div class="actions">
-              <button mat-button type="button" (click)="cancel()">Cancel</button>
-              <button mat-raised-button color="primary" type="submit" [disabled]="!domainForm.form.valid || isSubmitting">
-                {{ isSubmitting ? 'Creating...' : 'Create Domain' }}
-              </button>
-            </div>
-          </form>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  `,
-  styles: [`
-    .create-container {
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
-    .form-card {
-      width: 100%;
-      max-width: 600px;
-      padding: 20px;
-    }
-    .header-icon {
-      font-size: 40px;
-      width: 40px;
-      height: 40px;
-      color: #764ba2;
-    }
-    .create-form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-top: 20px;
-    }
-    .full-width {
-      width: 100%;
-    }
-    .actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-    }
-  `]
+  templateUrl: './domain-create.component.html',
+  styleUrl: './domain-create.component.css'
 })
 export class DomainCreateComponent {
   domain: string = '';

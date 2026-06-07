@@ -14,74 +14,8 @@ import { RouterModule, Router } from '@angular/router';
   selector: 'app-repos-list',
   standalone: true,
   imports: [CommonModule, MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatDialogModule, MatSnackBarModule, RouterModule],
-  template: `
-    <div class="header-container">
-      <h2>Repo Management</h2>
-      <button mat-raised-button color="primary" routerLink="/dashboard/repos/create">
-        <mat-icon>add</mat-icon> Add New Repo
-      </button>
-    </div>
-
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let element">
-           <a [routerLink]="['/dashboard/repos/edit', element.id]" class="id-link">{{ element.id }}</a>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef> Title </th>
-        <td mat-cell *matCellDef="let element"> {{ element.title }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="is_public">
-        <th mat-header-cell *matHeaderCellDef> Public </th>
-        <td mat-cell *matCellDef="let element"> 
-          <mat-icon [color]="element.is_public ? 'primary' : 'warn'">
-            {{ element.is_public ? 'check_circle' : 'cancel' }}
-          </mat-icon>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="view_count">
-        <th mat-header-cell *matHeaderCellDef> Views </th>
-        <td mat-cell *matCellDef="let element"> {{ element.view_count }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="created_at">
-        <th mat-header-cell *matHeaderCellDef> Created At </th>
-        <td mat-cell *matCellDef="let element"> {{ element.created_at | date }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" [routerLink]="['/dashboard/repos/edit', element.id]">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="delete(element.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <mat-paginator [length]="totalItems"
-                   [pageSize]="pageSize"
-                   [pageSizeOptions]="[5, 10, 25, 100]"
-                   (page)="onPageChange($event)"
-                   aria-label="Select page">
-    </mat-paginator>
-  `,
-  styles: [`
-    .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    table { width: 100%; }
-    .id-link { color: #3f51b5; font-weight: 500; text-decoration: underline; cursor: pointer; }
-  `]
+  templateUrl: './repos-list.component.html',
+  styleUrl: './repos-list.component.css'
 })
 export class ReposListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'title', 'is_public', 'view_count', 'created_at', 'actions'];

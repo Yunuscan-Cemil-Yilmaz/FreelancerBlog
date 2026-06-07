@@ -14,78 +14,8 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
   selector: 'app-educations-list',
   standalone: true,
   imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatDialogModule, MatSnackBarModule, DragDropModule],
-  template: `
-    <div class="header-container">
-      <h2>Education Management</h2>
-      <button mat-raised-button color="primary" (click)="openDialog()">
-        <mat-icon>add</mat-icon> Add New
-      </button>
-    </div>
-
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropList (cdkDropListDropped)="drop($event)" >
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-      </ng-container>
-        <ng-container matColumnDef="order">
-          <th mat-header-cell *matHeaderCellDef> Order </th>
-          <td mat-cell *matCellDef="let element">
-            <mat-icon style="cursor: grab;">drag_indicator</mat-icon> {{element.order}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="year_en">
-          <th mat-header-cell *matHeaderCellDef> year_en </th>
-          <td mat-cell *matCellDef="let element"> {{ element.year_en }} </td>
-        </ng-container>
-        <ng-container matColumnDef="year_tr">
-          <th mat-header-cell *matHeaderCellDef> year_tr </th>
-          <td mat-cell *matCellDef="let element"> {{ element.year_tr }} </td>
-        </ng-container>
-        <ng-container matColumnDef="degree_en">
-          <th mat-header-cell *matHeaderCellDef> degree_en </th>
-          <td mat-cell *matCellDef="let element"> {{ element.degree_en }} </td>
-        </ng-container>
-        <ng-container matColumnDef="degree_tr">
-          <th mat-header-cell *matHeaderCellDef> degree_tr </th>
-          <td mat-cell *matCellDef="let element"> {{ element.degree_tr }} </td>
-        </ng-container>
-        <ng-container matColumnDef="school_en">
-          <th mat-header-cell *matHeaderCellDef> school_en </th>
-          <td mat-cell *matCellDef="let element"> {{ element.school_en }} </td>
-        </ng-container>
-        <ng-container matColumnDef="school_tr">
-          <th mat-header-cell *matHeaderCellDef> school_tr </th>
-          <td mat-cell *matCellDef="let element"> {{ element.school_tr }} </td>
-        </ng-container>
-        <ng-container matColumnDef="description_en">
-          <th mat-header-cell *matHeaderCellDef> description_en </th>
-          <td mat-cell *matCellDef="let element"> {{ element.description_en }} </td>
-        </ng-container>
-        <ng-container matColumnDef="description_tr">
-          <th mat-header-cell *matHeaderCellDef> description_tr </th>
-          <td mat-cell *matCellDef="let element"> {{ element.description_tr }} </td>
-        </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" (click)="openDialog(element)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="delete(element.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></tr>
-    </table>
-  `,
-  styles: [`
-    .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    table { width: 100%; }
-  `]
+  templateUrl: './educations-list.component.html',
+  styleUrl: './educations-list.component.css'
 })
 export class EducationListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'year_en', 'year_tr', 'degree_en', 'degree_tr', 'school_en', 'school_tr', 'description_en', 'description_tr', 'order', 'actions'];

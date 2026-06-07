@@ -24,69 +24,8 @@ import { AuthService } from '@core/services/auth.service';
     MatIconModule,
     MatSnackBarModule
   ],
-  template: `
-    <div class="login-container">
-      <mat-card class="login-card">
-        <mat-card-header>
-          <mat-card-title>Moderator Login</mat-card-title>
-          <mat-card-subtitle>Manage your domain content</mat-card-subtitle>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Username</mat-label>
-              <input matInput type="text" formControlName="username" placeholder="moderator">
-              <mat-icon matSuffix>person</mat-icon>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Password</mat-label>
-              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-              <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
-                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-            </mat-form-field>
-
-            <div *ngIf="error" class="error-message">
-              {{ error }}
-            </div>
-
-            <button mat-raised-button color="primary" class="full-width" type="submit" [disabled]="loginForm.invalid || loading">
-              <mat-icon *ngIf="!loading">login</mat-icon>
-              <span *ngIf="!loading">Login</span>
-              <span *ngIf="loading">Logging in...</span>
-            </button>
-          </form>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  `,
-  styles: [`
-    .login-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #48c6ef 0%, #6f86d6 100%);
-    }
-    .login-card {
-      width: 400px;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    .full-width {
-      width: 100%;
-      margin-bottom: 15px;
-    }
-    .error-message {
-      color: #f44336;
-      margin-bottom: 15px;
-      text-align: center;
-      font-size: 14px;
-    }
-  `]
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css'
 })
 export class LoginComponent {
   loginForm: FormGroup;

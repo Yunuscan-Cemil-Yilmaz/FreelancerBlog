@@ -14,70 +14,8 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
   selector: 'app-references-list',
   standalone: true,
   imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatDialogModule, MatSnackBarModule, DragDropModule],
-  template: `
-    <div class="header-container">
-      <h2>Reference Management</h2>
-      <button mat-raised-button color="primary" (click)="openDialog()">
-        <mat-icon>add</mat-icon> Add New
-      </button>
-    </div>
-
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropList (cdkDropListDropped)="drop($event)" >
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-      </ng-container>
-        <ng-container matColumnDef="order">
-          <th mat-header-cell *matHeaderCellDef> Order </th>
-          <td mat-cell *matCellDef="let element">
-            <mat-icon style="cursor: grab;">drag_indicator</mat-icon> {{element.order}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> name </th>
-          <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
-        </ng-container>
-        <ng-container matColumnDef="role_en">
-          <th mat-header-cell *matHeaderCellDef> role_en </th>
-          <td mat-cell *matCellDef="let element"> {{ element.role_en }} </td>
-        </ng-container>
-        <ng-container matColumnDef="role_tr">
-          <th mat-header-cell *matHeaderCellDef> role_tr </th>
-          <td mat-cell *matCellDef="let element"> {{ element.role_tr }} </td>
-        </ng-container>
-        <ng-container matColumnDef="company">
-          <th mat-header-cell *matHeaderCellDef> company </th>
-          <td mat-cell *matCellDef="let element"> {{ element.company }} </td>
-        </ng-container>
-        <ng-container matColumnDef="quote_en">
-          <th mat-header-cell *matHeaderCellDef> quote_en </th>
-          <td mat-cell *matCellDef="let element"> {{ element.quote_en }} </td>
-        </ng-container>
-        <ng-container matColumnDef="quote_tr">
-          <th mat-header-cell *matHeaderCellDef> quote_tr </th>
-          <td mat-cell *matCellDef="let element"> {{ element.quote_tr }} </td>
-        </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" (click)="openDialog(element)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="delete(element.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></tr>
-    </table>
-  `,
-  styles: [`
-    .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    table { width: 100%; }
-  `]
+  templateUrl: './references-list.component.html',
+  styleUrl: './references-list.component.css'
 })
 export class ReferenceListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'role_en', 'role_tr', 'company', 'quote_en', 'quote_tr', 'order', 'actions'];

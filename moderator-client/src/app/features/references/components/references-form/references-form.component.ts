@@ -21,47 +21,8 @@ import { Reference } from '../../domain/references';
     MatButtonModule,
     MatSnackBarModule
   ],
-  template: `
-    <h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'Add' }} Reference</h2>
-    <mat-dialog-content>
-      <form [formGroup]="form" class="form-container">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>name</mat-label>
-          <input matInput formControlName="name">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>role_en</mat-label>
-          <input matInput formControlName="role_en">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>role_tr</mat-label>
-          <input matInput formControlName="role_tr">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>company</mat-label>
-          <input matInput formControlName="company">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>quote_en</mat-label>
-          <textarea matInput formControlName="quote_en" rows="4"></textarea>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>quote_tr</mat-label>
-          <textarea matInput formControlName="quote_tr" rows="4"></textarea>
-        </mat-form-field>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-raised-button color="primary" [disabled]="form.invalid || loading" (click)="save()">
-        {{ loading ? 'Saving...' : 'Save' }}
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    .form-container { display: flex; flex-direction: column; padding-top: 10px; }
-    .full-width { width: 100%; }
-  `]
+  templateUrl: './references-form.component.html',
+  styleUrl: './references-form.component.css'
 })
 export class ReferenceFormComponent implements OnInit {
   form: FormGroup;

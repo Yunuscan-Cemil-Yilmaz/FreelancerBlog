@@ -1,0 +1,135 @@
+.detail-container {
+      padding: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+      background-color: #f8f9fa;
+      min-height: 100vh;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      margin: 0;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    .spacer {
+      flex: 1 1 auto;
+    }
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .detail-card {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border: none;
+    }
+    .main-info {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+    }
+    .domain-avatar {
+      background-color: #3f51b5;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 16px 0;
+    }
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .label {
+      font-size: 11px;
+      color: #7f8c8d;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .value {
+      font-size: 16px;
+      font-weight: 500;
+      color: #34495e;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+    }
+    .stat-card {
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #3f51b5;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #7f8c8d;
+      text-transform: capitalize;
+    }
+    .table-container {
+      position: relative;
+      min-height: 150px;
+      margin-top: 16px;
+    }
+    .full-width-table {
+      width: 100%;
+    }
+    .loading-shade {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.7);
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .detail-link {
+      color: #3f51b5;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .detail-link:hover {
+      text-decoration: underline;
+    }
+    .spinner-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 100px;
+    }
+    .error-state {
+      text-align: center;
+      margin-top: 100px;
+    }
+    .error-state mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+    }
+    .no-moderators {
+      padding: 24px;
+      text-align: center;
+      color: #7f8c8d;
+      font-style: italic;
+    }

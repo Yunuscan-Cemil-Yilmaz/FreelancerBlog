@@ -1,0 +1,6 @@
+.form-container { display: flex; flex-direction: column; padding-top: 10px; }
+    .full-width { width: 100%; }
+    .items-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .items-header h3 { margin: 0; }
+    .item-row { display: flex; gap: 10px; align-items: center; margin-bottom: 5px; }
+    .flex-item { flex: 1; }

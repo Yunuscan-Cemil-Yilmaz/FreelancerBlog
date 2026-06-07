@@ -1,0 +1,158 @@
+<div class="form-header">
+      <h2>{{ isEditMode ? 'Edit Blog' : 'Create Blog' }}</h2>
+      <button mat-icon-button routerLink="/dashboard/blogs">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="blog-form">
+      <!-- General Info -->
+      <mat-card class="section-card">
+        <mat-card-content class="grid-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Title (EN)</mat-label>
+            <input matInput formControlName="title_en" (keyup)="onTitleChange('en')">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Title (TR)</mat-label>
+            <input matInput formControlName="title_tr" (keyup)="onTitleChange('tr')">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Slug (EN)</mat-label>
+            <input matInput formControlName="slug_en">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Slug (TR)</mat-label>
+            <input matInput formControlName="slug_tr">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Author</mat-label>
+            <input matInput formControlName="author">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Read Time (minutes)</mat-label>
+            <input matInput type="number" formControlName="read_time">
+          </mat-form-field>
+          <mat-form-field appearance="outline" *ngIf="isEditMode">
+            <mat-label>View Count</mat-label>
+            <input matInput type="number" formControlName="view_count" readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category_id" (selectionChange)="onCategoryChange()">
+              <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                {{ cat.name_en }} ({{ cat.name_tr }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Sub Category</mat-label>
+            <mat-select formControlName="sub_category_id">
+              <mat-option [value]="null">-- None --</mat-option>
+              <mat-option *ngFor="let sub of filteredSubCategories" [value]="sub.id">
+                {{ sub.name_en }} ({{ sub.name_tr }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <div class="full-width">
+            <mat-label style="display:block; margin-bottom:8px;">Main Image (Max 2MB)</mat-label>
+            <input type="file" (change)="onMainImageSelected($event)" accept="image/*" #mainImageInput style="display: none">
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+              <button mat-stroked-button type="button" (click)="mainImageInput.click()">Select Main Image</button>
+              <button mat-icon-button color="warn" type="button" *ngIf="mainImageFile || existingMainImage" (click)="removeMainImage()">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="mainImagePreview" style="margin-top: 10px;">
+              <img [src]="mainImagePreview" alt="Main Image Preview" style="max-height: 150px; border-radius: 4px; border: 1px solid #ddd;">
+            </div>
+          </div>
+
+          <div class="full-width">
+            <mat-label style="display:block; margin-bottom:8px; margin-top: 20px;">Gallery Images (Max 2MB each)</mat-label>
+            <input type="file" (change)="onGalleryImagesSelected($event)" accept="image/*" multiple #galleryImagesInput style="display: none">
+            <button mat-stroked-button type="button" (click)="galleryImagesInput.click()">Add Gallery Images</button>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+              <!-- Existing Gallery Images -->
+              <div *ngFor="let url of existingGalleryImages; let i = index" style="position: relative;">
+                <img [src]="url" alt="Gallery Image" style="height: 100px; border-radius: 4px; border: 1px solid #ddd;">
+                <button mat-icon-button color="warn" type="button" (click)="removeExistingGalleryImage(i)" style="position: absolute; top: 0; right: 0; background: rgba(255,255,255,0.7); width: 24px; height: 24px; line-height: 24px;">
+                  <mat-icon style="font-size: 16px;">close</mat-icon>
+                </button>
+              </div>
+              
+              <!-- New Gallery Images Previews -->
+              <div *ngFor="let preview of galleryImagePreviews; let i = index" style="position: relative;">
+                <img [src]="preview" alt="New Gallery Image" style="height: 100px; border-radius: 4px; border: 1px solid #ddd;">
+                <button mat-icon-button color="warn" type="button" (click)="removeNewGalleryImage(i)" style="position: absolute; top: 0; right: 0; background: rgba(255,255,255,0.7); width: 24px; height: 24px; line-height: 24px;">
+                  <mat-icon style="font-size: 16px;">close</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Content Editor -->
+      <mat-card class="section-card markdown-section">
+        <mat-tab-group>
+          <!-- English Content -->
+          <mat-tab label="Content (EN)">
+             <div class="md-editor-container">
+               <div class="md-input-col">
+                 <mat-form-field appearance="outline" class="full-width editor-field">
+                   <mat-label>Write Markdown here</mat-label>
+                   <textarea matInput formControlName="content_en" rows="15" (keyup)="updatePreview('en')"></textarea>
+                 </mat-form-field>
+               </div>
+               <div class="md-preview-col">
+                 <div class="preview-header">Live Preview</div>
+                 <div class="preview-content" [innerHTML]="previewEn"></div>
+               </div>
+             </div>
+          </mat-tab>
+
+          <!-- Turkish Content -->
+          <mat-tab label="Content (TR)">
+             <div class="md-editor-container">
+               <div class="md-input-col">
+                 <mat-form-field appearance="outline" class="full-width editor-field">
+                   <mat-label>Write Markdown here</mat-label>
+                   <textarea matInput formControlName="content_tr" rows="15" (keyup)="updatePreview('tr')"></textarea>
+                 </mat-form-field>
+               </div>
+               <div class="md-preview-col">
+                 <div class="preview-header">Live Preview</div>
+                 <div class="preview-content" [innerHTML]="previewTr"></div>
+               </div>
+             </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card>
+
+      <!-- Excerpt -->
+      <mat-card class="section-card">
+        <mat-card-content class="grid-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Excerpt (EN)</mat-label>
+            <textarea matInput formControlName="excerpt_en" rows="3"></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Excerpt (TR)</mat-label>
+            <textarea matInput formControlName="excerpt_tr" rows="3"></textarea>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="actions">
+        <button mat-button type="button" routerLink="/dashboard/blogs">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+          {{ isEditMode ? 'Update' : 'Create' }}
+        </button>
+      </div>
+    </form>

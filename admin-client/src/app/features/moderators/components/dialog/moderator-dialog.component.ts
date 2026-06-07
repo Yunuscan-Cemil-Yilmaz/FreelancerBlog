@@ -24,62 +24,8 @@ import { DomainService, Domain } from '@features/domains/domain/domain';
     MatButtonModule,
     MatSnackBarModule
   ],
-  template: `
-    <h2 mat-dialog-title>{{ title }}</h2>
-    <mat-dialog-content>
-      <form [formGroup]="form" class="dialog-form">
-        <ng-container *ngIf="data.mode === 'create'">
-          <mat-form-field appearance="outline">
-            <mat-label>Username</mat-label>
-            <input matInput formControlName="username" required>
-          </mat-form-field>
-          
-          <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput type="password" formControlName="password" required>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Full Name</mat-label>
-            <input matInput formControlName="full_name" required>
-          </mat-form-field>
-        </ng-container>
-
-        <ng-container *ngIf="data.mode === 'reset-password'">
-          <mat-form-field appearance="outline">
-            <mat-label>New Password</mat-label>
-            <input matInput type="password" formControlName="password" required>
-          </mat-form-field>
-        </ng-container>
-
-        <ng-container *ngIf="data.mode === 'create' || data.mode === 'update'">
-          <mat-form-field appearance="outline">
-            <mat-label>Domain</mat-label>
-            <mat-select formControlName="domain_id" required>
-              <mat-option *ngFor="let domain of domains" [value]="domain.id">
-                {{ domain.domain }} ({{ domain.admin_domain }})
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </ng-container>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="onCancel()">Cancel</button>
-      <button mat-raised-button color="primary" [disabled]="form.invalid || isSubmitting" (click)="onSubmit()">
-        {{ submitLabel }}
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    .dialog-form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding-top: 10px;
-      min-width: 400px;
-    }
-  `]
+  templateUrl: './moderator-dialog.component.html',
+  styleUrl: './moderator-dialog.component.css'
 })
 export class ModeratorDialogComponent implements OnInit {
   form: FormGroup;

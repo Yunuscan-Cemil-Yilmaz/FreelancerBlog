@@ -1,0 +1,30 @@
+<div class="create-container">
+      <mat-card class="form-card">
+        <mat-card-header>
+          <div mat-card-avatar><mat-icon class="header-icon">add_circle</mat-icon></div>
+          <mat-card-title>Create New Domain</mat-card-title>
+          <mat-card-subtitle>Add a new domain to the system</mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <form class="create-form" (ngSubmit)="onSubmit()" #domainForm="ngForm">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Domain Name</mat-label>
+              <input matInput placeholder="e.g., example.com" [(ngModel)]="domain" name="domain" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Admin Domain Name</mat-label>
+              <input matInput placeholder="e.g., admin.example.com" [(ngModel)]="admin_domain" name="admin_domain" required>
+            </mat-form-field>
+            
+            <div class="actions">
+              <button mat-button type="button" (click)="cancel()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="!domainForm.form.valid || isSubmitting">
+                {{ isSubmitting ? 'Creating...' : 'Create Domain' }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>

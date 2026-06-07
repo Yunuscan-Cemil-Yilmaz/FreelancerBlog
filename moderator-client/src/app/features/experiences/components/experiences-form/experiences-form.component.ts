@@ -21,55 +21,8 @@ import { Experience } from '../../domain/experiences';
     MatButtonModule,
     MatSnackBarModule
   ],
-  template: `
-    <h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'Add' }} Experience</h2>
-    <mat-dialog-content>
-      <form [formGroup]="form" class="form-container">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>year_en</mat-label>
-          <input matInput formControlName="year_en">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>year_tr</mat-label>
-          <input matInput formControlName="year_tr">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>role_en</mat-label>
-          <input matInput formControlName="role_en">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>role_tr</mat-label>
-          <input matInput formControlName="role_tr">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>company_en</mat-label>
-          <input matInput formControlName="company_en">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>company_tr</mat-label>
-          <input matInput formControlName="company_tr">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>description_en</mat-label>
-          <textarea matInput formControlName="description_en" rows="4"></textarea>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>description_tr</mat-label>
-          <textarea matInput formControlName="description_tr" rows="4"></textarea>
-        </mat-form-field>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-raised-button color="primary" [disabled]="form.invalid || loading" (click)="save()">
-        {{ loading ? 'Saving...' : 'Save' }}
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    .form-container { display: flex; flex-direction: column; padding-top: 10px; }
-    .full-width { width: 100%; }
-  `]
+  templateUrl: './experiences-form.component.html',
+  styleUrl: './experiences-form.component.css'
 })
 export class ExperienceFormComponent implements OnInit {
   form: FormGroup;

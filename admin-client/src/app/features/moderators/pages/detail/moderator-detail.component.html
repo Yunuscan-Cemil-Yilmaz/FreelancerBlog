@@ -1,0 +1,66 @@
+<div class="detail-container">
+      <div class="header">
+        <button mat-icon-button routerLink="/dashboard/moderators">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>Moderator Details</h1>
+      </div>
+
+      <div *ngIf="isLoading" class="spinner-container">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+
+      <div *ngIf="!isLoading && moderator" class="content-wrapper">
+        <mat-card class="detail-card main-info">
+          <mat-card-header>
+            <div mat-card-avatar class="moderator-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
+            <mat-card-title>{{ moderator.full_name }}</mat-card-title>
+            <mat-card-subtitle>@{{ moderator.username }}</mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="label">Status</span>
+                <span class="value">
+                  <span class="status-badge" [class.active]="moderator.is_active">
+                    {{ moderator.is_active ? 'Active Account' : 'Suspended' }}
+                  </span>
+                </span>
+              </div>
+              <div class="info-item">
+                <span class="label">Assigned Domain</span>
+                <span class="value">{{ moderator.domain?.domain || 'None' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Account ID</span>
+                <span class="value">{{ moderator.id }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="detail-card">
+          <mat-card-header>
+            <mat-card-title>Permissions & Role</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>This moderator has management access to the <strong>{{ moderator.domain?.domain }}</strong> domain.</p>
+            <ul class="permission-list">
+              <li>Manage Blog Posts</li>
+              <li>Manage Categories</li>
+              <li>Manage Projects/Repos</li>
+              <li>View Statistics</li>
+            </ul>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div *ngIf="!isLoading && !moderator" class="error-state">
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{ errorMessage || 'Moderator not found.' }}</p>
+        <button mat-raised-button color="primary" routerLink="/dashboard/moderators">Go Back</button>
+      </div>
+    </div>

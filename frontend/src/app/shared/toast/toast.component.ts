@@ -4,35 +4,8 @@ import { ToastService } from './toast.service';
 @Component({
   selector: 'app-toast-container',
   standalone: true,
-  template: `
-    <div class="fixed top-4 right-4 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none">
-      @for (toast of toastService.toasts(); track toast.id) {
-        <div class="pointer-events-auto px-4 py-3 rounded-xl border backdrop-blur-xl shadow-2xl
-                    flex items-start gap-3 animate-slide-in-right cursor-pointer transition-all duration-300
-                    hover:scale-[1.02]"
-             [class]="getToastClass(toast.type)"
-             (click)="toastService.dismiss(toast.id)">
-          <span class="text-lg shrink-0 mt-0.5">{{ getIcon(toast.type) }}</span>
-          <p class="text-sm font-medium leading-relaxed">{{ toast.message }}</p>
-        </div>
-      }
-    </div>
-  `,
-  styles: [`
-    @keyframes slideInRight {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-    .animate-slide-in-right {
-      animation: slideInRight 0.3s ease-out;
-    }
-  `],
+  templateUrl: './toast.component.html',
+  styleUrl: './toast.component.css',
 })
 export class ToastContainerComponent {
   readonly toastService = inject(ToastService);

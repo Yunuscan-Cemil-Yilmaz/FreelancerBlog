@@ -1,0 +1,66 @@
+.form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .section-card { margin-bottom: 20px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .full-width { grid-column: 1 / -1; width: 100%; }
+    
+    .md-editor-container {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .md-input-col, .md-preview-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Fixed equal height and independent scroll for both sides */
+    .editor-field textarea { 
+      height: 500px !important; 
+      resize: none; 
+      font-family: monospace; 
+      line-height: 1.5;
+      overflow-y: auto;
+    }
+    
+    .preview-header { font-weight: bold; margin-bottom: 8px; color: #555; height: 20px; }
+    .preview-content {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 16px;
+      background: #fdfdfd;
+      height: 500px;
+      overflow-y: auto;
+      font-family: sans-serif;
+      line-height: 1.6;
+    }
+    
+    /* Markdown Styles for Preview (using ::ng-deep because HTML is injected dynamically) */
+    .preview-content ::ng-deep h1 { font-size: 2em; font-weight: bold; margin-top: 0.67em; margin-bottom: 0.67em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
+    .preview-content ::ng-deep h2 { font-size: 1.5em; font-weight: bold; margin-top: 0.83em; margin-bottom: 0.83em; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
+    .preview-content ::ng-deep h3 { font-size: 1.17em; font-weight: bold; margin-top: 1em; margin-bottom: 1em; }
+    .preview-content ::ng-deep h4 { font-size: 1em; font-weight: bold; margin-top: 1.33em; margin-bottom: 1.33em; }
+    .preview-content ::ng-deep h5 { font-size: 0.83em; font-weight: bold; margin-top: 1.67em; margin-bottom: 1.67em; }
+    .preview-content ::ng-deep h6 { font-size: 0.67em; font-weight: bold; margin-top: 2.33em; margin-bottom: 2.33em; }
+    .preview-content ::ng-deep p { margin-top: 1em; margin-bottom: 1em; }
+    .preview-content ::ng-deep strong { font-weight: bold; }
+    .preview-content ::ng-deep em { font-style: italic; }
+    .preview-content ::ng-deep ul { list-style-type: disc; padding-left: 40px; margin-top: 1em; margin-bottom: 1em; }
+    .preview-content ::ng-deep ol { list-style-type: decimal; padding-left: 40px; margin-top: 1em; margin-bottom: 1em; }
+    .preview-content ::ng-deep li { margin-bottom: 0.5em; }
+    .preview-content ::ng-deep blockquote { border-left: 4px solid #ccc; margin: 1.5em 10px; padding: 0.5em 10px; color: #666; background: #f9f9f9; }
+    .preview-content ::ng-deep pre { background: #f4f4f4; border: 1px solid #ddd; border-left: 3px solid #f36d33; color: #666; page-break-inside: avoid; font-family: monospace; font-size: 15px; line-height: 1.6; margin-bottom: 1.6em; max-width: 100%; overflow: auto; padding: 1em 1.5em; display: block; word-wrap: break-word; }
+    .preview-content ::ng-deep code { font-family: monospace; background: #f4f4f4; padding: 2px 4px; border-radius: 4px; font-size: 0.9em; color: #d63384; }
+    .preview-content ::ng-deep pre code { padding: 0; color: inherit; background: transparent; border-radius: 0; }
+    .preview-content ::ng-deep hr { border: 0; border-top: 2px solid #eee; margin: 2em 0; }
+    .preview-content ::ng-deep a { color: #3f51b5; text-decoration: none; }
+    .preview-content ::ng-deep a:hover { text-decoration: underline; }
+    .preview-content ::ng-deep img { max-width: 100%; height: auto; }
+    
+    @media (max-width: 768px) {
+      .md-editor-container { flex-direction: column; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }

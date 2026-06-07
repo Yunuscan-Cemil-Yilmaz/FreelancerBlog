@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       '@context': 'https://schema.org',
       '@type': 'Person',
       name: this.env.fullName,
-      url: window.location.origin,
+      url: typeof window !== 'undefined' ? window.location.origin : '',
       sameAs: [
         this.env.githubUrl,
         this.env.linkedinUrl
