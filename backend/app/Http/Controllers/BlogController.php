@@ -52,9 +52,9 @@ class BlogController extends Controller
         ]);
     }
 
-    public function incrementViewCount(int $id, IncrementBlogViewCountCommand $command): JsonResponse
+    public function incrementViewCount(int $id, Request $request, IncrementBlogViewCountCommand $command): JsonResponse
     {
-        $viewRequest = new IncrementBlogViewCountRequest($id);
+        $viewRequest = new IncrementBlogViewCountRequest($id, $request->ip() ?? '0.0.0.0', $request->userAgent() ?? '');
         $result = $command->handle($viewRequest);
 
         return response()->json($result);

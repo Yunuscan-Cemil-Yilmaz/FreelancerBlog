@@ -1,4 +1,5 @@
 import { Component, inject, input, effect, untracked, computed } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { BlogsService } from '../../domain/blogs.service';
@@ -22,12 +23,14 @@ export class BlogDetailComponent {
 
   readonly slug = input.required<string>();
   readonly blog = this.blogsService.blogDetail;
+  readonly isLoading = this.blogsService.blogLoading;
 
   constructor() {
-    effect(() => {
-      const currentSlug = this.slug();
-      untracked(() => this.blogsService.loadBlogBySlug(currentSlug));
-    }, { allowSignalWrites: true });
+    toObservable(this.slug).subscribe(slug => {
+      if (slug) {
+        this.blogsService.loadBlogBySlug(slug);
+      }
+    });
 
     effect(() => {
       const blog = this.blog();

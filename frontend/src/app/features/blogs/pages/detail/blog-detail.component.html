@@ -36,6 +36,11 @@
       <app-interaction-form type="blog" [targetId]="blog.id" [title]="t.isEnglish() ? 'Are you interested in this blog?' : 'Bu yazı ilginizi çekti mi?'"></app-interaction-form>
     </div>
   </article>
+} @else if (isLoading()) {
+  <div class="py-32 flex flex-col items-center justify-center text-slate-500">
+    <div class="w-8 h-8 border-2 border-violet-500/30 border-t-violet-500 rounded-full animate-spin mb-4"></div>
+    <div>{{ t.t('common.loading') }}</div>
+  </div>
 } @else {
   <div class="py-32 text-center text-slate-500">
     {{ t.t('common.error') }}

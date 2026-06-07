@@ -64,17 +64,26 @@ export class ReposService {
   loadRepoBySlug(slug: string): { repo: () => Repo | undefined } {
     const lang = this.t.lang();
     this._repoDetailSignal.set(undefined);
+    this._repoLoadingSignal.set(true);
 
     this.api.get<RepoApiResponse>(`${lang}/repos/${slug}`).subscribe({
-      next: (res) => this._repoDetailSignal.set(res.data),
-      error: () => this._repoDetailSignal.set(undefined),
+      next: (res) => {
+        this._repoDetailSignal.set(res.data);
+        this._repoLoadingSignal.set(false);
+      },
+      error: () => {
+        this._repoDetailSignal.set(undefined);
+        this._repoLoadingSignal.set(false);
+      },
     });
 
     return { repo: () => this._repoDetailSignal() };
   }
 
   private readonly _repoDetailSignal = signal<Repo | undefined>(undefined);
+  private readonly _repoLoadingSignal = signal<boolean>(false);
   readonly repoDetail = this._repoDetailSignal.asReadonly();
+  readonly repoLoading = this._repoLoadingSignal.asReadonly();
 
   incrementViewCount(id: number): void {
     this.api.patch<{ viewCount: number }>(`repos/${id}/view`, {}).subscribe();

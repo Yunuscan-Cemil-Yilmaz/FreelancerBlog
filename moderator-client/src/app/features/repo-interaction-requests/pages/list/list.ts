@@ -21,7 +21,7 @@ import { RepoInteractionRequestService } from '../../services/repo-interaction-r
 export class List implements OnInit {
   service = inject(RepoInteractionRequestService);
 
-  displayedColumns: string[] = ['id', 'name', 'email', 'interaction_type', 'is_readed', 'is_handled', 'is_completed', 'created_at', 'actions'];
+  displayedColumns: string[] = ['id', 'title', 'name', 'email', 'interaction_type', 'is_readed', 'is_handled', 'is_completed', 'created_at', 'actions'];
   
   currentTabIndex = 0;
   
@@ -75,6 +75,9 @@ export class List implements OnInit {
     this.filters.phone = '';
     this.filters.interaction_type = '';
     this.filters.title = '';
+    this.filters.is_readed = null;
+    this.filters.is_handled = null;
+    this.filters.is_completed = null;
     this.applyFilters();
   }
 

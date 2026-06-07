@@ -1,4 +1,5 @@
 import { Component, inject, input, computed, effect } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslationService } from '../../../../core/config/translation.service';
 import { ReposService } from '../../domain/repos.service';
@@ -20,9 +21,16 @@ export class RepoDetailComponent {
   private readonly seoService = inject(SeoService);
   readonly t = inject(TranslationService);
 
-  readonly repo = computed(() => this.reposService.repos().find(r => r.slug === this.slug()));
+  readonly repo = this.reposService.repoDetail;
+  readonly isLoading = this.reposService.repoLoading;
 
   constructor() {
+    toObservable(this.slug).subscribe(slug => {
+      if (slug) {
+        this.reposService.loadRepoBySlug(slug);
+      }
+    });
+
     effect(() => {
       const r = this.repo();
       if (r) {

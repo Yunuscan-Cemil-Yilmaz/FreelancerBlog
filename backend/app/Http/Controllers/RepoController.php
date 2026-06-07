@@ -38,9 +38,9 @@ class RepoController extends Controller
         return response()->json($result);
     }
 
-    public function incrementViewCount(int $id, IncrementRepoViewCountCommand $command): JsonResponse
+    public function incrementViewCount(int $id, Request $request, IncrementRepoViewCountCommand $command): JsonResponse
     {
-        $viewRequest = new IncrementRepoViewCountRequest($id);
+        $viewRequest = new IncrementRepoViewCountRequest($id, $request->ip() ?? '0.0.0.0', $request->userAgent() ?? '');
         $result = $command->handle($viewRequest);
 
         return response()->json($result);

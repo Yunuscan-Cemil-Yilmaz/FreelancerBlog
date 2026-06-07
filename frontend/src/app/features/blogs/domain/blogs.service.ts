@@ -75,17 +75,26 @@ export class BlogsService {
   loadBlogBySlug(slug: string): { blog: () => Blog | undefined } {
     const lang = this.t.lang();
     this._blogDetailSignal.set(undefined);
+    this._blogLoadingSignal.set(true);
 
     this.api.get<BlogApiResponse>(`${lang}/blogs/${slug}`).subscribe({
-      next: (res) => this._blogDetailSignal.set(res.data),
-      error: () => this._blogDetailSignal.set(undefined),
+      next: (res) => {
+        this._blogDetailSignal.set(res.data);
+        this._blogLoadingSignal.set(false);
+      },
+      error: () => {
+        this._blogDetailSignal.set(undefined);
+        this._blogLoadingSignal.set(false);
+      },
     });
 
     return { blog: () => this._blogDetailSignal() };
   }
 
   private readonly _blogDetailSignal = signal<Blog | undefined>(undefined);
+  private readonly _blogLoadingSignal = signal<boolean>(false);
   readonly blogDetail = this._blogDetailSignal.asReadonly();
+  readonly blogLoading = this._blogLoadingSignal.asReadonly();
 
   /**
    * Increment view count for a blog.

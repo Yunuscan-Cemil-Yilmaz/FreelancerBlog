@@ -66,23 +66,40 @@ interface InteractionForm {
           </div>
         }
 
+        <!-- Subject -->
+        <mat-form-field appearance="outline" class="w-full custom-field">
+          <mat-label>{{ t.isEnglish() ? 'Subject' : 'Konu' }}</mat-label>
+          <input matInput [(ngModel)]="form.subject" name="subject" />
+        </mat-form-field>
+
         <!-- Message -->
         <mat-form-field appearance="outline" class="w-full custom-field">
           <mat-label>{{ t.t('contact.message') }}</mat-label>
           <textarea matInput [(ngModel)]="form.message" name="message" rows="3"></textarea>
         </mat-form-field>
 
-        <!-- KVKK -->
-        <div class="flex items-start gap-3">
-          <mat-checkbox [checked]="kvkkAccepted()" (change)="kvkkAccepted.set(!kvkkAccepted())" name="kvkk" class="mt-0.5 custom-checkbox"></mat-checkbox>
-          <p class="text-xs text-slate-400 leading-relaxed">
-            {{ t.t('contact.kvkk_text_before') }}
-            <button type="button" (click)="showKvkkModal.set(true)"
-                    class="text-blue-400 underline hover:text-blue-300 transition-colors cursor-pointer">
-              {{ t.t('contact.kvkk_link') }}
-            </button>
-            {{ t.t('contact.kvkk_text_after') }}
-          </p>
+        <!-- Consent Checkboxes -->
+        <div class="space-y-4 pt-2 pb-4">
+          <!-- Checkbox 1: Communication Consent -->
+          <div class="flex items-start gap-3">
+            <mat-checkbox [checked]="consentAccepted()" (change)="consentAccepted.set(!consentAccepted())" name="consent" class="mt-0.5 custom-checkbox"></mat-checkbox>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              {{ t.t('contact.consent_text') }}
+            </p>
+          </div>
+
+          <!-- Checkbox 2: KVKK -->
+          <div class="flex items-start gap-3">
+            <mat-checkbox [checked]="kvkkAccepted()" (change)="kvkkAccepted.set(!kvkkAccepted())" name="kvkk" class="mt-0.5 custom-checkbox"></mat-checkbox>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              {{ t.t('contact.kvkk_text_before') }}
+              <button type="button" (click)="showKvkkModal.set(true)"
+                      class="text-blue-400 underline hover:text-blue-300 transition-colors cursor-pointer">
+                {{ t.t('contact.kvkk_link') }}
+              </button>
+              {{ t.t('contact.kvkk_text_after') }}
+            </p>
+          </div>
         </div>
 
         <!-- Submit -->
@@ -134,6 +151,7 @@ export class InteractionFormComponent {
   readonly title = input<string>('Send Interaction Request');
 
   readonly kvkkAccepted = signal(false);
+  readonly consentAccepted = signal(false);
   readonly showKvkkModal = signal(false);
   readonly submitting = signal(false);
 
@@ -143,7 +161,7 @@ export class InteractionFormComponent {
     phone: '',
     contactPreference: '',
     preferred_contact_time: '',
-    subject: 'Interaction Request',
+    subject: '',
     message: '',
   };
 
@@ -166,8 +184,8 @@ export class InteractionFormComponent {
 
   onSubmit(): void {
     const isEn = this.t.isEnglish();
-    if (!this.form.name.trim() || !this.form.contactPreference || !this.form.message.trim() || !this.kvkkAccepted()) {
-      this.toast.error(isEn ? 'Please fill in all required fields and accept the privacy notice.' : 'Lütfen zorunlu alanları doldurun ve aydınlatma metnini kabul edin.');
+    if (!this.form.name.trim() || !this.form.contactPreference || !this.form.message.trim() || !this.kvkkAccepted() || !this.consentAccepted()) {
+      this.toast.error(isEn ? 'Please fill in all required fields and accept the agreements.' : 'Lütfen zorunlu alanları doldurun ve izinleri onaylayın.');
       return;
     }
 
@@ -190,8 +208,9 @@ export class InteractionFormComponent {
     this.apiClient.post(`${this.t.lang()}/${endpoint}`, payload).subscribe({
       next: () => {
         this.toast.success(isEn ? 'Your request has been sent successfully!' : 'Talebiniz başarıyla gönderildi!');
-        this.form = { name: '', email: '', phone: '', contactPreference: '', preferred_contact_time: '', subject: 'Interaction Request', message: '' };
+        this.form = { name: '', email: '', phone: '', contactPreference: '', preferred_contact_time: '', subject: '', message: '' };
         this.kvkkAccepted.set(false);
+        this.consentAccepted.set(false);
         this.submitting.set(false);
       },
       error: () => {

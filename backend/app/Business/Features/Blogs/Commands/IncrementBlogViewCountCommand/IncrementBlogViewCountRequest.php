@@ -5,7 +5,9 @@ namespace App\Business\Features\Blogs\Commands\IncrementBlogViewCountCommand;
 readonly class IncrementBlogViewCountRequest
 {
     public function __construct(
-        public int $id
+        public int $id,
+        public string $ip,
+        public string $userAgent
     ) {
     }
 }
