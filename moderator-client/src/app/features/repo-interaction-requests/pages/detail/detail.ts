@@ -53,26 +53,70 @@ export class Detail implements OnInit {
   }
 
   updateRead(event: any) {
-    this.service.updateReadStatus(this.id, event.checked).subscribe(() => this.snackBar.open('Updated', 'Close', { duration: 2000 }));
+    this.service.updateReadStatus(this.id, event.checked).subscribe({
+      next: () => {
+        this.snackBar.open('Updated', 'Close', { duration: 2000 });
+      },
+      error: (err) => {
+        this.data.is_readed = !event.checked;
+        this.cdr.detectChanges();
+        const errorMessage = err?.error?.message || 'Failed to update read status';
+        this.snackBar.open(errorMessage, 'Close', { duration: 4000 });
+      }
+    });
   }
 
   updateHandled(event: any) {
-    this.service.updateHandledStatus(this.id, event.checked).subscribe(() => this.snackBar.open('Updated', 'Close', { duration: 2000 }));
+    this.service.updateHandledStatus(this.id, event.checked).subscribe({
+      next: () => {
+        this.snackBar.open('Updated', 'Close', { duration: 2000 });
+      },
+      error: (err) => {
+        this.data.is_handled = !event.checked;
+        this.cdr.detectChanges();
+        const errorMessage = err?.error?.message || 'Failed to update handled status';
+        this.snackBar.open(errorMessage, 'Close', { duration: 4000 });
+      }
+    });
   }
 
   updateCompleted(event: any) {
-    this.service.updateCompletedStatus(this.id, event.checked).subscribe(() => this.snackBar.open('Updated', 'Close', { duration: 2000 }));
+    this.service.updateCompletedStatus(this.id, event.checked).subscribe({
+      next: () => {
+        this.snackBar.open('Updated', 'Close', { duration: 2000 });
+      },
+      error: (err) => {
+         this.data.is_completed = !event.checked;
+        this.cdr.detectChanges();
+        const errorMessage = err?.error?.message || 'Failed to update completed status';
+        this.snackBar.open(errorMessage, 'Close', { duration: 4000 });
+      }
+    });
   }
 
   saveAdminNote() {
-    this.service.updateAdminNote(this.id, this.data.admin_note).subscribe(() => this.snackBar.open('Admin note saved', 'Close', { duration: 2000 }));
+    this.service.updateAdminNote(this.id, this.data.admin_note).subscribe({
+      next: () => {
+        this.snackBar.open('Admin note saved', 'Close', { duration: 2000 });
+      },
+      error: (err) => {
+        const errorMessage = err?.error?.message || 'Failed to save admin note';
+        this.snackBar.open(errorMessage, 'Close', { duration: 4000 });
+      }
+    });
   }
 
   deleteInteraction() {
     if(confirm('Are you sure you want to delete this interaction and all its details?')) {
-      this.service.delete(this.id).subscribe(() => {
-        this.snackBar.open('Deleted successfully', 'Close', { duration: 2000 });
-        this.router.navigate(['/dashboard/repo-interaction-requests']);
+      this.service.delete(this.id).subscribe({
+        next: () => {
+          this.snackBar.open('Deleted successfully', 'Close', { duration: 2000 });
+          this.router.navigate(['/dashboard/repo-interaction-requests']);
+        },
+        error: (err) => {
+          const errorMessage = err?.error?.message || 'Failed to delete request';
+          this.snackBar.open(errorMessage, 'Close', { duration: 4000 });
+        }
       });
     }
   }
@@ -82,18 +126,30 @@ export class Detail implements OnInit {
     const payload = { ...this.newDetail };
     payload['repo_interaction_id'] = this.id;
     
-    this.service.addDetail(payload).subscribe(() => {
-      this.snackBar.open('Detail added', 'Close', { duration: 2000 });
-      this.newDetail.interaction_note = '';
-      this.loadData();
+    this.service.addDetail(payload).subscribe({
+      next: () => {
+        this.snackBar.open('Detail added', 'Close', { duration: 2000 });
+        this.newDetail.interaction_note = '';
+        this.loadData();
+      },
+      error: (err) => {
+        const errorMessage = err?.error?.message || 'Failed to add detail';
+        this.snackBar.open(errorMessage, 'Close', { duration: 4000 });
+      }
     });
   }
 
   deleteDetail(detailId: number) {
     if(confirm('Delete this detail?')) {
-      this.service.deleteDetail(detailId).subscribe(() => {
-        this.snackBar.open('Detail deleted', 'Close', { duration: 2000 });
-        this.loadData();
+      this.service.deleteDetail(detailId).subscribe({
+        next: () => {
+          this.snackBar.open('Detail deleted', 'Close', { duration: 2000 });
+          this.loadData();
+        },
+        error: (err) => {
+          const errorMessage = err?.error?.message || 'Failed to delete detail';
+          this.snackBar.open(errorMessage, 'Close', { duration: 4000 });
+        }
       });
     }
   }

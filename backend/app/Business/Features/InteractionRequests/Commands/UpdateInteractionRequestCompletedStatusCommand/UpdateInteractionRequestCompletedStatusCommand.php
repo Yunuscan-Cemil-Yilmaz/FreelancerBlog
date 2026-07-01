@@ -4,6 +4,7 @@ namespace App\Business\Features\InteractionRequests\Commands\UpdateInteractionRe
 
 use App\Models\InteractionRequest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Validation\ValidationException;
 
 class UpdateInteractionRequestCompletedStatusCommand
 {
@@ -13,6 +14,14 @@ class UpdateInteractionRequestCompletedStatusCommand
 
         if (!$interaction) {
             throw new NotFoundHttpException('Interaction request not found');
+        }
+
+        if ($is_completed) {
+            if (!$interaction->is_handled) {
+                throw ValidationException::withMessages([
+                    'is_completed' => ['Cannot mark as completed before the request is marked as handled.']
+                ]);
+            }
         }
 
         $interaction->update(['is_completed' => $is_completed]);

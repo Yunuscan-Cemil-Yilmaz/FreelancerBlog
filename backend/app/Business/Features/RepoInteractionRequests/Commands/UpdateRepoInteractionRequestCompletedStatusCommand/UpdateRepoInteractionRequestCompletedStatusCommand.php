@@ -3,6 +3,7 @@ namespace App\Business\Features\RepoInteractionRequests\Commands\UpdateRepoInter
 
 use App\Models\RepoInteractionRequest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Validation\ValidationException;
 
 class UpdateRepoInteractionRequestCompletedStatusCommand
 {
@@ -12,6 +13,15 @@ class UpdateRepoInteractionRequestCompletedStatusCommand
         if (!$interaction) {
             throw new NotFoundHttpException('Interaction request not found');
         }
+
+        if ($is_completed) {
+            if (!$interaction->is_handled) {
+                throw ValidationException::withMessages([
+                    'is_completed' => ['Cannot mark as completed before the request is marked as handled.']
+                ]);
+            }
+        }
+
         $interaction->update(['is_completed' => $is_completed]);
         return ['message' => 'Completed status updated successfully', 'data' => $interaction];
     }
