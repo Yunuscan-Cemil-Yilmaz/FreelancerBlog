@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, timeout } from 'rxjs';
+import { environment } from '@env/environment';
 
 export interface Moderator {
   id: number;
@@ -19,8 +20,8 @@ export interface Moderator {
   providedIn: 'root'
 })
 export class ModeratorService {
-  private apiUrl = 'http://localhost:8000/api/admin/moderators';
-  private detailUrl = 'http://localhost:8000/api/admin/moderator-details';
+  private apiUrl = `${environment.apiBaseUrl}/admin/moderators`;
+  private detailUrl = `${environment.apiBaseUrl}/admin/moderator-details`;
 
   constructor(private http: HttpClient) {}
 

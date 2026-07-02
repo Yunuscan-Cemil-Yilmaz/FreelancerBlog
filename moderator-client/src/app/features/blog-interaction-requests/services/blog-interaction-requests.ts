@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '@env/environment';
 
 @Injectable({ providedIn: 'root' })
 export class BlogInteractionRequestService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8000/api/moderator/blog-interaction-requests';
+  private apiUrl = `${environment.apiBaseUrl}/moderator/blog-interaction-requests`;
 
   getList(params: any): Observable<any> {
     let httpParams = new HttpParams();

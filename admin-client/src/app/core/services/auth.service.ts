@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
+import { environment } from '@env/environment';
+
 export interface AuthToken {
   token: string;
   expired_at: string; // ISO string
@@ -14,7 +16,7 @@ export interface AuthToken {
 })
 export class AuthService {
   private readonly STORAGE_KEY = 'admin_token';
-  private readonly API_URL = 'http://localhost:8000/api'; // Adjust if needed
+  private readonly API_URL = environment.apiBaseUrl;
   
   // Use Angular signals for reactive state
   currentUser = signal<any>(null);

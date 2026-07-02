@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, timeout } from 'rxjs';
+import { environment } from '@env/environment';
 
 export interface Domain {
   id: number;
@@ -19,8 +20,8 @@ export interface PaginatedResponse<T> {
   providedIn: 'root'
 })
 export class DomainService {
-  private apiUrl = 'http://localhost:8000/api/admin/domains';
-  private detailUrl = 'http://localhost:8000/api/admin/domain-details';
+  private apiUrl = `${environment.apiBaseUrl}/admin/domains`;
+  private detailUrl = `${environment.apiBaseUrl}/admin/domain-details`;
 
   constructor(private http: HttpClient) {}
 

@@ -1,5 +1,5 @@
 export const environment = {
-  brandName: 'yunuscanyilmaz',
+  brandName: 'yunusyilmaz',
   brandDomain: '.com',
   fullName: 'Yunuscan Cemil Yılmaz',
   copyrightHolder: 'Yunuscan Cemil',
